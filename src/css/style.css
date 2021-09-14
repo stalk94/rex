@@ -54,9 +54,7 @@ article {
     width: 94%;
     height: 90%;
 }
-.Cell {
-    border-bottom: 1px solid #333;
-}
+
 ul {
     margin-left: -30px;
 }
@@ -369,9 +367,15 @@ button:hover {
     cursor: pointer;
     font-size: 18px;
     background-color: hsl(0deg 0% 100% / 7%);
+    padding: 5px;
+    color: gray;
 }
-.accordion-item {
-    
+.acordion-title {
+    border: 1px solid rgba(128, 128, 128, 0.445);
+    background-color: #0707075d;
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 3px;
 }
 
 .logo {

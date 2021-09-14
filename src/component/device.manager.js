@@ -19,16 +19,7 @@ const ICON = {
     logic: logic,
     termostat: termostat
 }
-const INTRFACE = {
-    lamp: <ProgressBar></ProgressBar>,
-    onOff: <div></div>,
-    wtor: <ProgressBar></ProgressBar>,
-    logic: <div></div>,
-    termostat: <ProgressBar></ProgressBar>
-}
-const DEVICES = {
-    
-}
+
 ////////////////////////////////////////////////////////////////
 let info = `Enables an invisible overlay beneath the popover that captures clicks 
 and prevents interaction with the rest of the document until the popover is closed. 
@@ -87,7 +78,6 @@ export default class FavoriteDevice extends React.Component {
         //this.setState({devices:mock})
         //setInterval(()=> this.setState({devices:[{type:"lamp",name:"dildo"}]}), this.props.const)
     }
-    /** интерфейс устройства */ 
     selectable(ev) {
         let id = +ev.target.getAttribute("key")
         let dataDevice = this.state.devices[id]
@@ -96,7 +86,7 @@ export default class FavoriteDevice extends React.Component {
         return ()=> <Device 
             key={id}
             title={dataDevice.name} 
-            head={INTRFACE[type]}
+            head={dataDevice.sheme}
             body={body} 
         />
     }
@@ -105,10 +95,12 @@ export default class FavoriteDevice extends React.Component {
             <>{this.state.devices.map((device, index)=> {
                     return <MainDevice 
                         key={index} 
+                        mac={device.mac}
                         type={device.type} 
                         event={console.log} 
                         title={`${device.name} [${this.props.rooms[device.room].name}]: #${index}`} 
                         info={device.info}
+
                     />
                 })
             }</>

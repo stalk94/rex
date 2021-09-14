@@ -1,16 +1,16 @@
-const mqtt = require("mqtt");
+import mqtt from "mqtt";
 
 
 /**
  * Связь с api брокера 
  * @returns connection
  */
-exports.conect = function(client) {
-    let api = mqtt.connect("ws://31.172.65.58:8083/mqtt", {
+export default function Connect(client) {
+    const api = mqtt.connect("ws://31.172.65.58:8083/mqtt", {
         clean: true,
-        connectTimeout: 2000,
+        connectTimeout: 1000,
         clientId: client.id,
-        username: client.name
+        username: client.login
     });
 
     api.on('reconnect', (error)=> {

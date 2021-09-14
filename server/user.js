@@ -1,7 +1,6 @@
 const db = require("quick.db");
 const CryptoJS = require('crypto-js');
-const { conect } = require("./api");
-
+const SHEME = require("./sheme.json");
 
 
 const master = 'rexMyHome';
@@ -77,8 +76,9 @@ exports.registration = function(login, password, optionsData) {
             kontact2: "",
             avatar: "./img/no-avatar.png",
             status: "off",
+            sheme: SHEME,
             devices: [],
-            rooms: []
+            rooms: [{name:"Серверная", visibility:"block"}]   //*
         }
         db.set("user."+login, newUser)
 
@@ -103,13 +103,13 @@ class User {
         });
     }
     #dump() {
-        delete this.api         //!
         db.set("user."+this.login, this)
     }
     addNewRoom(name, clb) {
         if(this.rooms.length < 10){
             this.rooms.push({
-                name: name??`новая комната ${this.rooms.length}`
+                name: name??`новая комната ${this.rooms.length}`,
+                visibility: "block",
             });
             
             clb(this.rooms)
@@ -117,24 +117,15 @@ class User {
         }
         else clb({error: "Максимальное кол-во комнат 10"})
     }
-    _findGroop(comand) {
-        let groopDevices = []
-        let inerToken = comand.split("/")
-
-        this.devices.forEach((device)=> {
-            let ownerToken = device.mac.split("/")
-            if(inerToken[1]===ownerToken[1]) groopDevices.push(device)
-        });
-        return groopDevices
+    _findShemeType(type) {
+        return SHEME[type]
     }
-    addNewSchemeInput(mac, type, name, clb) {
-        let groopDevices = this._findGroop(mac)
+    addDevice(state, clb) {
+        let {mac, type, name} = state
 
         let find = this.devices.find((device, index)=> {
             if(device.mac===mac){
                 this.devices[index].name = name
-                this.devices[index].type = type
-                this.devices[index].groop = groopDevices
                 clb(this.devices[index])
                 return true
             }
@@ -144,10 +135,10 @@ class User {
             let device = {
                 mac: mac,
                 room: 0,
-                name: name??"test-devices",
+                name: name??`newDevice-${this.devices.length}`,
                 type: type,
-                groop: groopDevices,
-                payload: []
+                sheme: SHEME[type],
+                payload: {}
             }
 
             clb(device)
@@ -177,35 +168,6 @@ class User {
         this.rooms.splice(id, 1)
         clb(this.rooms)
         this.#dump()
-    }
-    /**
-     * публикация команды устройсту от клиента
-     * @param {*} idDevices mac устройства
-     * @param {*} comand comand name
-     * @param {*} massage 
-     * @returns 
-     */
-    comand(mac, massage, clb) {
-        this.devices.find((device)=> {
-            if(device.mac===mac){
-                this.api.publish(mac, massage, {qos:0}, clb)
-            }
-        })
-    }
-    /**
-     *  Chanel {_name, value}
-     */
-    async connectDevices() {
-        this.devices.forEach((device)=> {
-            let mac = device.mac
-
-            Object.keys(device.payload).forEach((key)=> {
-                this.api.subscribe(`${mac}/${key}`, (err, data)=> {
-                    if(err) log(err);
-                    else device.payload[key] = data
-                });
-            });
-        });
     }
     /**
      * Переход в автономный режим

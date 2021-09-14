@@ -77,7 +77,7 @@ export function DropDown2(props) {
             </div>
             <ul className="dropdown-menu" style={{margin: "2px 1% 1% 1%"}}>
                 {props.data.map((elem, index)=> {
-                    return( <li key={index}>
+                    return( <li onClick={(ev)=> {window.localStorage.setItem("typeDevice", elem); props.click(ev)}} key={index}>
                                 <i>{elem}</i>
                             </li>
                         )

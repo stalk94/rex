@@ -1,0 +1,18 @@
+{
+    "PMR": {
+        "rele": [
+            "/R0/onoff",
+            "/R0/ga1",
+            "/R0/ga2", 
+            "/R0/ga3",
+            "/R0/gafb"
+        ],
+        "button": [
+            "/B0/ga1",
+            "/B0/ga2",
+            "/B0/gafb", 
+            "/B0/ga1mode",
+            "/B0/ga2mode"
+        ]
+    }
+}

@@ -17,6 +17,9 @@ export function ListContainer(props) {
     const setData =(ev, elem)=> {
         ev.dataTransfer.setData("text/plain", JSON.stringify(elem))
     }
+    const onSelectCategory =(ev)=> {
+        window.localStorage.setItem("setCategory", props.category)
+    }
     const refList = React.createRef()
 
     return(
@@ -35,24 +38,15 @@ export function ListContainer(props) {
                         suppressContentEditableWarning="true"
                         onInput={(ev)=> reNameDevice(ev.target.innerText, index)}
                     >
-                        { elem.name??`девайс ${index}` }
+                        {elem.name}
                     </var>
                 </div>
             )}
-            
-            <div id="addDevice" style={{cursor:"cell"}} onClick={()=> props.onAdd({})}> ➕ </div>
         </div>
     );
 }
 
 
-
-/**
- *  AtomsList: [{
- *      title: ''
- *      list:  ListContainer
- *  }]
- */
 export default function Catalog(props) {
     const [selectedIndex, setSelected] = useState(0)
 
@@ -63,13 +57,13 @@ export default function Catalog(props) {
             onChange={(index, expanded, selectedIndex)=> console.log(selectedIndex)}
         >
             {props.list.map((elem, index)=> (
-                <div className="accordion-item"
+                <div
                     key={index} 
-                    data-header={elem.title}
+                    data-header={<div className="acordion-title">{elem.title}</div>}            // title list
                 >
-                    <ListContainer list={elem.list}/>
+                    <ListContainer list={elem.list} category={elem.title} onAdd={props.onAdd}/>
                 </div>
-            ))
-        }</Accordion>
+            ))}
+        </Accordion>
     );
 }

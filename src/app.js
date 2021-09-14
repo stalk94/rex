@@ -8,13 +8,13 @@ import userIcon from "./img/user.svg";
 import house from "./img/house.svg";
 import hard from "./img/hard.png";
 import { NavigationHome } from "./component/navigation";
-import SchemeConstructor from "./component/add";
+import SchemeConstructor from "./component/scheme";
 import { send } from "./engine";
 import { Modal } from "./component/form";
 import FavoriteDevice from "./component/device.manager";
 import DevicePanel from "./component/device.panel";
 import Catalog from "./component/lists";
-
+import Api from "./api";
 
 
 let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localStorage.getItem("user")) : {login:'test', password:"test"}
@@ -30,6 +30,7 @@ const onFetch =(setUser, setDevice, setRooms, onError)=> {
         })
     }), 2500)
 }
+const api = Api(user)
 /////////////////////////////////////////////////////////////
 const onExit =()=> {
     window.localStorage.clear()
@@ -93,7 +94,7 @@ const User =(props)=> {
 
 function App(props) {
     const onAddDevice =(device)=> {
-        send("add", device, "POST").then((res)=> {
+        send("addDevice", {device}, "POST").then((res)=> {
             res.json().then((value)=> {
                 if(value.error) console.log("error")
                 else ''
@@ -146,7 +147,7 @@ function App(props) {
         return find
     }
     //<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>
-    const [leftNavigation, setLeftNavigations] = useState(<Catalog list={listDevicesSortable()} click={console.log} onAdd={onAddDevice}/>)
+    const [leftNavigation, setLeftNavigations] = useState(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>)
 
     
     //////////////////////////////////////////

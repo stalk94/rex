@@ -84,7 +84,7 @@ export class NavigationHome extends React.Component {
                         setList={(newState)=> this.setState({ rooms: newState })}
                     >
                         {this.state.rooms.map((item, id)=> (
-                            <li id="rooms" key={id} ctx={"delRoom:"+id}>
+                            <li style={{display:item.visibility}} id="rooms" key={id} ctx={"delRoom:"+id}>
                                 <i style={{fontSize:"19px",fontStyle:"normal"}}>🏛️ </i> 
                                 <var 
                                     contentEditable="true" 

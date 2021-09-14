@@ -67,7 +67,7 @@
             "name": "rex",
             "host": "31.172.65.58",
             "port": 1883,
-            "clientId": "vscode"
+            "clientId": "vsmqtt_client"
         }
     ],
     "liveServer.settings.multiRootWorkspaceName": "rex-s"

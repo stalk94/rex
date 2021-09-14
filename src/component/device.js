@@ -151,7 +151,7 @@ export const Move =(elem)=> {
 }
 export function ProgressBar(props) {
     return(
-        <div onClick={()=> props.enable==="false"?props.toggle("true"):props.toggle("false")} className="top-device">  
+        <div onClick={props.toggle} className="top-device">  
             <svg className="progress" data-progress={props.value} version="1.1" xmlns="http://www.w3.org/2000/svg" 
                 x={props.x ? props.x : "0px"} 
                 y={props.y ? props.y : "0px"} 
@@ -187,21 +187,45 @@ export const Loader =()=> <div className="ring"></div>
 
 
 export default function Device(props) {
-    const [disabled, setEnable] = useState('false')
+    const [init, setInit] = useState(false)
+    const [disabled, setEnable] = useState('true')
     const [value, setValue] = useState(50)
     const [temperature, setTemp] = useState(21)
+    const pub =(key, val)=> {
+        props.sheme[key].forEach((str)=> {
+            let tokens = str.split("/")
+            if(tokens[tokens.length-1]===key) props.api.publish(props.mac+str, val)
+        });
+    }
+    const sub =()=> {
+        Object.keys(props.sheme).forEach((key)=> {
+            props.sheme[key].forEach((str)=> {
+                let tokens = str.split("/")
+                
+                props.api.subscribe(props.mac+str+"st")
+                props.api.on('massage', (topic, payload, packet)=> {
+                    let input = tokens[tokens.length-1]
 
+                    if(topic===props.mac+str+"st"){
+                        if(input==="onoff") setEnable(+payload===1?"false":"true")
+                        if(input==="brihtness") setValue(+payload)
+                        if(input==="temperature") setTemp(+payload)
+                    }
+                })
+            })
+        })
+        setInit(true)
+    }
+
+    
     const input = disabled==="true"
-        ? <input disabled style={{marginTop:"25%"}} type="range" onInput={(ev)=> setValue(ev.target.value)} value={value}/>
-        : <input style={{marginTop:"25%"}} type="range" onInput={(ev)=> setValue(ev.target.value)} value={value}/>
+        ? <input disabled style={{marginTop:"25%"}} type="range" onInput={(ev)=> pub('brihtness', ev.target.value)} value={value}/>
+        : <input style={{marginTop:"25%"}} type="range" onInput={(ev)=> pub('brihtness', ev.target.value)} value={value}/>
     const display = {
-        deamer: input,
-        onOff: "",
-        wtor: input,
-        termostat: input
+        PMR: input
     }
     const labelImage = props.type!=="termostat" 
-        ? <div onClick={()=> disabled==='true'?setEnable('false'):setEnable('true')} style={{cursor:"pointer"}}>
+        ? <div onClick={()=> {pub("onoff", disabled==='true'?1:0)}} style={{cursor:"pointer"}}>
             <h3 style={{position:"absolute",color:disabled==='false'?"#42f059":"red",left:"40%",top:"30%"}}>
                 {disabled==='false'?(value+"%"):"off"}
             </h3>
@@ -211,11 +235,14 @@ export default function Device(props) {
             />
         </div>
         : <ProgressBar 
-            toggle={setEnable} 
+            toggle={()=> {pub("onoff", disabled==='true'?1:0)}} 
             enable={disabled} 
             value={value} 
             temperature={temperature}
         />
+    
+    // слушаем
+    if(!init) sub()
 
 
     return(

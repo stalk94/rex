@@ -1,4 +1,4 @@
 const db = require("quick.db")
 
 
-console.log(db.get("user"))
+console.log(db.set("user.test", {}))

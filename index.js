@@ -75,10 +75,10 @@ app.post("/regUser", jsonParser, (req, res)=> {
     if(req.body.login && req.body.password) res.send(registration(req.body.login, req.body.password));
     else res.send({error: "Не все поля заполнены"});
 });
-app.post("/regNewScheme", jsonParser, (req, res)=> {
+app.post("/regNewDevice", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
 
-    if(!user.error) user.addNewSchemeInput(req.body.scheme, (data)=> {
+    if(!user.error) user.addDevicet(req.body.state, (data)=> {
         res.send(data)
     });
     else res.send(user)
@@ -122,6 +122,7 @@ app.post("/comand", jsonParser, (req, res)=> {
 });
 app.post("/reNameDevice", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
+    
     if(!user.error) user.reNameDevice(req.body.name, req.body.id, (data)=> {
         res.send(data)
     });

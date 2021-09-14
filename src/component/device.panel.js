@@ -21,6 +21,9 @@ export default function DevicePanel(props) {
         if(props.devices && props.devices.length!==0) return <Device key={index}
             type={device.type} 
             title={device.name} 
+            sheme={device.sheme}
+            mac={device.mac}
+            api={props.api}
             room={props.rooms[device.room]?props.rooms[device.room].name:""} 
             image={ICON[device.type]}
         />
