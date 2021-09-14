@@ -1,47 +1,72 @@
 import React, { useState, useEffect, useContext } from "react";
+import {DropDown2} from "./form"
 import { send } from "../engine";
 
 
 
-export default function AddDevice(props) {
-    const [err, setError] = useState() 
-    const [mac, setMac] = useState()
-    const [name, setName] = useState()
-    const [type, setType] = useState()
+/**
+ *  output: mac/chanel/comand+"st"
+ *  input: mac/chanel/comand
+*/
+export default class SchemeConstructor extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            mac: "",
+            groop: "",
+            comand: "",
+            name: ""
+        }
+        this.setInput = this.setInput.bind(this)
+        this.create = this.create.bind(this)
+        this.setError = this.setError.bind(this)
+    }
+    setError(error) {
+        this.props.error(error)
+    }
+    create() {
+        let str = ''
+        Object.values(this.state).forEach((val)=> {
+            str += val
+        });
 
-    const onSend =()=> {
-        let user = JSON.parse(window.localStorage.getItem("user"))
-
-        send("regNewDevice", { login:user.login, password:user.password, data:{mac:mac, name:name, type:type} }, "POST").then((res)=> {
+        send("regNewDevice", { login:user.login, password:user.password, scheme:str }, "POST").then((res)=> {
             res.json().then((data)=> {
-                if(!data.mac.error && !data.type.error ) props.add(data)
+                if(!data.mac.error && !data.type.error) props.add(data)
                 else if(data.mac.error) setError(data.mac.error)
-                else setError(data.type.error)
+                else this.setError(data.type.error)
             });
         });
     }
+    setInput(ev) {
+        let name = ev.target.getAttribute("name")
 
-    return(
-        <div className="intrf">
-            {err ? <div>{err}</div> : "" }
-            mac id device:
-            <input type="text" 
-                value={ mac } 
-                onInput={(ev)=> setMac(ev.target.value)}
-            />
-            Имя устройства(любое):
-            <input type="text" 
-                value={ name } 
-                onInput={(ev)=> setName(ev.target.value)}
-            />
-            Тип устройства:
-            <select>
+        this.setState({
+            [name]: ev.target.value
+        })
+    }
+    render() {
+        const INTRFACE = {
+            lamp: {},
+            onOff: { maxCount: 1 },
+            wtor: {},
+            logic: {},
+            termostat: {}
+        }
 
-            </select>
-            <button onClick={onSend}>
-                <i class="fal fa-plus-circle"/>
-                Добавить
-            </button>
-        </div>
-    );
+        return(
+            <div style={{marginTop:"5%", maxWidth:"60%"}}>
+                <h3 style={{color:"grey"}}>{`${this.state.mac}/${this.state.groop}/${this.state.comand}`}</h3>
+                <input placeholder="MAC" name="mac" type="text" onInput={this.setInput} value={this.state.mac} />
+                <input placeholder="GROUP" name="groop" type="text" onInput={this.setInput} value={this.state.groop} />
+                <input placeholder="TOPIC" name="comand" type="text" onInput={this.setInput} value={this.state.comand} />
+                <DropDown2 title={"Тип"} data={Object.keys(INTRFACE)}/>
+                <input placeholder="имя устройства(кастомное)" name="name" type="text" onInput={this.setInput} value={this.state.name} />
+
+                <button onClick={this.create} style={{marginTop:"2%",marginLeft:"25%",width:"50%"}}> 
+                    create 
+                </button>
+            </div>  
+        );
+    }
 }

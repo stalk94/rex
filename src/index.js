@@ -35,9 +35,11 @@ const GM =(props)=> <img className="gm" onClick={props.open} src={gm}/>;
 
 
 function Main() {
+    const [regForm, setRegForm] = useState("")
     const verify =()=> {
         let userStorage = window.localStorage.getItem("user")
         let data = JSON.parse(userStorage)
+        
     
         if(userStorage) send("auth", {login:data.login, password:data.password}, "POST").then((res)=> {
             res.json().then((userData)=> {
@@ -57,6 +59,21 @@ function Main() {
                     <h3 style={{color:"brown", marginLeft:"5%"}}>Воспользуйтесь формой регистрации/авторизации</h3>
                 </React.Fragment>
             );
+            setRegForm(<Authorize 
+                onOk={(userData)=> {
+                    window.localStorage.setItem("user", JSON.stringify(userData))
+                    document.location.href = "app.html"
+                }}
+                onErr={(textError)=> {
+                    onHead(
+                        <React.Fragment>
+                            <GM open={verify}/>
+                            <h3 style={{color:"brown", marginLeft:"5%"}}>{textError}</h3>
+                        </React.Fragment>
+                    );
+                    setTimeout(()=> onHead(<GM open={verify}/>), 6000)
+                }}
+            />);
             setTimeout(()=> onHead(<GM open={verify}/>), 6000)
         }
     }
@@ -67,22 +84,7 @@ function Main() {
         <Slide className="section-1"> 
             <header>{ head }</header>
             <img className="figure" src={ figure }/>
-            <img className="logo-index" src={ logo }/>
-
-            <Authorize 
-                onOk={(userData)=> {
-                    window.localStorage.setItem("user", JSON.stringify(userData))
-                    document.location.href = "app.html"
-                }}
-                onErr={(textError)=> {
-                    onHead(
-                        <div className="line">
-                            <GM open={verify}/>
-                            <h3>{textError}</h3>
-                        </div>
-                    )
-                }}
-            />
+            { regForm }
         </Slide>,
         <Slide className="section-2">
             <h1>{ text1 }</h1>

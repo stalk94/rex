@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
+import "./css/style.css";
+import "./css/fontawesome.css";
 import logo from "./img/logo.svg";
 import exit from "./img/exit.svg";
 import userIcon from "./img/user.svg";
 import house from "./img/house.svg";
-import "./css/style.css";
-import "./css/fontawesome.css";
-import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
-import Navigation from "./component/navigation";
-import AddDevice from "./component/add";
+import hard from "./img/hard.png";
+import { NavigationHome } from "./component/navigation";
+import SchemeConstructor from "./component/add";
 import { send } from "./engine";
-import Authorize from "./component/authorize";
 import { Modal } from "./component/form";
-import DeviceManager from "./component/device.manager";
+import FavoriteDevice from "./component/device.manager";
 import DevicePanel from "./component/device.panel";
+import Catalog from "./component/lists";
 
 
-let user = window.localStorage.getItem("user")!==null 
-    ? JSON.parse(window.localStorage.getItem("user")) 
-    : {login:'test', password:"test"}
+
+let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localStorage.getItem("user")) : {login:'test', password:"test"}
 const onFetch =(setUser, setDevice, setRooms, onError)=> {
-    window.onFetch = setInterval(()=> send("auth", {login:user.login, password:user.password, test:"test"}, "POST").then((rawData)=> {
+    window.onFetch = setInterval(()=> send("auth", {login:user.login, password:user.password}, "POST").then((rawData)=> {
         rawData.json().then((data)=> {
             if(!data.error){
                 setUser(data)
@@ -40,6 +39,7 @@ const HeaderNav =(props)=> {
     return(
         <React.Fragment>
             <img className="link" onClick={()=> props.fn("home")} id="home" src={house}/>
+            <img className="link" onClick={()=> props.fn("atoms")} id="serverRoom" src={hard}/>
             <h3 style={props.style} className="Error">{props.title}</h3>
             <img className="link" onClick={()=> props.fn("user")} id="user" src={userIcon}></img>
         </React.Fragment>
@@ -90,37 +90,88 @@ const User =(props)=> {
 //////////////////////////////////////////////////////////////
 
 
+
 function App(props) {
-    const [user, setUser] = useState(props.user)
-    const [view, setView] = useState("devices")
-    const [devices, setDevice] = useState(user.devices)
-    const [rooms, setRooms] = useState(user.rooms)
-    const [title, setTitle] = useState(<HeaderNav className="line top-panel" fn={setView}/>)
-    //////////////////////////////////////////
-    const pages = { 
-        devices: <DevicePanel devices={devices} rooms={rooms}/>,
-        home: <DeviceManager const={3000} devices={devices} rooms={rooms}/>,
-        user: <User onExit={onExit}>{user}</User>,
-        add: <AddDevice add={onAddDevice} />,
-        modal: ""
-    }
-    //////////////////////////////////////////
-    const onError =(textError)=> {
-        setTitle(<HeaderVav title={textError} fn={setView}/>)
-        setView("auth")
-        setTimeout(()=> setTitle(<HeaderNav fn={setView}/>), 5000)
-    }
     const onAddDevice =(device)=> {
-        props.user.devices.push(device)
-        setDevice(props.user.devices)
+        send("add", device, "POST").then((res)=> {
+            res.json().then((value)=> {
+                if(value.error) console.log("error")
+                else ''
+            })
+        })
     }
     const onAddRoom =(val)=> {
         send("addRoom", {login:props.user.login, password:props.user.password, room:val}, "POST").then((res)=> {
             res.json().then((val)=> {
-                if(!val.error) setRooms(val);
-                else onError(val);
+                if(!val.error) console.log(val);
+                else console.log(val.error);
             })
         })
+    }
+    const readRoom =(val, id)=> {
+        send("readNameRoom", {login:props.user.login, password:props.user.password, name:val, id:id}, "POST").then((res)=> {
+            res.json().then((val)=> {
+                if(!val.error) setLeftNavigations(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>);
+                else console.log(val.error);
+            })
+        })
+    }
+    const delRoom =(id)=> {
+        send("delRoom", {login:props.user.login, password:props.user.password, id:id}, "POST").then((res)=> {
+            res.json().then((val)=> {
+                if(!val.error) setLeftNavigations(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>);
+                else console.log(val.error);
+            })
+        })
+    }
+    const selectDevice =(ev)=> {
+        
+    }
+
+    const [user, setUser] = useState(props.user)
+    const [view, setView] = useState("test")
+    const [devices, setDevice] = useState(user.devices)
+    const [rooms, setRooms] = useState(user.rooms)
+    const [title, setTitle] = useState(<HeaderNav className="line top-panel" fn={setView}/>)
+    function listDevicesSortable() {
+        let find = []
+        
+        rooms.forEach((room, index)=> {
+            find.push({title:room.name, list:[]})
+        });
+        if(rooms.length>0) rooms.forEach((device)=> {
+            if(device.room) find[device.room].list.push(device)
+        });
+
+        return find
+    }
+    //<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>
+    const [leftNavigation, setLeftNavigations] = useState(<Catalog list={listDevicesSortable()} click={console.log} onAdd={onAddDevice}/>)
+
+    
+    //////////////////////////////////////////
+    const pages = { 
+        test: <SchemeConstructor/>,
+        devices: <DevicePanel devices={devices} rooms={rooms}/>,
+        home: <FavoriteDevice devices={devices} rooms={rooms}/>,
+        user: <User onExit={onExit}>{user}</User>,
+        modal: ''
+    }
+    //////////////////////////////////////////
+    const setError =(textError)=> {
+        setTitle(<HeaderVav title={textError} fn={setView}/>)
+        setView("auth")
+        setTimeout(()=> setTitle(<HeaderNav fn={setView}/>), 5000)
+    }
+    function setNavigation() {
+        if(view==='serverRoom'){
+            setLeftNavigations(<Catalog list={listDevicesSortable()} event={console.log} onAdd={onAddDevice}/>)
+            pages.devices = <SchemeConstructor error={setError}/>
+        }
+        else {
+            setLeftNavigations(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>)
+            pages.devices = <DevicePanel devices={devices} rooms={rooms}/>
+        }
     }
     const closeModal =()=> {
         setView("home")
@@ -130,8 +181,9 @@ function App(props) {
         setView("modal")
     }
     useEffect(()=> {
-        if(!window.onFetch) onFetch(setUser, setDevice, setRooms, onError)
-    })
+        if(!window.onFetch) onFetch(setUser, setDevice, setRooms, setError)
+    });
+
 
     return(
         <article>
@@ -141,12 +193,7 @@ function App(props) {
                     <img src={ logo }/>
                 </header>
                 <nav className="card">
-                    <Navigation 
-                        rooms={ rooms } 
-                        setRoom={ onAddRoom } 
-                        fn={ setView } 
-                        modal={ openModal }
-                    />
+                    { leftNavigation }
                 </nav>
             </aside>
 
@@ -164,12 +211,18 @@ function App(props) {
 }
 
 
-send("auth", {login:user.login, password:user.password, test:"test"}, "POST").then((data)=> {
-    data.json().then((userData)=>
-        ReactDOM.render(<App user={userData}/>, document.querySelector(".root"))) 
+send("auth", {login:user.login, password:user.password}, "POST").then((data)=> {
+    data.json().then((userData)=> ReactDOM.render(<App user={userData}/>, document.querySelector(".root"))) 
 })
 window.onresize =()=> {
     const canvas = document.querySelector("#stars")
     canvas.style.width = window.innerWidth+"px"
     canvas.style.height = window.innerHeight+"px"
 }
+window.oncontextmenu = ((ev)=>{
+    let ctxMain = ev.target.getAttribute("ctx")
+    if(ctxMain){
+        console.log(ctxMain)
+    }
+    return false
+});

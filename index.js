@@ -64,40 +64,24 @@ app.get("/", (req, res)=> {
     res.sendFile(__dirname+"/dist/index.html")
 });
 
-let count = 0
+
 
 // синхронизация с параметрами только через сервер
 app.post("/auth", jsonParser, (req, res)=> {
-    console.log(count++)
-    if(req.body.test){
-        if(count===10){mock.devices.pop()}
-        else res.send(mock)
-    }
-    else {
-        if(req.body.login && req.body.password) res.send(autorise(req.body.login, req.body.password));
-        else res.send({error: "Не все поля заполнены"});
-    }
+    if(req.body.login && req.body.password) res.send(autorise(req.body.login, req.body.password, req.body.row));
+    else res.send({error: "Не все поля заполнены"});
 });
 app.post("/regUser", jsonParser, (req, res)=> {
-    if(req.body.test) res.send(mock)
-    else {
-        if(req.body.login && req.body.password) res.send(registration(req.body.login, req.body.password));
-        else res.send({error: "Не все поля заполнены"});
-    }
+    if(req.body.login && req.body.password) res.send(registration(req.body.login, req.body.password));
+    else res.send({error: "Не все поля заполнены"});
 });
-// todo: добавить схемы девайсов
-app.post("/regNewDevice", jsonParser, (req, res)=> {
-    if(req.body.test){
-        mock.devices.push()
-        res.send(mock)
-    }
-    else {
-        let user = autorise(req.body.login, req.body.password);
-        if(!user.error) user.addNewDevice(req.body.data, (data)=> {
-            res.send(data)
-        });
-        else res.send(user)
-    }
+app.post("/regNewScheme", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+
+    if(!user.error) user.addNewSchemeInput(req.body.scheme, (data)=> {
+        res.send(data)
+    });
+    else res.send(user)
 });
 app.post("/addRoom", jsonParser, (req, res)=> {
     if(req.body.test){
@@ -112,6 +96,20 @@ app.post("/addRoom", jsonParser, (req, res)=> {
         else res.send(user)
     }
 });
+app.post("/readNameRoom", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+    if(!user.error) user.reWriteRoom(req.body.name, req.body.id, (data)=> {
+        res.send(data)
+    });
+    else res.send(user)
+});
+app.post("/delRoom", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+    if(!user.error) user.delRoom(req.body.id, (data)=> {
+        res.send(data)
+    });
+    else res.send(user)
+});
 app.post("/sinc", jsonParser, (req, res)=> {
     if(req.body.test) res.send(mock);
     else {
@@ -122,7 +120,13 @@ app.post("/sinc", jsonParser, (req, res)=> {
 app.post("/comand", jsonParser, (req, res)=> {
     
 });
-
+app.post("/reNameDevice", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+    if(!user.error) user.reNameDevice(req.body.name, req.body.id, (data)=> {
+        res.send(data)
+    });
+    else res.send(user)
+});
 
 
 // admin api

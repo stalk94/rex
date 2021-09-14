@@ -17,17 +17,19 @@ const ICON = {
 
 
 export default function DevicePanel(props) {
-
+    const view = props.devices.map((device, index)=> {
+        if(props.devices && props.devices.length!==0) return <Device key={index}
+            type={device.type} 
+            title={device.name} 
+            room={props.rooms[device.room]?props.rooms[device.room].name:""} 
+            image={ICON[device.type]}
+        />
+        else return "девайсов нет"
+    })
 
     return(
         <div className="device-wraper">
-            {props.devices.map((device, index)=> <Device key={index}
-                    type={device.type} 
-                    title={device.name} 
-                    room={props.rooms[device.room].name} 
-                    image={ICON[device.type]}
-                />
-            )}
+            {view}
         </div>
     );
 }

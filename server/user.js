@@ -22,12 +22,12 @@ function tokenDecriptor(token, pass) {
         : rez
 }
 /** Верификатор регистрации нового устройства */
-function verifyDevice(device) {
+function verifyDevice(scheme) {
     const protos = {
         mac: ()=> {
             let find;
 
-            if(device.mac.length < 3) find = {error: "Вы не ввели mac id устройства"}
+            if(scheme.length < 3) find = {error: "Вы не ввели mac id устройства"}
             else {
                 let allUser = db.get("user");
 
@@ -56,7 +56,6 @@ function verifyDevice(device) {
         }
     }
     protos.mac()
-    protos.type()
     protos.name()
 
     return device
@@ -70,6 +69,12 @@ exports.registration = function(login, password, optionsData) {
             id: Object.keys(db.get("user")).length,
             login: login,
             password: setPasswordHash(password),
+            firstName: "",
+            lastName: "",
+            phone: "",
+            adres: "",
+            kontact1: "",
+            kontact2: "",
             avatar: "./img/no-avatar.png",
             status: "off",
             devices: [],
@@ -80,10 +85,11 @@ exports.registration = function(login, password, optionsData) {
         return new User(newUser)
     }
 }
-exports.autorise = function(login, password) {
+exports.autorise = function(login, password, row) {
     if(!db.has("user."+login)) return {error: "нет такого юзера"};
     else {
-        if(db.get("user."+login+".password")!==password) return {error: "password error"}
+        if(row && getPasswordHash(db.get("user."+login).password)!==password) return {error: "password error"}
+        else if(!row && db.get("user."+login).password!==password) return {error: "password error"}
         else return new User(db.get("user."+login))
     }
 }
@@ -95,20 +101,15 @@ class User {
         Object.keys(data).forEach((key)=> {
             this[key] = data[key]
         });
-
-        if(this.status === "off"){
-            this.api = conect(this)
-            this.status = "on"
-        }
     }
     #dump() {
         delete this.api         //!
-        db.set("user."+this.name, this)
+        db.set("user."+this.login, this)
     }
     addNewRoom(name, clb) {
         if(this.rooms.length < 10){
             this.rooms.push({
-                name: name
+                name: name??`новая комната ${this.rooms.length}`
             });
             
             clb(this.rooms)
@@ -116,18 +117,66 @@ class User {
         }
         else clb({error: "Максимальное кол-во комнат 10"})
     }
-    addNewDevice(device, clb) {
-        let vDev = verifyDevice(device)
-        
-        if(!vDev.type.error && !vDev.mac.error){
-            vDev.room = undefined
-            vDev.payload = {}
+    _findGroop(comand) {
+        let groopDevices = []
+        let inerToken = comand.split("/")
 
-            this.devices.push(vDev);
-            clb(vDev)
+        this.devices.forEach((device)=> {
+            let ownerToken = device.mac.split("/")
+            if(inerToken[1]===ownerToken[1]) groopDevices.push(device)
+        });
+        return groopDevices
+    }
+    addNewSchemeInput(mac, type, name, clb) {
+        let groopDevices = this._findGroop(mac)
+
+        let find = this.devices.find((device, index)=> {
+            if(device.mac===mac){
+                this.devices[index].name = name
+                this.devices[index].type = type
+                this.devices[index].groop = groopDevices
+                clb(this.devices[index])
+                return true
+            }
+        });
+
+        if(!find){
+            let device = {
+                mac: mac,
+                room: 0,
+                name: name??"test-devices",
+                type: type,
+                groop: groopDevices,
+                payload: []
+            }
+
+            clb(device)
+            this.devices.push(device)
+        }
+    }
+    reWriteRoom(name, id, clb) {
+        if(name.length>3){
+            this.rooms[id].name = name
+            clb(this.rooms)
             this.#dump()
         }
-        else clb(vDev)
+        else clb({error:"название не может быть менее 3-х символов"})
+    }
+    reNameDevice(name, id, clb) {
+        if(name.length>3){
+            if(this.devices[id]){
+                this.devices[id].name = name
+                clb("ok")
+                this.#dump()
+            }
+            else clb({error:"девайс не найден"})
+        }
+        else clb({error:"название не может быть менее 3-х символов"})
+    }
+    delRoom(id, clb) {
+        this.rooms.splice(id, 1)
+        clb(this.rooms)
+        this.#dump()
     }
     /**
      * публикация команды устройсту от клиента
@@ -136,11 +185,12 @@ class User {
      * @param {*} massage 
      * @returns 
      */
-    comand(idDevices, comand, massage) {
-        if(this.devices[idDevices]){
-            this.api.publish(idDevices+"/"+comand, massage)
-        }
-        else return {error: "ошибка устройства, обратитесь к менеджеру!"}
+    comand(mac, massage, clb) {
+        this.devices.find((device)=> {
+            if(device.mac===mac){
+                this.api.publish(mac, massage, {qos:0}, clb)
+            }
+        })
     }
     /**
      *  Chanel {_name, value}

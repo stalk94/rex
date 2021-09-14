@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { send } from "../engine";
-
+import "../css/form.css"
 
 
 /**
@@ -13,7 +13,7 @@ export default function Authorize(props) {
     const [password, setPass] = useState("")
 
     const auth =()=> {
-        send("auth", {login:login, password:password}, "POST").then((res)=> {
+        send("auth", {login:login, password:password, row:true}, "POST").then((res)=> {
             res.json().then((data)=> {
                 if(!data.error) props.onOk(data);
                 else props.onErr(data.error);
@@ -60,3 +60,5 @@ export default function Authorize(props) {
         </div>
     );
 }
+
+

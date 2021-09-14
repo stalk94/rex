@@ -74,7 +74,7 @@ const MainDevice =(props)=> {
  *      `const`: константы верхнего уровня    
  * }
  */
-export default class DeviceManager extends React.Component {
+export default class FavoriteDevice extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -82,9 +82,6 @@ export default class DeviceManager extends React.Component {
         }
         this.tick = this.tick.bind(this)
         this.selectable = this.selectable.bind(this)
-    }
-    tick() {
-        
     }
     componentDidMount() {
         //this.setState({devices:mock})

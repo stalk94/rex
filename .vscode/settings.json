@@ -52,8 +52,23 @@
         "rex-admin/swiftshader": true,
         "rex-admin/locales": true,
         "rex-admin/node_modules": true,
-        "rex-admin/pnacl": true
+        "rex-admin/pnacl": true,
+        "rex-job": true,
+        "src\\component/test.js": true,
+        "cfg.json": true,
+        "rex-admin\\src/*.json": true
     },
     "explorerExclude.backup": null,
-    "svg.preview.background": "transparent"
+    "svg.preview.background": "transparent",
+    "editor.fontWeight": "1",
+    "editor.fontSize": 13.8,
+    "vsmqtt.brokerProfiles": [
+        {
+            "name": "rex",
+            "host": "31.172.65.58",
+            "port": 1883,
+            "clientId": "vscode"
+        }
+    ],
+    "liveServer.settings.multiRootWorkspaceName": "rex-s"
 }
