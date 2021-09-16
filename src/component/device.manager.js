@@ -12,7 +12,7 @@ import termostat from '../img/termostat.png';
 
 ////////////////////////////////////////////////////////////////
 const ICON = {
-    lamp: lamp,
+    PMR: lamp,
     deamer: lamp,
     onOff: onOff,
     wtor: wtor,
@@ -71,7 +71,6 @@ export default class FavoriteDevice extends React.Component {
         this.state = {
             devices: props.devices
         }
-        this.tick = this.tick.bind(this)
         this.selectable = this.selectable.bind(this)
     }
     componentDidMount() {

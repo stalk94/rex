@@ -387,6 +387,9 @@ button:hover {
     width: 80%;
     height: 20%;
 }
+.logo:hover {
+    cursor: pointer;
+}
 .glass {
     background-color: rgba(255, 255, 255, 0.15);
     border: 1px solid rgb(175, 174, 174); 

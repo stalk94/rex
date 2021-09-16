@@ -62,37 +62,34 @@ export class NavigationHome extends React.Component {
             rooms: props.rooms
         }
         this.onAdd = this.onAdd.bind(this)
-        this.goTo = this.goTo.bind(this)
-        this.exit = this.exit.bind(this)
-        this.profile = this.profile.bind(this)
-        this.test = this.test.bind(this)
     }
     onAdd() {
         this.setState({rooms: [...this.state.rooms, `новая комната ${this.state.rooms.length}`]})
         this.props.setRoom()
-    }
-    goTo(ev) {
-        this.props.event(this.state.rooms[ev.target.getAttribute("data-id")])
     }
     render() {
         return(
             <React.Fragment>
                 <ul>
                     <h4 style={{marginLeft:"5%",marginTop:"0px",fontSize:"18px",opacity:"0.6"}}>Мой дом:</h4>
+
                     <ReactSortable
                         list={this.state.rooms}
                         setList={(newState)=> this.setState({ rooms: newState })}
                     >
                         {this.state.rooms.map((item, id)=> (
-                            <li style={{display:item.visibility}} id="rooms" key={id} ctx={"delRoom:"+id}>
+                            <li style={{display:item.visibility}} 
+                                id="rooms" 
+                                key={id} 
+                                ctx={"delRoom:"+id}
+                                onClick={this.props.click}
+                            >
                                 <i style={{fontSize:"19px",fontStyle:"normal"}}>🏛️ </i> 
                                 <var 
-                                    contentEditable="true" 
-                                    suppressContentEditableWarning="true"
                                     onInput={(ev)=> this.props.readRoom(ev.target.innerText, id)}
                                     ctx={"delRoom:"+id}         // удаление через контекстное меню
                                 >
-                                    {item.name}
+                                    { item.name }
                                 </var>
                             </li>
                         ))}
@@ -103,14 +100,5 @@ export class NavigationHome extends React.Component {
                 <div id="addRoom" onClick={this.onAdd}> ➕ </div>
             </React.Fragment>
         );
-    }
-    profile() {
-        this.props.event("home")
-    }
-    test() {
-        this.props.event("test")
-    }
-    exit() {
-        this.props.event("auth")
     }
 }

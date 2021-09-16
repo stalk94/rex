@@ -5,7 +5,7 @@ import mqtt from "mqtt";
  * Связь с api брокера 
  * @returns connection
  */
-export default function Connect(client) {
+export default function Connect(client, err) {
     const api = mqtt.connect("ws://31.172.65.58:8083/mqtt", {
         clean: true,
         connectTimeout: 1000,
@@ -14,10 +14,10 @@ export default function Connect(client) {
     });
 
     api.on('reconnect', (error)=> {
-        console.log('reconnecting:', error)
+        err('reconnecting:', error)
     });
     api.on('error', (error)=> {
-        console.log('Connection failed:', error)
+        err('Connection failed:', error)
     });
 
     return api

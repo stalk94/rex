@@ -31,15 +31,9 @@ export function ListContainer(props) {
                     key={index} 
                     onClick={props.click}
                     draggable={'true'}
-                    onDragStart={(ev)=> setData(ev, elem)}
+                    onDragStart={(ev)=> setData(ev, elem)}                                  // сохраняем перетаскиваемый
                 >
-                    <var 
-                        contentEditable="true" 
-                        suppressContentEditableWarning="true"
-                        onInput={(ev)=> reNameDevice(ev.target.innerText, index)}
-                    >
-                        {elem.name}
-                    </var>
+                    {elem.name}
                 </div>
             )}
         </div>
@@ -61,7 +55,11 @@ export default function Catalog(props) {
                     key={index} 
                     data-header={<div className="acordion-title">{elem.title}</div>}            // title list
                 >
-                    <ListContainer list={elem.list} category={elem.title} onAdd={props.onAdd}/>
+                    <ListContainer 
+                        list={elem.list} 
+                        category={elem.title} 
+                        click={console.log}                                                     // клик по устройству
+                    />
                 </div>
             ))}
         </Accordion>

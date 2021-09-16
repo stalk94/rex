@@ -10,11 +10,13 @@ import hard from "./img/hard.png";
 import { NavigationHome } from "./component/navigation";
 import SchemeConstructor from "./component/scheme";
 import { send } from "./engine";
-import { Modal } from "./component/form";
 import FavoriteDevice from "./component/device.manager";
 import DevicePanel from "./component/device.panel";
 import Catalog from "./component/lists";
 import Api from "./api";
+import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 
 
 let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localStorage.getItem("user")) : {login:'test', password:"test"}
@@ -30,7 +32,7 @@ const onFetch =(setUser, setDevice, setRooms, onError)=> {
         })
     }), 2500)
 }
-const api = Api(user)
+const api = Api(user, console.log)
 /////////////////////////////////////////////////////////////
 const onExit =()=> {
     window.localStorage.clear()
@@ -39,10 +41,13 @@ const onExit =()=> {
 const HeaderNav =(props)=> {
     return(
         <React.Fragment>
-            <img className="link" onClick={()=> props.fn("home")} id="home" src={house}/>
-            <img className="link" onClick={()=> props.fn("atoms")} id="serverRoom" src={hard}/>
+            <Menu menuButton={<MenuButton><img src={house}/></MenuButton>} transition>
+                <MenuItem onClick={props.home}> Главная </MenuItem>
+                <MenuItem onClick={props.add}> Серверная </MenuItem>
+                <MenuItem onClick={onExit}> Выход </MenuItem>
+            </Menu>
             <h3 style={props.style} className="Error">{props.title}</h3>
-            <img className="link" onClick={()=> props.fn("user")} id="user" src={userIcon}></img>
+            <img className="link" onClick={props.user} id="user" src={userIcon}></img>
         </React.Fragment>
     );
 }
@@ -93,6 +98,10 @@ const User =(props)=> {
 
 
 function App(props) {
+    const [user, setUser] = useState(props.user)
+    const [devices, setDevice] = useState(user.devices)
+    const [rooms, setRooms] = useState(user.rooms)
+    ////////////////////////////////////////
     const onAddDevice =(device)=> {
         send("addDevice", {device}, "POST").then((res)=> {
             res.json().then((value)=> {
@@ -101,6 +110,16 @@ function App(props) {
             })
         })
     }
+    ////////////////////////////////////////
+    const [view, setView] = useState(
+        <div className="area">
+            <FavoriteDevice 
+                devices={devices} 
+                rooms={rooms}
+            />
+        </div>
+    );
+    /////////////////////////////////////////
     const onAddRoom =(val)=> {
         send("addRoom", {login:props.user.login, password:props.user.password, room:val}, "POST").then((res)=> {
             res.json().then((val)=> {
@@ -112,75 +131,69 @@ function App(props) {
     const readRoom =(val, id)=> {
         send("readNameRoom", {login:props.user.login, password:props.user.password, name:val, id:id}, "POST").then((res)=> {
             res.json().then((val)=> {
-                if(!val.error) setLeftNavigations(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>);
+                if(!val.error) setLeftNavigations(
+                    <NavigationHome 
+                        rooms={rooms} 
+                        setRoom={onAddRoom} 
+                        readRoom={readRoom} 
+                        event={setView}
+                    />
+                );
                 else console.log(val.error);
             })
         })
+    }
+    function setNav(mod="home") {
+        function listDevicesSortable() {
+            let find = []
+            
+            rooms.forEach((room, index)=> {
+                find.push({title:room.name, list:[]})
+            });
+            if(rooms.length>0) rooms.forEach((device)=> {
+                if(device.room) find[device.room].list.push(device)
+            });
+    
+            return find
+        }
+        //<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>
+        if(mod==="home") return (
+            <NavigationHome 
+                rooms={rooms} 
+                setRoom={onAddRoom} 
+                readRoom={readRoom} 
+                click={()=> setView(<DevicePanel devices={devices} rooms={rooms} api={api}/>)}
+            />
+        )
+        else return (
+            <Catalog 
+                list={listDevicesSortable()} 
+                click={console.log} 
+            />
+        )
+    }
+    const setError =(textError)=> {
+        setTitle(<HeaderVav title={textError} fn={setView}/>)
+        setTimeout(()=> setTitle(<HeaderNav fn={setView}/>), 5000)
     }
     const delRoom =(id)=> {
         send("delRoom", {login:props.user.login, password:props.user.password, id:id}, "POST").then((res)=> {
             res.json().then((val)=> {
-                if(!val.error) setLeftNavigations(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>);
+                if(!val.error) setLeftNavigations(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} click={setView}/>);
                 else console.log(val.error);
             })
         })
     }
-    const selectDevice =(ev)=> {
-        
-    }
+    /////////////////////////////////////////
+    const [leftNavigation, setLeftNavigations] = useState(setNav('home'))
+    const [title, setTitle] = useState(
+        <HeaderNav className="line top-panel"
+            user={()=> setView(<div className="area"><User onExit={onExit}>{user}</User></div>)}
+            add={()=> setView(<div className="area"><SchemeConstructor onAdd={onAddDevice}/>{setLeftNavigations(setNav("add"))}</div>) }
+            home={()=> setView(<div className="area"><FavoriteDevice devices={devices} rooms={rooms}/>{setLeftNavigations(setNav("home"))}</div>)}
+        />
+    );
 
-    const [user, setUser] = useState(props.user)
-    const [view, setView] = useState("test")
-    const [devices, setDevice] = useState(user.devices)
-    const [rooms, setRooms] = useState(user.rooms)
-    const [title, setTitle] = useState(<HeaderNav className="line top-panel" fn={setView}/>)
-    function listDevicesSortable() {
-        let find = []
-        
-        rooms.forEach((room, index)=> {
-            find.push({title:room.name, list:[]})
-        });
-        if(rooms.length>0) rooms.forEach((device)=> {
-            if(device.room) find[device.room].list.push(device)
-        });
-
-        return find
-    }
-    //<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>
-    const [leftNavigation, setLeftNavigations] = useState(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>)
-
-    
-    //////////////////////////////////////////
-    const pages = { 
-        test: <SchemeConstructor/>,
-        devices: <DevicePanel devices={devices} rooms={rooms}/>,
-        home: <FavoriteDevice devices={devices} rooms={rooms}/>,
-        user: <User onExit={onExit}>{user}</User>,
-        modal: ''
-    }
-    //////////////////////////////////////////
-    const setError =(textError)=> {
-        setTitle(<HeaderVav title={textError} fn={setView}/>)
-        setView("auth")
-        setTimeout(()=> setTitle(<HeaderNav fn={setView}/>), 5000)
-    }
-    function setNavigation() {
-        if(view==='serverRoom'){
-            setLeftNavigations(<Catalog list={listDevicesSortable()} event={console.log} onAdd={onAddDevice}/>)
-            pages.devices = <SchemeConstructor error={setError}/>
-        }
-        else {
-            setLeftNavigations(<NavigationHome rooms={rooms} setRoom={onAddRoom} readRoom={readRoom} event={setView}/>)
-            pages.devices = <DevicePanel devices={devices} rooms={rooms}/>
-        }
-    }
-    const closeModal =()=> {
-        setView("home")
-    }
-    const openModal =(content)=> {
-        pages.modal = <Modal close={closeModal}>{content}</Modal>;
-        setView("modal")
-    }
     useEffect(()=> {
         if(!window.onFetch) onFetch(setUser, setDevice, setRooms, setError)
     });
@@ -191,7 +204,9 @@ function App(props) {
         <main>
             <aside>
                 <header className="logo">
-                    <img src={ logo }/>
+                    <img src={ logo }
+                        onClick={()=> setNav('home')}
+                    />
                 </header>
                 <nav className="card">
                     { leftNavigation }
@@ -202,9 +217,7 @@ function App(props) {
                 <header style={{position:"fixed"}}>
                     { title }
                 </header>
-                <div className="area">
-                    { pages[view] }
-                </div>
+                { view }
             </main>
         </main>
         </article>
@@ -212,6 +225,7 @@ function App(props) {
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////
 send("auth", {login:user.login, password:user.password}, "POST").then((data)=> {
     data.json().then((userData)=> ReactDOM.render(<App user={userData}/>, document.querySelector(".root"))) 
 })

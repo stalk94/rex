@@ -1,16 +1,5 @@
 {
   "name": "rex",
-  "quokka": {
-    "babel": true,
-    "presets": [
-      "es2015",
-      "react"
-    ],
-    "nativeEsm": true,
-    "jsdom": {
-      "config": {}
-    }
-  },
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -26,7 +15,6 @@
     "fullpage-react": "^3.1.0",
     "ip-address": "^8.1.0",
     "jotai": "^1.3.2",
-    "mobx": "^6.3.3",
     "mqtt": "^4.2.8",
     "potrace": "^2.1.8",
     "quick.db": "^7.1.3",
@@ -38,7 +26,6 @@
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
     "react-moveable": "0.29.0",
-    "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.1",
     "react-sortablejs": "^6.0.0",
     "react-tiny-accordion": "^2.0.5",

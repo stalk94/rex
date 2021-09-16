@@ -192,10 +192,10 @@ export default function Device(props) {
     const [value, setValue] = useState(50)
     const [temperature, setTemp] = useState(21)
     const pub =(key, val)=> {
-        props.sheme[key].forEach((str)=> {
+        Object.keys(props.sheme).forEach((name)=> props.sheme[name].forEach((str)=> {
             let tokens = str.split("/")
             if(tokens[tokens.length-1]===key) props.api.publish(props.mac+str, val)
-        });
+        }));
     }
     const sub =()=> {
         Object.keys(props.sheme).forEach((key)=> {

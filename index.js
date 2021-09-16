@@ -8,7 +8,6 @@ const {User, registration, autorise} = require("./server/user");
 
 
 const TIME =()=> [new Date().getDay(), new Date().getUTCHours(), new Date().getMinutes(), new Date().getSeconds()];
-
 const mock = {
     login: "TestLoginName",
     firstName: "test",
