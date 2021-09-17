@@ -3983,6 +3983,11 @@ isomorphic-fetch@^2.1.1:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
 
+jedisdb@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/jedisdb/-/jedisdb-0.2.4.tgz#09ddc9ad50405c732ea5560f993b01f1e6bef670"
+  integrity sha512-5Tq98Vbs9xc+taCn0NScHuOrhLqQbDfsBTo2JxxDRpaukscl7nSLP1z9w1MVqf5hQxJgC81Fh792jxvj9LPJkQ==
+
 jimp@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/jimp/-/jimp-0.14.0.tgz#fde55f69bdb918c1b01ac633d89a25853af85625"
@@ -5276,6 +5281,13 @@ react-dom@^17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-drag-drop-container@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/react-drag-drop-container/-/react-drag-drop-container-6.1.1.tgz#9ba08eb2bfe14202f179d601227b0ae5b589de48"
+  integrity sha512-GfKE4L/t5TnxOfCEfYkc0tsMvQQ+HXg88NmDwi2nBmFG7JHsZUJjIn1EnI0Uia5xocXtJSrk/9A3cF1ja9kx1g==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-dropzone@^11.3.4:
   version "11.3.4"

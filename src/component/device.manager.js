@@ -1,7 +1,4 @@
 import React from 'react';
-import {Button} from './buttons';
-import {SlideBar} from './input';
-import List, {DropDown, DropDown2} from './form';
 import Device, {ProgressBar, Label, loader} from './device';
 import lamp from '../img/lamp.png';
 import onOff from '../img/onOff.png';
@@ -19,11 +16,7 @@ const ICON = {
     logic: logic,
     termostat: termostat
 }
-
-////////////////////////////////////////////////////////////////
-let info = `Enables an invisible overlay beneath the popover that captures clicks 
-and prevents interaction with the rest of the document until the popover is closed. 
-This prop is only available when interactionKind`
+let info = `📡 🔗 💻 🔌`
 const mock = [
     {type:"lamp", room:"кухня", name:"Лампочка", info:info}, 
     {type:"onOff", room:"ванная", name:"Розетка", info:info}, 
@@ -69,8 +62,9 @@ export default class FavoriteDevice extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            devices: props.devices
+            devices: []
         }
+        this.props.devices.state = [{}]
         this.selectable = this.selectable.bind(this)
     }
     componentDidMount() {
@@ -79,7 +73,7 @@ export default class FavoriteDevice extends React.Component {
     }
     selectable(ev) {
         let id = +ev.target.getAttribute("key")
-        let dataDevice = this.state.devices[id]
+        let dataDevice = this.props.devices[id]
         let type = dataDevice.type
 
         return ()=> <Device 
@@ -91,18 +85,18 @@ export default class FavoriteDevice extends React.Component {
     }
     render() {
         return(
-            <>{this.state.devices.map((device, index)=> {
-                    return <MainDevice 
+            <React.Fragment>
+                {this.props.devices.state.map((device, index)=> (
+                    <MainDevice 
                         key={index} 
                         mac={device.mac}
                         type={device.type} 
                         event={console.log} 
-                        title={`${device.name} [${this.props.rooms[device.room].name}]: #${index}`} 
-                        info={device.info}
-
+                        title={`${device.name} [${this.props.rooms.state[device.room].name}]: #${index}`} 
+                        info={info}
                     />
-                })
-            }</>
+                ))}
+            </React.Fragment>
         );
     }
 }

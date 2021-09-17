@@ -1,154 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { Button } from './buttons';
-import Moveable from "react-moveable";
+import {DragDropContainer, DropTarget} from "react-drag-drop-container";
+require("../stor");
+import useJedis from 'jedisdb'
 
 
 ///////////////////////////////////////////////////////////
-export const Cell =(props)=> {
-    const [value, setValue] = useState(props.value)
-
-    return(
-        <div className="skills">
-            <div className="skills_label">
-
-            </div>
-            <div className="bar">
-                <h2>{value}</h2>
-            </div>
-        </div>
-    );
-}
-export const Move =(elem)=> {
-    return (
-        <Moveable
-                target={elem.target}
-                container={null}
-                origin={true}
-                edge={false}
-                /* draggable */
-                draggable={true}
-                throttleDrag={0}
-                onDragStart={({ target, clientX, clientY }) => {
-                    console.log("onDragStart", target);
-                }}
-                onDrag={({
-                    target,
-                    beforeDelta, beforeDist,
-                    left, top,
-                    right, bottom,
-                    delta, dist,
-                    transform,
-                    clientX, clientY,
-                })=> {
-                    console.log("onDrag left, top", left, top);
-                   
-                    console.log("onDrag translate", dist);
-                    if(target) target.style.transform = transform;
-                }}
-                onDragEnd={({ target, isDrag, clientX, clientY })=> {
-                    console.log("onDragEnd", target, isDrag);
-                }}
-
-                /* When resize or scale, keeps a ratio of the width, height. */
-                keepRatio={true}
-                resizable={true}
-                throttleResize={0}
-                onResizeStart={({ target , clientX, clientY})=> {
-                    console.log("onResizeStart", target);
-                }}
-                onResize={({
-                    target, width, height,
-                    dist, delta, direction,
-                    clientX, clientY,
-                })=> {
-                    console.log("onResize", target);
-                    delta[0] && (target.style.width = `${width}px`);
-                    delta[1] && (target.style.height = `${height}px`);
-                }}
-                onResizeEnd={({ target, isDrag, clientX, clientY }) => {
-                    console.log("onResizeEnd", target, isDrag);
-                }}
-                scalable={true}
-                throttleScale={0}
-                onScaleStart={({ target, clientX, clientY }) => {
-                    console.log("onScaleStart", target);
-                }}
-                onScale={({
-                    target, scale, dist, delta, transform,
-                    clientX, clientY,
-                })=> {
-                    console.log("onScale scale", scale);
-                    if(target) target.style.transform = transform;
-                }}
-                onScaleEnd={({ target, isDrag, clientX, clientY }) => {
-                    console.log("onScaleEnd", target, isDrag);
-                }}
-
-                /* rotatable */
-                rotatable={true}
-                throttleRotate={0}
-                onRotateStart={({ target, clientX, clientY }) => {
-                    console.log("onRotateStart", target);
-                }}
-                onRotate={({
-                    target,
-                    delta, dist,
-                    transform,
-                    clientX, clientY,
-                })=> {
-                    console.log("onRotate", dist);
-                    if(target) target.style.transform = transform;
-                }}
-                onRotateEnd={({ target, isDrag, clientX, clientY }) => {
-                    console.log("onRotateEnd", target, isDrag);
-                }}
-
-                /* warpable */
-                /* Only one of resizable, scalable, warpable can be used. */
-                /*
-                this.matrix = [
-                    1, 0, 0, 0,
-                    0, 1, 0, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 1,
-                ]
-                */
-                warpable={true}
-                onWarpStart={({ target, clientX, clientY })=> {
-                    console.log("onWarpStart", target);
-                }}
-                onWarp={({
-                    target,
-                    clientX,
-                    clientY,
-                    delta,
-                    dist,
-                    multiply,
-                    transform,
-                })=> {
-                    console.log("onWarp", target);
-                    // target.style.transform = transform;
-                    this.matrix = multiply(this.matrix, delta);
-                    target.style.transform = `matrix3d(${this.matrix.join(",")})`;
-                }}
-                onWarpEnd={({ target, isDrag, clientX, clientY })=> {
-                    console.log("onWarpEnd", target, isDrag);
-                }}
-                pinchable={true}
-                onPinchStart={({ target, clientX, clientY, datas })=> {
-                    console.log("onPinchStart");
-                }}
-                onPinch={({ target, clientX, clientY, datas })=> {
-                    // pinch event occur before drag, rotate, scale, resize
-                    console.log("onPinch");
-                }}
-                onPinchEnd={({ isDrag, target, clientX, clientY, datas })=> {
-                    // pinchEnd event occur before dragEnd, rotateEnd, scaleEnd, resizeEnd
-                    console.log("onPinchEnd");
-                }}
-        />
-    );
-}
+export const Loader =()=> <div className="ring"></div>
 export function ProgressBar(props) {
     return(
         <div onClick={props.toggle} className="top-device">  
@@ -182,18 +39,20 @@ export function ProgressBar(props) {
         </div>
     );
 }
-export const Loader =()=> <div className="ring"></div>
-//////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 
 export default function Device(props) {
-    const [init, setInit] = useState(false)
+    const init = useJedis('init')
     const [disabled, setEnable] = useState('true')
     const [value, setValue] = useState(50)
     const [temperature, setTemp] = useState(21)
+
+    
     const pub =(key, val)=> {
         Object.keys(props.sheme).forEach((name)=> props.sheme[name].forEach((str)=> {
             let tokens = str.split("/")
+            console.log(`[PUB📡]:${props.mac+str}`, `key:${key}`, `val:${val}`)
             if(tokens[tokens.length-1]===key) props.api.publish(props.mac+str, val)
         }));
     }
@@ -203,7 +62,9 @@ export default function Device(props) {
                 let tokens = str.split("/")
                 
                 props.api.subscribe(props.mac+str+"st")
+
                 props.api.on('massage', (topic, payload, packet)=> {
+                    console.log("[SUB🔌]:", topic, payload, packet)
                     let input = tokens[tokens.length-1]
 
                     if(topic===props.mac+str+"st"){
@@ -214,10 +75,12 @@ export default function Device(props) {
                 })
             })
         })
-        setInit(true)
+        init.state[props.mac] = true
     }
 
-    
+    // слушаем
+    if(!init.state[props.mac]) sub()
+
     const input = disabled==="true"
         ? <input disabled style={{marginTop:"25%"}} type="range" onInput={(ev)=> pub('brihtness', ev.target.value)} value={value}/>
         : <input style={{marginTop:"25%"}} type="range" onInput={(ev)=> pub('brihtness', ev.target.value)} value={value}/>
@@ -241,8 +104,6 @@ export default function Device(props) {
             temperature={temperature}
         />
     
-    // слушаем
-    if(!init) sub()
 
 
     return(

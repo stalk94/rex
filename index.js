@@ -2,11 +2,11 @@ const express = require("express");
 const jsonParser = require("body-parser").json();
 const db = require("quick.db");
 const app = express();
-const fs = require("fs");
 const path = require("path");
 const {User, registration, autorise} = require("./server/user");
 
 
+////////////////////////////////////////////////////////////////////////////
 const TIME =()=> [new Date().getDay(), new Date().getUTCHours(), new Date().getMinutes(), new Date().getSeconds()];
 const mock = {
     login: "TestLoginName",
@@ -74,10 +74,17 @@ app.post("/regUser", jsonParser, (req, res)=> {
     if(req.body.login && req.body.password) res.send(registration(req.body.login, req.body.password));
     else res.send({error: "Не все поля заполнены"});
 });
+app.post("/sinc", jsonParser, (req, res)=> {
+    if(req.body.test) res.send(mock);
+    else {
+        let user = autorise(req.body.login, req.body.password);
+        res.send(user)
+    }
+});
 app.post("/regNewDevice", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
 
-    if(!user.error) user.addDevicet(req.body.state, (data)=> {
+    if(!user.error) user.addDevice(req.body.state, (data)=> {
         res.send(data)
     });
     else res.send(user)
@@ -108,16 +115,6 @@ app.post("/delRoom", jsonParser, (req, res)=> {
         res.send(data)
     });
     else res.send(user)
-});
-app.post("/sinc", jsonParser, (req, res)=> {
-    if(req.body.test) res.send(mock);
-    else {
-        let user = autorise(req.body.login, req.body.password);
-        res.send(user)
-    }
-});
-app.post("/comand", jsonParser, (req, res)=> {
-    
 });
 app.post("/reNameDevice", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);

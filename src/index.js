@@ -4,8 +4,8 @@ import { Fullpage, Slide, HorizontalSlider } from 'fullpage-react';
 import Authorize from "./component/authorize";
 import { send } from "./engine";
 import "./css/main.css";
-import logo from "./img/logo.jpg";
 import figure from "./img/figure.svg";
+import logo from "./img/loggo.svg";
 import gm from "./img/gm.svg";
 import p1 from "./img/promo-1.jpg";
 import p2 from "./img/promo-2.jpg";
@@ -84,6 +84,7 @@ function Main() {
         <Slide className="section-1"> 
             <header>{ head }</header>
             <img className="figure" src={ figure }/>
+            <img style={{marginLeft:"35%"}} src={logo}/>
             { regForm }
         </Slide>,
         <Slide className="section-2">

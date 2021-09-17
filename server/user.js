@@ -105,6 +105,10 @@ class User {
     #dump() {
         db.set("user."+this.login, this)
     }
+    _findShemeType(type) {
+        return SHEME[type]
+    }
+
     addNewRoom(name, clb) {
         if(this.rooms.length < 10){
             this.rooms.push({
@@ -117,9 +121,21 @@ class User {
         }
         else clb({error: "Максимальное кол-во комнат 10"})
     }
-    _findShemeType(type) {
-        return SHEME[type]
+    reWriteRoom(name, id, clb) {
+        if(name.length>3){
+            console.log(this.rooms, id, name)
+            this.rooms[id].name = name
+            clb(this.rooms)
+            this.#dump()
+        }
+        else clb({error:"название не может быть менее 3-х символов"})
     }
+    delRoom(id, clb) {
+        this.rooms.splice(id, 1)
+        clb(this.rooms)
+        this.#dump()
+    }
+
     addDevice(state, clb) {
         let {mac, type, name} = state
 
@@ -132,6 +148,7 @@ class User {
         });
 
         if(!find){
+            console.log("new devices: ", state)
             let device = {
                 mac: mac,
                 room: 0,
@@ -143,35 +160,21 @@ class User {
 
             clb(device)
             this.devices.push(device)
-        }
-    }
-    reWriteRoom(name, id, clb) {
-        if(name.length>3){
-            this.rooms[id].name = name
-            clb(this.rooms)
             this.#dump()
         }
-        else clb({error:"название не может быть менее 3-х символов"})
     }
     reNameDevice(name, id, clb) {
         if(name.length>3){
             if(this.devices[id]){
                 this.devices[id].name = name
-                clb("ok")
+                clb(this.devices[id])
                 this.#dump()
             }
             else clb({error:"девайс не найден"})
         }
         else clb({error:"название не может быть менее 3-х символов"})
     }
-    delRoom(id, clb) {
-        this.rooms.splice(id, 1)
-        clb(this.rooms)
-        this.#dump()
-    }
-    /**
-     * Переход в автономный режим
-     */
+
     exit() {
         this.status = "off"
         this.#dump()

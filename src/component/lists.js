@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Accordion from 'react-tiny-accordion';
+import {DragDropContainer, DropTarget} from "react-drag-drop-container";
 import { send } from "../engine";
 let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localStorage.getItem("user")) : {login:'test', password:"test"}
 
@@ -7,10 +8,12 @@ let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localS
 
 
 export function ListContainer(props) {
+    const refList = React.createRef()
+    
     const reNameDevice =(name, id)=> {
         send("reNameDevice", {login:user.login, password:user.password, name:name, id:id}, "POST").then((res)=> {
             res.json().then((val)=> {
-                if(val.error) console.log(val.error)
+                if(val.error) props.error(val.error)
             });
         });
     }
@@ -20,7 +23,6 @@ export function ListContainer(props) {
     const onSelectCategory =(ev)=> {
         window.localStorage.setItem("setCategory", props.category)
     }
-    const refList = React.createRef()
 
     return(
         <div className="List"
@@ -56,9 +58,11 @@ export default function Catalog(props) {
                     data-header={<div className="acordion-title">{elem.title}</div>}            // title list
                 >
                     <ListContainer 
+                        error={props.error}
+                        add={props.onAdd}
                         list={elem.list} 
                         category={elem.title} 
-                        click={console.log}                                                     // клик по устройству
+                        click={props.click}                                                     // клик по устройству
                     />
                 </div>
             ))}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { send } from "../engine";
-import "../css/form.css"
 
 
 /**
@@ -31,7 +30,7 @@ export default function Authorize(props) {
 
 
     return(
-        <div className="intrf">
+        <div style={{marginTop:"0px"}} className="intrf">
             Логин:
             <input type="text" 
                 value={ login } 

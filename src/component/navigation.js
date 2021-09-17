@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ReactSortable, Sortable, MultiDrag, Swap } from "react-sortablejs";
-
+require("../stor");
+import useJedis from 'jedisdb'
 
 
 /**
@@ -8,7 +9,7 @@ import { ReactSortable, Sortable, MultiDrag, Swap } from "react-sortablejs";
  * category: []:elems
  * 
  */
-export default class Nav extends React.Component {
+export class Nav extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -54,51 +55,32 @@ export default class Nav extends React.Component {
 
 
 
-export class NavigationHome extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            enable: true,
-            rooms: props.rooms
-        }
-        this.onAdd = this.onAdd.bind(this)
-    }
-    onAdd() {
-        this.setState({rooms: [...this.state.rooms, `новая комната ${this.state.rooms.length}`]})
-        this.props.setRoom()
-    }
-    render() {
-        return(
-            <React.Fragment>
-                <ul>
-                    <h4 style={{marginLeft:"5%",marginTop:"0px",fontSize:"18px",opacity:"0.6"}}>Мой дом:</h4>
 
-                    <ReactSortable
-                        list={this.state.rooms}
-                        setList={(newState)=> this.setState({ rooms: newState })}
+export default function Navigations(props) {
+    const rooms = useJedis("rooms")
+    const setname =(id)=> rooms.state[id].name
+
+    return(
+        <React.Fragment>
+            <ul>
+                <h4 style={{marginLeft:"5%",marginTop:"0px",fontSize:"18px",opacity:"0.6"}}>
+                    Мой дом[{props.rooms.state.length}/10]:
+                </h4>
+                {rooms.state.map((item, id)=> (
+                    <li style={{display:item.visibility}} 
+                        id="rooms" 
+                        key={id} 
+                        ctx={"delRoom:"+id}
+                        onClick={()=> {setname(id); props.click(id)}}
                     >
-                        {this.state.rooms.map((item, id)=> (
-                            <li style={{display:item.visibility}} 
-                                id="rooms" 
-                                key={id} 
-                                ctx={"delRoom:"+id}
-                                onClick={this.props.click}
-                            >
-                                <i style={{fontSize:"19px",fontStyle:"normal"}}>🏛️ </i> 
-                                <var 
-                                    onInput={(ev)=> this.props.readRoom(ev.target.innerText, id)}
-                                    ctx={"delRoom:"+id}         // удаление через контекстное меню
-                                >
-                                    { item.name }
-                                </var>
-                            </li>
-                        ))}
-                    </ReactSortable>
-                </ul>
+                        <i style={{fontSize:"19px",fontStyle:"normal"}}>🏛️ </i> 
+                        { setname(id) }
+                    </li>
+                ))}
+            </ul>
                 
-                <hr style={{width:"85%", opacity:"0.1"}}/>
-                <div id="addRoom" onClick={this.onAdd}> ➕ </div>
-            </React.Fragment>
-        );
-    }
+            <hr style={{width:"85%", opacity:"0.1"}}/>
+            <div id="addRoom" onClick={props.setRoom}> ➕ </div>
+        </React.Fragment>
+    );
 }

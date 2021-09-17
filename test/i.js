@@ -1,14 +1,4 @@
-import React from 'react';
+const db = require("quick.db")
 
 
-export default class Cat extends React.Component {
-    render() {
-        let o = JSON.parse(this.props.children)
-        console.log()
-        return (
-            <h3>
-                {this.props.children}
-            </h3>
-        );
-    }
-}
+db.set("user.test3.devices.0.name", 'лампочка')  //?

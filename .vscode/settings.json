@@ -56,12 +56,13 @@
         "rex-job": true,
         "src\\component/test.js": true,
         "cfg.json": true,
-        "rex-admin\\src/*.json": true
+        "rex-admin\\src/*.json": true,
+        "src\\component/tool.js": true
     },
     "explorerExclude.backup": null,
     "svg.preview.background": "transparent",
     "editor.fontWeight": "1",
-    "editor.fontSize": 13.8,
+    "editor.fontSize": 13.6,
     "vsmqtt.brokerProfiles": [
         {
             "name": "rex",
