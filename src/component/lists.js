@@ -2,27 +2,30 @@ import React, { useState, useEffect, useContext } from 'react';
 import Accordion from 'react-tiny-accordion';
 import {DragDropContainer, DropTarget} from "react-drag-drop-container";
 import { send } from "../engine";
+
+
 let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localStorage.getItem("user")) : {login:'test', password:"test"}
-
-
+const setData =(ev, elem)=> {
+    ev.dataTransfer.setData("text/plain", JSON.stringify(elem))
+}
+const onSelectCategory =(ev)=> {
+    window.localStorage.setItem("setCategory", props.category)
+}
 
 
 export function ListContainer(props) {
     const refList = React.createRef()
-    
-    const reNameDevice =(name, id)=> {
+    let reNameDevice =(name, id)=> {
         send("reNameDevice", {login:user.login, password:user.password, name:name, id:id}, "POST").then((res)=> {
             res.json().then((val)=> {
                 if(val.error) props.error(val.error)
             });
         });
     }
-    const setData =(ev, elem)=> {
-        ev.dataTransfer.setData("text/plain", JSON.stringify(elem))
-    }
-    const onSelectCategory =(ev)=> {
-        window.localStorage.setItem("setCategory", props.category)
-    }
+    
+    useEffect(()=> {
+        
+    }, [])
 
     return(
         <div className="List"
@@ -46,11 +49,12 @@ export function ListContainer(props) {
 export default function Catalog(props) {
     const [selectedIndex, setSelected] = useState(0)
 
+    
     return(
         <Accordion
             className="accordion"
             selectedIndex={selectedIndex}
-            onChange={(index, expanded, selectedIndex)=> console.log(selectedIndex)}
+            onChange={(index, expanded, selectedIndex)=> setSelected(selectedIndex)}
         >
             {props.list.map((elem, index)=> (
                 <div
@@ -60,7 +64,7 @@ export default function Catalog(props) {
                     <ListContainer 
                         error={props.error}
                         add={props.onAdd}
-                        list={elem.list} 
+                        list={props.list[index].list} 
                         category={elem.title} 
                         click={props.click}                                                     // клик по устройству
                     />

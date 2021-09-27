@@ -57,18 +57,22 @@
         "src\\component/test.js": true,
         "cfg.json": true,
         "rex-admin\\src/*.json": true,
-        "src\\component/tool.js": true
+        "src\\component/tool.js": true,
+        "src\\component/device.js": true,
+        "src/stor.js": true,
+        "src\\component/device.manager.js": true
     },
     "explorerExclude.backup": null,
     "svg.preview.background": "transparent",
     "editor.fontWeight": "1",
-    "editor.fontSize": 13.6,
+    "editor.fontSize": 13.2,
     "vsmqtt.brokerProfiles": [
         {
             "name": "rex",
             "host": "31.172.65.58",
-            "port": 1883,
-            "clientId": "vsmqtt_client"
+            "port": "8083/mqtt",
+            "clientId": "vsmqtt_client",
+            "savedSubscriptions": []
         }
     ],
     "liveServer.settings.multiRootWorkspaceName": "rex-s"

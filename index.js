@@ -83,7 +83,7 @@ app.post("/sinc", jsonParser, (req, res)=> {
 });
 app.post("/regNewDevice", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
-
+    console.log(user)
     if(!user.error) user.addDevice(req.body.state, (data)=> {
         res.send(data)
     });
@@ -123,6 +123,20 @@ app.post("/reNameDevice", jsonParser, (req, res)=> {
         res.send(data)
     });
     else res.send(user)
+});
+app.post("/dump", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+    
+    if(!user.error) user.payload(req.body.devices, req.body.rooms, (data)=> {
+        res.send(data)
+    });
+    else res.send(user)
+});
+app.post("/favorites", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+   
+    if(!user.error) user.setFavorite(req.body.data)
+    res.send(user)
 });
 
 

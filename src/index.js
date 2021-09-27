@@ -35,7 +35,21 @@ const GM =(props)=> <img className="gm" onClick={props.open} src={gm}/>;
 
 
 function Main() {
-    const [regForm, setRegForm] = useState("")
+    const [regForm, setRegForm] = useState(<Authorize 
+        onOk={(userData)=> {
+            window.localStorage.setItem("user", JSON.stringify(userData))
+            document.location.href = "app.html"
+        }}
+        onErr={(textError)=> {
+            onHead(
+                <React.Fragment>
+                    <GM open={verify}/>
+                    <h3 style={{color:"brown", marginLeft:"5%"}}>{textError}</h3>
+                </React.Fragment>
+            );
+            setTimeout(()=> onHead(<GM open={verify}/>), 6000)
+        }}
+    />)
     const verify =()=> {
         let userStorage = window.localStorage.getItem("user")
         let data = JSON.parse(userStorage)

@@ -1,14 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {DragDropContainer, DropTarget} from "react-drag-drop-container";
-require("../stor");
-import useJedis from 'jedisdb'
 
 
 ///////////////////////////////////////////////////////////
-export const Loader =()=> <div className="ring"></div>
 export function ProgressBar(props) {
     return(
-        <div onClick={props.toggle} className="top-device">  
+        <div onClick={()=> props.toggle()} className="top-device">  
             <svg className="progress" data-progress={props.value} version="1.1" xmlns="http://www.w3.org/2000/svg" 
                 x={props.x ? props.x : "0px"} 
                 y={props.y ? props.y : "0px"} 
@@ -39,92 +36,90 @@ export function ProgressBar(props) {
         </div>
     );
 }
-///////////////////////////////////////////////////////////
+const Brihtness =(props)=> (
+    props.disabled==="true"
+        ? <input disabled style={{marginTop:"25%"}} type="range" onInput={(ev)=> props.pub('brihtness', ev.target.value)} />
+        : <input style={{marginTop:"25%"}} type="range" onInput={(ev)=> props.pub('brihtness', ev.target.value)} />
+);
+const Enabler =(props)=> (
+    <div onClick={()=> {props.pub("onoff", props.disabled==='true'?1:0)}} style={{cursor:"pointer"}}>
+        <h3 style={{position:"absolute",color:(props.disabled==='false'?"#42f059":"red"),left:"40%",top:"30%"}}>
+            {props.disabled==='false'?(props.value+"%"):"off"}
+        </h3>
+        <img 
+            style={{width:"100%", opacity:props.disabled==='false'?"1":"0.4"}} 
+            src={props.image}
+        />
+    </div>
+);
+////////////////////////////////////////////////////////////
 
 
-export default function Device(props) {
-    const init = useJedis('init')
-    const [disabled, setEnable] = useState('true')
-    const [value, setValue] = useState(50)
-    const [temperature, setTemp] = useState(21)
 
-    
-    const pub =(key, val)=> {
-        Object.keys(props.sheme).forEach((name)=> props.sheme[name].forEach((str)=> {
-            let tokens = str.split("/")
-            console.log(`[PUB📡]:${props.mac+str}`, `key:${key}`, `val:${val}`)
-            if(tokens[tokens.length-1]===key) props.api.publish(props.mac+str, val)
-        }));
+export default class Device extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            disable: "",
+            brihtness: "",
+            temp: ""
+        }
+        if(props.type==="termostat") this.termostat = 
+            <ProgressBar 
+                toggle={()=> {props.pub("onoff", props.disabled==='true'?1:0)}} 
+                enable={props.disabled} 
+                value={props.value} 
+                temperature={props.temperature}
+            />
+        this.pub = this.pub.bind(this)
     }
-    const sub =()=> {
-        Object.keys(props.sheme).forEach((key)=> {
-            props.sheme[key].forEach((str)=> {
+    pub(key, val) {
+        Object.keys(this.props.sheme).map((name)=> 
+            this.props.sheme[name].map((str)=> {
                 let tokens = str.split("/")
-                
-                props.api.subscribe(props.mac+str+"st")
+                if(tokens[tokens.length-1]===key) window.api.publish(this.props.mac+str, String(val))
+            })
+        );
+    }
+    componentDidMount() {
+        let scheme = this.props.sheme
+        let mac = this.props.mac
 
-                props.api.on('massage', (topic, payload, packet)=> {
-                    console.log("[SUB🔌]:", topic, payload, packet)
-                    let input = tokens[tokens.length-1]
-
-                    if(topic===props.mac+str+"st"){
-                        if(input==="onoff") setEnable(+payload===1?"false":"true")
-                        if(input==="brihtness") setValue(+payload)
-                        if(input==="temperature") setTemp(+payload)
-                    }
-                })
+        Object.keys(scheme).map((key)=> {
+            scheme[key].map((str)=> {
+                let tokens = str.split("/")
+                window.api.subscribe(mac+str+"st")
+                 
+                if(tokens[2]==="onoff") window.on(mac+str+"st", (data)=> this.setState({disable:data===1?"true":"false"}))
+                else if(tokens[2]==='brihtness') window.on(mac+str+"st", (data)=> this.setState({brihtness:+data.detail.value}))
+                else if(tokens[2]==="temp") window.on(mac+str+"st", (data)=> this.setState({temp:+data.detail.value}))
             })
         })
-        init.state[props.mac] = true
     }
-
-    // слушаем
-    if(!init.state[props.mac]) sub()
-
-    const input = disabled==="true"
-        ? <input disabled style={{marginTop:"25%"}} type="range" onInput={(ev)=> pub('brihtness', ev.target.value)} value={value}/>
-        : <input style={{marginTop:"25%"}} type="range" onInput={(ev)=> pub('brihtness', ev.target.value)} value={value}/>
-    const display = {
-        PMR: input
-    }
-    const labelImage = props.type!=="termostat" 
-        ? <div onClick={()=> {pub("onoff", disabled==='true'?1:0)}} style={{cursor:"pointer"}}>
-            <h3 style={{position:"absolute",color:disabled==='false'?"#42f059":"red",left:"40%",top:"30%"}}>
-                {disabled==='false'?(value+"%"):"off"}
-            </h3>
-            <img style={{width:"100%", opacity:disabled==='false'?"1":"0.4"}} 
-                src={props.image}
-                enable={disabled}
-            />
-        </div>
-        : <ProgressBar 
-            toggle={()=> {pub("onoff", disabled==='true'?1:0)}} 
-            enable={disabled} 
-            value={value} 
-            temperature={temperature}
-        />
-    
-
-
-    return(
-        <div className="container">
-            <div className="device-title">
-                <Loader/> 
-            </div>
-            <div className="device-body">
-                <div className="line" style={{borderBottom:"1px solid rgba(0,0,0,.2)"}}>
-                    <h2 style={{marginBottom:"5px", marginTop:"3px", color:"white", textAlign:"left", fontSize:"18px"}}>
-                        { props.title }
-                    </h2>
-                    <h3 style={{marginBottom:"1px", marginLeft:"35%", marginTop:"5px", color:"gray", textAlign:"right", fontSize:"14px"}}>
-                        { props.room }
-                    </h3>
+    render() {
+        return(
+            <div className="container">
+                <div className="device-title">
+                    <div className="ring"></div> 
                 </div>
-                { display[props.type] }
+
+                <div className="device-body">
+                    <div className="line" style={{borderBottom:"1px solid rgba(0,0,0,.2)"}}>
+                        <h2 style={{marginBottom:"5px", marginTop:"3px", color:"white", textAlign:"left", fontSize:"18px"}}>
+                            { this.props.title }
+                        </h2>
+                        <h3 style={{marginBottom:"1px", marginLeft:"35%", marginTop:"5px", color:"gray", textAlign:"right", fontSize:"14px"}}>
+                            { this.props.room }
+                        </h3>
+                    </div>
+                    <Brihtness/>
+                </div>
+
+                <div className="device-icon">
+                    { this.termostat }
+                    <Enabler/>
+                </div>
             </div>
-            <div className="device-icon">
-                { labelImage }
-            </div>
-        </div>
-    );
+        );
+    }
 }

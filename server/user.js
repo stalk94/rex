@@ -2,7 +2,7 @@ const db = require("quick.db");
 const CryptoJS = require('crypto-js');
 const SHEME = require("./sheme.json");
 
-
+const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
 const master = 'rexMyHome';
 function setPasswordHash(pass) {
     return CryptoJS.AES.encrypt(pass, master).toString()
@@ -78,7 +78,8 @@ exports.registration = function(login, password, optionsData) {
             status: "off",
             sheme: SHEME,
             devices: [],
-            rooms: [{name:"Серверная", visibility:"block"}]   //*
+            favorites: [],
+            rooms: [{name:"Серверная", visibility:"block"}]
         }
         db.set("user."+login, newUser)
 
@@ -135,6 +136,16 @@ class User {
         clb(this.rooms)
         this.#dump()
     }
+    payload(devices, rooms) {
+        console.log("payload:devices", devices)
+        console.log("payload:rooms", rooms)
+
+        db.set("dumps."+this.login+"."+TIME(), {devices:devices, rooms:rooms})
+    }
+    setFavorite(data) {
+        if(data instanceof Array) this.devices = data
+        this.#dump()
+    }
 
     addDevice(state, clb) {
         let {mac, type, name} = state
@@ -158,9 +169,9 @@ class User {
                 payload: {}
             }
 
-            clb(device)
             this.devices.push(device)
             this.#dump()
+            clb(this)
         }
     }
     reNameDevice(name, id, clb) {

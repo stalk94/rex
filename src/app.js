@@ -1,57 +1,42 @@
-import React, { useState, useEffect } from "react";
+require("./api");
+import React, { useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
-require("./stor");
-import useJedis from 'jedisdb'
+import Favorites from "./component/favorites";
+import { useLocalstorageState } from "rooks";
 import "./css/style.css";
 import "./css/fontawesome.css";
 import logo from "./img/logo.svg";
 import exit from "./img/exit.svg";
 import userIcon from "./img/user.svg";
-import house from "./img/house.svg";
-import hard from "./img/hard.png";
+import redact from './img/pen-tool.png';
 import NavigationHome from "./component/navigation";
 import SchemeConstructor from "./component/scheme";
 import { send } from "./engine";
-import FavoriteDevice from "./component/device.manager";
 import DevicePanel from "./component/device.panel";
 import Catalog from "./component/lists";
-import Api from "./api";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import { AiFillDatabase, AiFillStar } from "react-icons/ai";
 
 
-let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localStorage.getItem("user")) : {login:'test', password:"test"}
-const onFetch =(setUser, setDevice, setRooms)=> {
-    window.onFetch = setInterval(()=> send("auth", {login:user.login, password:user.password}, "POST").then((rawData)=> {
-        rawData.json().then((data)=> {
-            if(!data.error){
-                setUser(data)
-                setDevice(data.devices)
-                setRooms = data.rooms
-            }
-            else console.log(data.error);
-        })
-    }), 4000)
+window.on =(name, fn)=> window.addEventListener(name, fn)
+const Mod = {}
+//////////////////////////////////////////////////////////////
+const listDevicesSortable =(user)=> {
+    let find = []
+    
+    user.rooms.forEach((room, index)=> {
+        find.push({title:room.name, list:[]})
+    });
+    if(user.rooms.length>0) user.devices.forEach((device)=> {
+        find[device.room].list.push(device)
+    });
+    return find
 }
-const api = Api(user, console.log)
-/////////////////////////////////////////////////////////////
 const onExit =()=> {
     window.localStorage.clear()
     document.location.href = "index.html"
-}
-const HeaderNav =(props)=> {
-    return(
-        <React.Fragment>
-            <Menu menuButton={<MenuButton><img src={house}/></MenuButton>} transition>
-                <MenuItem onClick={props.home}> Главная </MenuItem>
-                <MenuItem onClick={props.add}> Серверная </MenuItem>
-                <MenuItem onClick={onExit}> Выход </MenuItem>
-            </Menu>
-            <h3 style={props.style} className="Error">{props.title}</h3>
-            <img className="link" onClick={props.user} id="user" src={userIcon}></img>
-        </React.Fragment>
-    );
 }
 const User =(props)=> {
     const [firsName, setFirstName] = useState(props.children.firstName)
@@ -95,77 +80,65 @@ const User =(props)=> {
         </div>
     );
 }
-const Favorite =(props)=> {
-    const devices = useJedis("devices")
-    const rooms = useJedis("rooms")
-
+const Main =(props)=> {
+    let rooms = store.get("user").rooms
     return(
-        <div className="area">
-            <FavoriteDevice 
-                devices={devices} 
-                rooms={rooms}
-            />
-        </div>
+        <React.Fragment>
+            <Menu menuButton={<MenuButton>{props.title}</MenuButton>} transition>
+                <MenuItem onClick={()=> props.home({name:"Избранное"})}>
+                    <AiFillStar style={{marginBottom:"5px"}}/><div style={{marginBottom:"4%",color:"#fae247b3"}}>Избранное</div>
+                </MenuItem>
+                    {rooms.map((room, id)=> {
+                        if(id!==0) return(
+                            <MenuItem key={id} onClick={()=> props.room(room)}>
+                                <div style={{color:"#cccccc"}}>{room.name}</div>
+                            </MenuItem>
+                        )
+                    })}
+                <MenuItem onClick={props.add}>
+                    <div style={{marginTop:"6%",display:"flex",flexDirection:"row"}}>
+                        <AiFillDatabase/><div style={{color:"#fae247b3",padding:"3px"}}>Серверная</div>
+                    </div>
+                </MenuItem>
+                <MenuItem onClick={onExit}>
+                    <div style={{color:"brown"}}>Выход</div>
+                </MenuItem>
+            </Menu>
+            <h3 style={props.style} className="Error">{ props.error }</h3>
+            <img className="link" onClick={props.user} id="user" src={userIcon}/>
+        </React.Fragment>
     );
 }
+const NameRoom =(props)=> (
+    <>
+        <var className="title-name" 
+            onInput={(ev)=> props.setName(ev.target.textContent)}
+        >
+            { props.name }
+        </var>
+        <img id="read-b" height="31px" src={redact} onClick={props.changeName}/>
+    </>
+)
+
 //////////////////////////////////////////////////////////////
 
 
 function App(props) {
-    const user = useJedis("user")
-    const devices = useJedis("devices")
-    const rooms = useJedis("rooms")
-    ////////////////////////////////////////
-    const onAddDevice =(device)=> {
-        console.log(device)
-        devices.state = [...devices.state, device]
-        user.devices = devices.state
-        window.localStorage.setItem("user", JSON.stringify(user))
-    }
-    const onDelDevice =()=> {
+    const [user, setUser] = useLocalstorageState("user", store.get("user"));
+    const [curentRoom, setCurentRoom] = useState()
+    const [leftNavigation, setLeftNavigations] = useState("Room");
+    const [view, setView] = useState(<div className="area"><Favorites/></div>);
+    const [error, setErr] = useState("");
 
-    }
-    const setError =(textError)=> {
-        setTitle(<HeaderVav title={textError} fn={setView}/>)
-        setTimeout(()=> setTitle(<HeaderNav fn={setView}/>), 5000)
-    }
     ////////////////////////////////////////
-    const [view, setView] = useState(<Favorite/>);
-    const [leftNavigation, setLeftNavigations] = useState(setNav('home'))
-    const [title, setTitle] = useState(
-        <HeaderNav className="line top-panel"
-            user={()=> setView(
-                <div className="area">
-                    <User onExit={onExit}>{user.state}</User>
-                </div>
-            )}
-            add={()=> setView(
-                <div className="area">
-                    <SchemeConstructor 
-                        error={setError} 
-                        onAdd={(device)=> onAddDevice(device)}
-                        onDel={onDelDevice}
-                    />
-                    {setLeftNavigations(setNav("add"))}
-                </div>
-            )}
-            home={()=> setView(
-                <div className="area">
-                    <FavoriteDevice 
-                        devices={devices} 
-                        rooms={rooms}
-                    />
-                    {setLeftNavigations(setNav("home"))}
-                </div>
-            )}
-        />
-    );
-    /////////////////////////////////////////
+    const setError =(textError)=> {
+        setErr(textError)
+        setTimeout(()=> setErr(""), 5000)
+    }
     const onAddRoom =(value)=> {
         send("addRoom", {login:user.state.login, password:user.state.password, room:value}, "POST").then((res)=> {
             res.json().then((val)=> {
-                if(!val.error) rooms.state = val;
-                else setError(val.error);
+                if(!val.error) user.rooms = val;;
             })
         })
     }
@@ -173,71 +146,116 @@ function App(props) {
         send("readNameRoom", {login:user.state.login, password:user.state.password, name:newVal, id:id}, "POST").then((res)=> {
             res.json().then((val)=> {
                 if(!val.error){
-                    rooms.state = val
-                    setLeftNavigations(setNav('home'))
+                    user.rooms = val
                 }
                 else console.log(val.error);
             })
         })
     }
     const delRoom =(id)=> {
-        send("delRoom", {login:props.user.login, password:props.user.password, id:id}, "POST").then((res)=> {
+        send("delRoom", {login:user.state.login, password:user.state.password, id:id}, "POST").then((res)=> {
             res.json().then((val)=> {
-                if(!val.error) rooms.state = val;
-                else setError(val.error);
+                if(!val.error) user.rooms = val;
             })
         });
     }
-    function setNav(mod="home") {
-        const listDevicesSortable =()=> {
-            let find = []
-            
-            rooms.state.forEach((room, index)=> {
-                find.push({title:room.name, list:[]})
-            });
-            if(rooms.state.length>0) devices.state.forEach((device)=> {
-                find[device.room].list.push(device)
-            });
-            return find
-        }
 
-        // список комнат
-        if(mod==="home") return (
-            <NavigationHome 
-                rooms={rooms} 
-                delRoom={()=> delRoom()}
-                click={(id)=> setView(<DevicePanel roomId={id} devices={devices} readRoom={readRoom} api={api}/>)}
-                setRoom={()=> onAddRoom()} 
-                readRoom={()=> readRoom()} 
-            />
-        );
-        // каталог девайсов согласно комнатам
-        else if(mod==="add") return (
-            <Catalog 
-                onAdd={onAddDevice}
-                onDel={onDelDevice}
-                error={setError}
-                list={listDevicesSortable()} 
-                click={()=> setView(<DevicePanel devices={devices} rooms={rooms} api={api}/>)}
-            />
-        );
-        else return <Favorite/>
-    }
     
+    /////////////////////////////////////////
+    Mod.Home =(room)=> {
+        setCurentRoom(room)
+        setView(
+            <div className="area">
+                <DevicePanel 
+                    user={user}
+                    target={curentRoom}
+                    readRoom={readRoom}
+                />
+            </div>
+        );
+    }
+    Mod.Add =()=> setView(
+        <div className="area">
+            <SchemeConstructor 
+                user={user}
+                error={setError} 
+                onAdd={setUser}
+            />
+            {setLeftNavigations("Devices")}
+        </div>
+    );
+    Mod.User =()=> setView(
+        <div className="area">
+            <User onExit={onExit}>{ user }</User>
+        </div>
+    );
+    Mod.Room = (
+        <NavigationHome 
+            error={setError}
+            user={user} 
+            target={curentRoom}
+            onTarget={setCurentRoom}
+            setRoom={onAddRoom}
+            readRoom={readRoom} 
+            delRoom={delRoom}
+        />
+    );
+    Mod.Devices = (
+        <Catalog 
+            list={listDevicesSortable(user)}
+            onAdd={setUser}
+            onError={setError}
+        />
+    );
+    useEffect(()=> {
+        window.api.on("message", (...arg)=> {
+            let u = user
+            let target = arg[0].split("/")
+            let topic = target[target.length-1]
+            topic = topic.slice(0, topic.length-2)
+        
+            u.devices.forEach((device, index)=> {
+                if(device.mac===target[0]){
+                    console.log("[🔌]:", topic, String(arg[1]))
+                    device.payload[topic] = String(arg[1])
+                    u.devices[index] = device
+                    store.set("user", u)       // на сервер паралельно
+                    setUser(u)
+                }
+            });
+        });
+    }, [user])
+    /////////////////////////////////////////
     
     return(
         <article>
             <main>
                 <aside>
                     <header className="logo">
-                        <img onClick={()=> setLeftNavigations(setNav('home'))} src={logo}/>
+                        <img 
+                            onClick={()=> setLeftNavigations("Room")} 
+                            src={logo}
+                        />
                     </header>
-                    <nav className="card">
-                        { leftNavigation }
-                    </nav>
+                    <nav className="card">{ Mod[leftNavigation] }</nav>
                 </aside>
                 <div className="base">
-                    <header>{ title }</header>
+                    <header>
+                        <Main className="line top-panel"
+                            title={curentRoom===undefined
+                                ? setCurentRoom({name:"Избранное"})
+                                : curentRoom.name
+                            }
+                            error={error}
+                            user={Mod.User}
+                            add={Mod.Add}
+                            room={(room)=> Mod.Home(room)}
+                            home={()=> {
+                                setLeftNavigations("Room");
+                                setView(<div className="area"><Favorites/>{setCurentRoom({name:"Избранное"})}</div>)
+                            }}
+                        />
+                    </header>
                     { view }
                 </div>
             </main>
@@ -247,16 +265,4 @@ function App(props) {
 
 
 ///////////////////////////////////////////////////////////////////////////////////
-setTimeout(()=> ReactDOM.render(<App />, document.querySelector(".root")), 1000)
-window.onresize =()=> {
-    const canvas = document.querySelector("#stars")
-    canvas.style.width = window.innerWidth+"px"
-    canvas.style.height = window.innerHeight+"px"
-}
-window.oncontextmenu = ((ev)=>{
-    let ctxMain = ev.target.getAttribute("ctx")
-    if(ctxMain){
-        console.log(ctxMain)
-    }
-    return false
-});
+ReactDOM.render(<App />, document.querySelector(".root"))

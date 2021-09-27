@@ -64,7 +64,6 @@ export default class FavoriteDevice extends React.Component {
         this.state = {
             devices: []
         }
-        this.props.devices.state = [{}]
         this.selectable = this.selectable.bind(this)
     }
     componentDidMount() {
@@ -86,13 +85,13 @@ export default class FavoriteDevice extends React.Component {
     render() {
         return(
             <React.Fragment>
-                {this.props.devices.state.map((device, index)=> (
+                {this.props.devices.map((device, index)=> (
                     <MainDevice 
                         key={index} 
                         mac={device.mac}
                         type={device.type} 
                         event={console.log} 
-                        title={`${device.name} [${this.props.rooms.state[device.room].name}]: #${index}`} 
+                        title={`${device.name} [${this.props.rooms[device.room].name}]: #${index}`} 
                         info={info}
                     />
                 ))}

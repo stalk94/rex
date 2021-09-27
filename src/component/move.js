@@ -1,134 +1,92 @@
+import React, {useEffect, useState} from "react";
 import Moveable from "react-moveable";
 
 
-export default function Move(elem) {
+
+export default function Movable(props) {
+    const [target, setTarget] = useState();
+    const [frame, setFrame] = useState({
+        rotate: 0,
+        translate: [0, 0],
+        scale: [1, 1],
+        clipStyle: "inset",
+        matrix: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
+    });
+    
+    useEffect(()=> {
+        setTarget(document.querySelector(props.className));
+    }, [props])
+
+
     return (
-        <Moveable
-            target={elem.target}
-                container={null}
-                origin={true}
-                edge={false}
-                /* draggable */
-                draggable={true}
-                throttleDrag={0}
-                onDragStart={({ target, clientX, clientY }) => {
-                    console.log("onDragStart", target);
-                }}
-                onDrag={({
-                    target,
-                    beforeDelta, beforeDist,
-                    left, top,
-                    right, bottom,
-                    delta, dist,
-                    transform,
-                    clientX, clientY,
-                })=> {
-                    console.log("onDrag left, top", left, top);
-                   
-                    console.log("onDrag translate", dist);
-                    if(target) target.style.transform = transform;
-                }}
-                onDragEnd={({ target, isDrag, clientX, clientY })=> {
-                    console.log("onDragEnd", target, isDrag);
-                }}
+        <div className="container" style={{width:"100%",height:"100%",border:"1px solid red"}}>
+            { props.children }
+            <Moveable
+                target={target}
 
-                /* When resize or scale, keeps a ratio of the width, height. */
-                keepRatio={true}
-                resizable={true}
-                throttleResize={0}
-                onResizeStart={({ target , clientX, clientY})=> {
-                    console.log("onResizeStart", target);
-                }}
-                onResize={({
-                    target, width, height,
-                    dist, delta, direction,
-                    clientX, clientY,
-                })=> {
-                    console.log("onResize", target);
-                    delta[0] && (target.style.width = `${width}px`);
-                    delta[1] && (target.style.height = `${height}px`);
-                }}
-                onResizeEnd={({ target, isDrag, clientX, clientY }) => {
-                    console.log("onResizeEnd", target, isDrag);
-                }}
-                scalable={true}
+                draggable="true"
+                rotatable="true"
+                scalable="true"
+                clippable="true"
+                warpable="true"
+
+                keepRatio="true"
                 throttleScale={0}
-                onScaleStart={({ target, clientX, clientY }) => {
-                    console.log("onScaleStart", target);
-                }}
-                onScale={({
-                    target, scale, dist, delta, transform,
-                    clientX, clientY,
-                })=> {
-                    console.log("onScale scale", scale);
-                    if(target) target.style.transform = transform;
-                }}
-                onScaleEnd={({ target, isDrag, clientX, clientY }) => {
-                    console.log("onScaleEnd", target, isDrag);
-                }}
-
-                /* rotatable */
-                rotatable={true}
                 throttleRotate={0}
-                onRotateStart={({ target, clientX, clientY }) => {
-                    console.log("onRotateStart", target);
+                rotationPosition={"top"}
+                zoom={1}
+                edge={false}
+                clipRelative={false}
+                clipArea={false}
+                dragWithClip={true}
+                defaultClipPath={"inset"}
+                origin={true}
+                clipTargetBounds={false}
+                clipVerticalGuidelines={[]}
+                clipHorizontalGuidelines={[]}
+                snapThreshold={5}
+                renderDirections={["nw","n","ne","w","e","sw","s","se"]}
+                padding={{"left":0,"top":0,"right":0,"bottom":0}}
+                onRotateStart={(e)=> {
+                    e.set(frame.rotate);
                 }}
-                onRotate={({
-                    target,
-                    delta, dist,
-                    transform,
-                    clientX, clientY,
-                })=> {
-                    console.log("onRotate", dist);
-                    if(target) target.style.transform = transform;
+                onRotate={({target, transform, beforeRotate})=> {
+                    frame.rotate = beforeRotate;
+                    target.style.transform = transform;
                 }}
-                onRotateEnd={({ target, isDrag, clientX, clientY }) => {
-                    console.log("onRotateEnd", target, isDrag);
+                onDragStart={(e)=> {
+                    e.set(frame.translate);
                 }}
-
-                /* warpable */
-                /* Only one of resizable, scalable, warpable can be used. */
-                /*
-                this.matrix = [
-                    1, 0, 0, 0,
-                    0, 1, 0, 0,
-                    0, 0, 1, 0,
-                    0, 0, 0, 1,
-                ]
-                */
-                warpable={true}
-                onWarpStart={({ target, clientX, clientY })=> {
-                    console.log("onWarpStart", target);
+                onDrag={(e)=> {
+                    frame.translate = e.beforeTranslate;
+                    e.target.style.transform = `translate(${e.beforeTranslate[0]}px, ${e.beforeTranslate[1]}px)`;
                 }}
-                onWarp={({
-                    target,
-                    clientX,
-                    clientY,
-                    delta,
-                    dist,
-                    multiply,
-                    transform,
-                })=> {
-                    console.log("onWarp", target);
-                    // target.style.transform = transform;
-                    this.matrix = multiply(this.matrix, delta);
-                    target.style.transform = `matrix3d(${this.matrix.join(",")})`;
+                onClip={(e)=> {
+                    if(e.clipType === "rect") e.target.style.clip = e.clipStyle;
+                    else e.target.style.clipPath = e.clipStyle;
+                    frame.clipStyle = e.clipStyle;
                 }}
-                onWarpEnd={({ target, isDrag, clientX, clientY })=> {
-                    console.log("onWarpEnd", target, isDrag);
+                onScaleStart={(e)=> {
+                    e.set(frame.scale);
+                    e.dragStart && e.dragStart.set(frame.translate);
                 }}
-                pinchable={true}
-                onPinchStart={({ target, clientX, clientY, datas })=> {
-                    console.log("onPinchStart");
+                onScale={(e)=> {
+                    const beforeTranslate = e.drag.beforeTranslate;
+                
+                    frame.translate = beforeTranslate;
+                    frame.scale = e.scale;
+                    e.target.style.transform
+                        = `translate(${beforeTranslate[0]}px, ${beforeTranslate[1]}px)`
+                        + ` scale(${e.scale[0]}, ${e.scale[1]})`;
                 }}
-                onPinch={({ target, clientX, clientY, datas })=> {
-                    // pinch event occur before drag, rotate, scale, resize
-                    console.log("onPinch");
+                onWarpStart={(e)=> {
+                    e.set(frame.matrix);
                 }}
-                onPinchEnd={({ isDrag, target, clientX, clientY, datas })=> {
-                    // pinchEnd event occur before dragEnd, rotateEnd, scaleEnd, resizeEnd
-                    console.log("onPinchEnd");
-            }}
-        />
+                onWarp={(e)=> {
+                    frame.matrix = e.matrix;
+                    e.target.style.transform = `matrix3d(${e.matrix.join(",")})`;
+                }}
+            />
+        </div>
     );
 }
