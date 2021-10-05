@@ -1,6 +1,6 @@
 body {
     /*background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);*/
-    background-image: url(2.png);
+    background-image: url(../img/bacg.png);
     margin: 0px;
     overflow: hidden;
     width: 100%;
@@ -203,7 +203,7 @@ input[type=email], input[type=text], input[type=number], input[type=password] {
     box-shadow: 0 0 7px rgba(0,0,0,.6);
 }
 .container:hover {
-    box-shadow: 0 0 5px rgba(77, 2, 2, 0.7);
+    box-shadow: 0 0 5px rgba(226, 74, 74, 0.9);
 }
 .device-title {
     display: flex;
@@ -288,12 +288,10 @@ input[type=email], input[type=text], input[type=number], input[type=password] {
 }
 
 #addRoom {
-    padding-left: 2vh;
     font-size: 20px;
-    color: rgba(255, 255, 255, 0.3);
 }
 #addRoom:hover {
-    opacity: 0.4;
+    opacity: 0.8;
     cursor: pointer;
 }
 li:hover {
@@ -320,6 +318,8 @@ li:hover {
 #rooms::marker {
     content: none;
 }
+
+
 .szh-menu-button {
     margin-left: 3px;
 }
@@ -328,13 +328,14 @@ li:hover {
     padding: .25rem!important;
 }
 
+
 .top-panel {
     margin: 25%;
 }
 
 .Error {
     text-align: center;
-    width: 85%;
+    width: 80%;
     color: #CA0B00;
 }
 #home { 
@@ -694,7 +695,7 @@ span:before {
 ul.szh-menu {
     margin-left: 2px;
     color: rgba(255, 255, 255, 0.8);
-    background-color: hsl(0deg 0% 100% / 8%);
+    background-color: rgba(62, 62, 70, 0.85);
     font-weight: 400;
     line-height: 1;
     text-align: center;
@@ -710,6 +711,15 @@ ul.szh-menu {
     text-align: left;
     margin-bottom: 3px;
 }
+#add {
+    text-align: center;
+    width: 30%;
+    margin-left: 5%;
+    border: 1px solid rgba(22, 22, 22, 0.5);
+}
+#add:hover {
+    border: 1px solid rgba(0, 128, 0, 0.25);
+}
 .szh-menu__item:hover {
     background-color: rgba(255, 255, 255, 0.3);
 }
@@ -717,6 +727,17 @@ ul.szh-menu {
     opacity: 0.5;
 }
 
+.title {
+    cursor: pointer;
+    margin-bottom: 5px;
+    margin-top: 3px; 
+    color: white;
+    text-align: left; 
+    font-size: 18px;
+}
+.title:hover {
+    opacity: .6;
+}
 .table {
     text-align: center;
     width: 100%;
@@ -773,4 +794,9 @@ ul.szh-menu {
     100% {
         background-position: 0% 50%;
     }
+}
+@keyframes animate-pulse {
+    0% {transform: scale(0.9)}
+    50% {transform: scale(0.8)}
+    100% {transform: scale(0.9)}
 }

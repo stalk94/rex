@@ -1,11 +1,37 @@
+const gurl = "http://localhost:3000/";
 const engine = require('store/src/store-engine');
 const observe = require('store/plugins/observe');
 const ls = require('store/storages/localStorage');
+
 window.store = engine.createStore(ls, observe);
-const gurl = "http://31.172.65.58/";
+//const canvas = document.querySelector("#stars")
+window.onresize =()=> {
+    //canvas.style.width = window.innerWidth+"px"
+    //canvas.style.height = window.innerHeight+"px"
+}
 
 
-
+class EventEmmitter {
+    constructor() {
+      this.events = {};
+    }
+    on(eventName, fn) {
+      if(!this.events[eventName]) this.events[eventName] = [];
+      this.events[eventName].push(fn);
+      
+      return ()=> {
+        this.events[eventName] = this.events[eventName].filter(eventFn => fn !== eventFn);
+      }
+    }
+    emit(eventName, data) {
+      const event = this.events[eventName];
+      if(event){
+        event.forEach((fn)=> {
+          fn.call(null, data);
+        });
+      }
+    }
+}
 export function send(url, data, metod) {
     let response;
 
@@ -40,13 +66,7 @@ export function send(url, data, metod) {
 }
 
 
-window.server = function(path, data) {
-	let user = store.get("user")
-	send(path, {login:user.login, password:user.password, ...data}, "POST").then((res)=> {
-		res.json().then((resData)=> {
-			if(!resData.error) store.set(`responce:${path}`, resData)
-			else console.log("[⚠️]:", path, resData)
-		})
-	});
-}
-store.watch("user", (data)=> window.server("dump", {...data}))
+window.triger = new EventEmmitter()
+window.addEventListener("beforeunload", ()=> {
+  triger.emit("exit")
+});

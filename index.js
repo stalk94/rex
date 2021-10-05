@@ -2,12 +2,20 @@ const express = require("express");
 const jsonParser = require("body-parser").json();
 const db = require("quick.db");
 const app = express();
+const log4js = require("log4js");
 const path = require("path");
 const {User, registration, autorise} = require("./server/user");
 
 
 ////////////////////////////////////////////////////////////////////////////
 const TIME =()=> [new Date().getDay(), new Date().getUTCHours(), new Date().getMinutes(), new Date().getSeconds()];
+log4js.configure({
+    appenders: { cheeses: { type: "file", filename: "log.log" } },
+    categories: { default: { appenders: ["cheeses"], level: "info" } }
+});
+
+
+const logger = log4js.getLogger("cheeses");
 const mock = {
     login: "TestLoginName",
     firstName: "test",
@@ -58,6 +66,8 @@ const mock = {
         }
     }]
 };
+ 
+
 ////////////////////////////////////////////////////////////////////////////
 app.get("/", (req, res)=> {
     res.sendFile(__dirname+"/dist/index.html")
@@ -67,11 +77,17 @@ app.get("/", (req, res)=> {
 
 // синхронизация с параметрами только через сервер
 app.post("/auth", jsonParser, (req, res)=> {
-    if(req.body.login && req.body.password) res.send(autorise(req.body.login, req.body.password, req.body.row));
+    if(req.body.login && req.body.password){
+        res.send(autorise(req.body.login, req.body.password, req.body.row, req.body.ip));
+        logger.info("[🔌]авторизация: ", req.body.login, req.body.ip)
+    }
     else res.send({error: "Не все поля заполнены"});
 });
 app.post("/regUser", jsonParser, (req, res)=> {
-    if(req.body.login && req.body.password) res.send(registration(req.body.login, req.body.password));
+    if(req.body.login && req.body.password){
+        res.send(registration(req.body.login, req.body.password, req.body.ip));
+        logger.info("[🆕] регистрация: ", req.body.login, req.body.ip)
+    }
     else res.send({error: "Не все поля заполнены"});
 });
 app.post("/sinc", jsonParser, (req, res)=> {
@@ -97,7 +113,7 @@ app.post("/addRoom", jsonParser, (req, res)=> {
     else {
         let user = autorise(req.body.login, req.body.password);
         if(!user.error) user.addNewRoom(req.body.room, (data)=> {
-            res.send(data)
+            res.send(user)
         });
         else res.send(user)
     }
@@ -112,7 +128,7 @@ app.post("/readNameRoom", jsonParser, (req, res)=> {
 app.post("/delRoom", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
     if(!user.error) user.delRoom(req.body.id, (data)=> {
-        res.send(data)
+        res.send(user)
     });
     else res.send(user)
 });
@@ -138,6 +154,18 @@ app.post("/favorites", jsonParser, (req, res)=> {
     if(!user.error) user.setFavorite(req.body.data)
     res.send(user)
 });
+app.post("/payload", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+    
+    if(!user.error) res.send(user.dump(req.body.data))
+    else res.send(user)
+});
+app.post("/exit", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+    
+    if(!user.error) user.dump(req.body.data)
+    console.log("exit")
+});
 
 
 // admin api
@@ -158,4 +186,4 @@ app.post("/getUser", jsonParser, (req, res)=> {
 
 ////////////////////////////////////////////////////////////////////////////////
 app.use('/', express.static(path.join(__dirname, './dist')));
-app.listen(3000, ()=> console.log("start server"))
+app.listen(3000, ()=> logger.info("server start"))

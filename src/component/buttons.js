@@ -17,3 +17,14 @@ export function Button(props) {
         </button>
     );
 }
+
+const NameRoom =(props)=> (
+    <>
+        <var className="title-name" 
+            onInput={(ev)=> props.setName(ev.target.textContent)}
+        >
+            { props.name }
+        </var>
+        <img id="read-b" height="31px" src={redact} onClick={props.changeName}/>
+    </>
+);

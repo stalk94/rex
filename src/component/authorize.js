@@ -12,19 +12,23 @@ export default function Authorize(props) {
     const [password, setPass] = useState("")
 
     const auth =()=> {
-        send("auth", {login:login, password:password, row:true}, "POST").then((res)=> {
-            res.json().then((data)=> {
-                if(!data.error) props.onOk(data);
-                else props.onErr(data.error);
-            })
-        });
+        $.getJSON("https://api.ipify.org?format=json", (data)=> {
+            send("auth", {login:login, password:password, ip:data, row:true}, "POST").then((res)=> {
+                res.json().then((data)=> {
+                    if(!data.error) props.onOk(data);
+                    else props.onErr(data.error);
+                })
+            });
+        })
     }
     const reg =()=> {
-        send("regUser", {login:login, password:password}, "POST").then((res)=> {
-            res.json().then((data)=> {
-                if(!data.error) props.onOk(data);
-                else props.onErr(data.error);
-            })
+        $.getJSON("https://api.ipify.org?format=json", (data)=> {
+            send("regUser", {login:login, password:password, ip:data}, "POST").then((res)=> {
+                res.json().then((data)=> {
+                    if(!data.error) props.onOk(data);
+                    else props.onErr(data.error);
+                })
+            });
         });
     }
 

@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import { useFreshRef, useLifecycleLogger } from "rooks";
+"use strict"
+import React, {useState, useEffect, useCallback} from 'react';
+import { useTimeout, useLocalstorageState } from "rooks";
 import { FcSettings, FcHome, FcClock } from 'react-icons/fc';
+import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 
 
 ///////////////////////////////////////////////////////////
@@ -38,6 +40,9 @@ export function ProgressBar(props) {
         </div>
     );
 }
+const publics =(key, vals)=> {
+    window.api.publish(key, vals)
+}
 ///////////////////////////////////////////////////////////
 const SetingsPanel =(props)=> {
     return(
@@ -51,10 +56,16 @@ const SetingsPanel =(props)=> {
 
 
 export default function Device(props) {
+    const id = props.id, title = props.title, room = props.room, mac = props.mac, sheme = props.sheme
     const [selected, setSelected] = useState(0)
     const [load, setLoad] = useState()
-    const [payload, setStates] = useState(props.payload)
+    const [payload, setPayload] = useState(props.payload)
+    const [settingsView, setView] = useState(false)
     
+
+    const {stop, start, isActive} = useTimeout(()=> {
+        setLoad()
+    }, 300);
     const pub =(mac, sheme, key, val)=> {
         Object.keys(sheme).map((name)=> {
             sheme[name].map((str)=> {
@@ -63,13 +74,11 @@ export default function Device(props) {
                 if(tokens[tokens.length-1]===key){
                     let vals = String(val)
                     console.log(`[📡]:`, mac+str, "value:", vals)
-                    window.api.publish(mac+str, vals)
+                    publics(mac+str, vals)
                     setLoad(<div className="ring"></div>)
 
-                    setTimeout(()=> {
-                        setStates(store.get("user").devices[props.id].payload)
-                        setLoad()
-                    }, 1000)
+                    if(isActive) stop()
+                    start()
                 }
             })
         });
@@ -80,31 +89,33 @@ export default function Device(props) {
                 <>
                 <div className="device-body">
                     <div className="line" style={{borderBottom:"1px solid rgba(0,0,0,.2)"}}>
-                        <h2 style={{marginBottom:"5px", marginTop:"3px", color:"white", textAlign:"left", fontSize:"18px"}}>
-                            { props.title }
+                        <h2 className="title"
+                            onClick={()=> setView(settingsView?false:true)}
+                        >
+                           { title }
                         </h2>
                         <h3 style={{marginBottom:"1px", marginLeft:"35%", marginTop:"5px", color:"gray", textAlign:"right", fontSize:"14px"}}>
-                            { props.room }
+                            { room }
                         </h3>
                     </div>
-                        {props.payload.onoff==='0'
+                        {payload.onoff === '0'
                             ? <input style={{marginTop:"25%"}} 
                                 disabled
                                 type="range" 
-                                onInput={(ev)=> pub(props.mac, props.sheme, 'brihtness', ev.target.value)} 
-                                value={props.payload.brihtness}
+                                onInput={(ev)=> pub(mac, sheme, 'brihtness', ev.target.value)} 
+                                value={payload.brihtness}
                             />
                             : <input style={{marginTop:"25%"}} 
                                 type="range" 
-                                onInput={(ev)=> pub(props.mac, props.sheme, 'brihtness', ev.target.value)} 
-                                value={props.payload.brihtness}
+                                onInput={(ev)=> pub(mac, sheme, 'brihtness', ev.target.value)} 
+                                value={payload.brihtness}
                             /> 
                         }
                     </div>
                 <div className="device-icon">
                     {props.type!=="termostat" 
                         ? <div style={{cursor:"pointer"}}
-                            onClick={()=> pub(props.mac, props.sheme, "onoff", payload.onoff==='0'?1:0)} 
+                            onClick={()=> pub(mac, sheme, "onoff", payload.onoff==='0'?1:0)} 
                         >
                             <h3 style={{position:"absolute", color:(payload.onoff==='1'?"#42f059":"red"), left:"40%",top:"30%"}}>
                                 { load ? load : (payload.onoff==='1'?payload.brihtness+"%":"off") }
@@ -114,10 +125,10 @@ export default function Device(props) {
                             />
                         </div>
                         : <ProgressBar 
-                                toggle={()=> pub(props.mac, props.sheme, "onoff", props.payload.onoff==='0'?1:0)} 
-                                enable={props.payload.onoff} 
-                                value={props.payload.brihtness} 
-                                temperature={props.payload.temperature}
+                                toggle={()=> pub(mac, sheme, "onoff", payload.onoff==='0'?1:0)} 
+                                enable={payload.onoff} 
+                                value={payload.brihtness} 
+                                temperature={payload.temperature}
                         /> 
                         }
                 </div>
@@ -137,21 +148,15 @@ export default function Device(props) {
                 break;
         }
     }
-
-
     useEffect(()=> {
-        store.watch("user", (newData)=> {
-            setLoad(<div className="ring"></div>)
-            setStates(newData.devices[props.id].payload)
-            setTimeout(()=> setLoad(), 400)
-        })
-    }, [payload, load])
-
+        store.watch("user", (data)=> setPayload(data.devices[id].payload))
+    })
+    
 
     return(
         <div className="container">
             <div className="device-title">
-                <SetingsPanel selected={selected} onSelect={setSelected} />
+                {settingsView ? <SetingsPanel selected={selected} onSelect={setSelected} /> : ""}
             </div>
                 { view(selected) }
         </div>

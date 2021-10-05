@@ -1,21 +1,8 @@
 import mqtt from "mqtt";
-const client = store.get("user")
 import { send } from "./engine";
 
-const canvas = document.querySelector("#stars")
-const events =(name, val)=> new CustomEvent(name, {
-    bubbles: true,
-    detail: { value: val}
-});
-window.emit =(name, ...values)=> {
-	window.dispatchEvent(events(name, values[1]))
-}
-window.onresize =()=> {
-    canvas.style.width = window.innerWidth+"px"
-    canvas.style.height = window.innerHeight+"px"
-}
 
-
+const client = store.get("user")
 
 
 window.api = mqtt.connect("ws://31.172.65.58:8083/mqtt", {
@@ -38,4 +25,21 @@ client.devices.forEach((device)=> {
             window.api.subscribe(device.mac+topic+"st")
         })
     })
+});
+window.api.on("message", (...arg)=> {
+    let u = store.get("user")
+    let target = arg[0].split("/")
+    let topic = target[target.length-1]
+    topic = topic.slice(0, topic.length-2)
+
+    u.devices.forEach((device, index)=> {
+        if(device.mac===target[0]){
+            console.log("[🔌]:", topic, String(arg[1]))
+            
+            device.payload[topic] = String(arg[1])
+            u.devices[index] = device
+            store.set("user", u)       // на сервер паралельно
+            send("dump", {login:u.login,password:u.password,data:u}, "POST").then((v)=> console.log(v))
+        }
+    });
 });

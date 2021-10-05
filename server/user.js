@@ -1,9 +1,18 @@
 const db = require("quick.db");
 const CryptoJS = require('crypto-js');
 const SHEME = require("./sheme.json");
+const log4js = require("log4js");
+log4js.configure({
+    appenders: { cheese: { type: "file", filename: "log.log" } },
+    categories: { default: { appenders: ["cheese"], level: "error" } }
+});
 
+
+const log = log4js.getLogger("cheese")
 const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
 const master = 'rexMyHome';
+
+
 function setPasswordHash(pass) {
     return CryptoJS.AES.encrypt(pass, master).toString()
 }
@@ -61,11 +70,12 @@ function verifyDevice(scheme) {
 }
 
 ////////////////////////////////////////////////////////////////////////
-exports.registration = function(login, password, optionsData) {
+exports.registration = function(login, password, ip, optionsData) {
     if(db.has("user."+login)) return {error: "login bussy"};
     else {
         let newUser = {
             id: Object.keys(db.get("user")).length,
+            ip: ip,
             login: login,
             password: setPasswordHash(password),
             firstName: "",
@@ -86,12 +96,16 @@ exports.registration = function(login, password, optionsData) {
         return new User(newUser)
     }
 }
-exports.autorise = function(login, password, row) {
+exports.autorise = function(login, password, row, ip) {
     if(!db.has("user."+login)) return {error: "нет такого юзера"};
     else {
         if(row && getPasswordHash(db.get("user."+login).password)!==password) return {error: "password error"}
         else if(!row && db.get("user."+login).password!==password) return {error: "password error"}
-        else return new User(db.get("user."+login))
+        else {
+            let data = db.get("user."+login)
+            data.ip=ip
+            return new User(data)
+        }
     }
 }
 ////////////////////////////////////////////////////////////////////////
@@ -185,7 +199,14 @@ class User {
         }
         else clb({error:"название не может быть менее 3-х символов"})
     }
-
+    dump(data) {
+        this.devices.forEach((device, id)=> {
+            if(data.devices[id]) this.devices[id].payload = data.devices[id].payload
+            else log.error(this.login+" payload не совпадают(на сервере новее)")
+        })
+        this.#dump()
+        return "ok"
+    }
     exit() {
         this.status = "off"
         this.#dump()

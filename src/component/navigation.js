@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
 import { ReactSortable, Sortable, MultiDrag, Swap } from "react-sortablejs";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import { send } from "../engine";
@@ -91,12 +91,22 @@ const Fav =(props)=> {
 
 
 export default function Navigations(props) {
+    const [nameRoom, setName] = useState("")
     const [time, setTime] = useState()
-    useEffect(()=> {
+    const clb = useCallback(()=> {
         store.watch("user", ()=> {
             setTime(<div style={{display:"none"}}>{Date.now()}</div>)
         })
+        triger.on("user.update", ()=>  setTime(<div style={{display:"none"}}>{Date.now()}</div>))
     });
+
+    const chek =()=> {
+        nameRoom.length > 3 
+            ? props.setRoom(nameRoom) && setName("")
+            : props.error("Не менее 4х символов")
+        
+        setTimeout(()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>), 1000)
+    }
 
     return(
         <React.Fragment>
@@ -111,7 +121,6 @@ export default function Navigations(props) {
                             direction="right"
                             menuButton={
                                 <MenuButton onClick={()=> props.onTarget(room)} id="szh-menu">
-                                    <i style={{fontSize:"19px",fontStyle:"normal"}}>🏛️ </i> 
                                     { props.user.rooms[index].name }
                                 </MenuButton>
                             }
@@ -129,6 +138,7 @@ export default function Navigations(props) {
                                 );
                             })}
                             {<MenuItem><var style={{color:"grey"}}>+ добавить</var></MenuItem>}
+                            {index>1?<MenuItem onClick={()=> props.delRoom(index)}><var style={{marginTop:"5%",color:"brown"}}>❌удалить</var></MenuItem>:""}
                         </Menu>
                     );
                 })}
@@ -136,7 +146,19 @@ export default function Navigations(props) {
             </ul>
 
             <hr style={{width:"85%", opacity:"0.1"}}/>
-            <div id="addRoom" onClick={props.setRoom}> ➕ </div>
+
+            <Menu 
+                direction="right"
+                menuButton={<MenuButton id="add"><div id="addRoom"> ➕ </div></MenuButton>}
+            >
+                <input placeholder="имя комнаты" 
+                    style={{width:"80%", marginLeft:"4%"}} 
+                    type="text" 
+                    onInput={(ev)=> setName(ev.target.value)} 
+                    value={nameRoom}
+                />
+                <MenuItem onClick={chek}>создать</MenuItem>
+            </Menu>
         </React.Fragment>
     );
 }
