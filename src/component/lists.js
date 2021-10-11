@@ -4,41 +4,24 @@ import {DragDropContainer, DropTarget} from "react-drag-drop-container";
 import { send } from "../engine";
 
 
-let user = window.localStorage.getItem("user")!==null ? JSON.parse(window.localStorage.getItem("user")) : {login:'test', password:"test"}
-const setData =(ev, elem)=> {
-    ev.dataTransfer.setData("text/plain", JSON.stringify(elem))
-}
-const onSelectCategory =(ev)=> {
-    window.localStorage.setItem("setCategory", props.category)
-}
+let user = store.get("user")
 
 
 export function ListContainer(props) {
     const refList = React.createRef()
-    let reNameDevice =(name, id)=> {
-        send("reNameDevice", {login:user.login, password:user.password, name:name, id:id}, "POST").then((res)=> {
-            res.json().then((val)=> {
-                if(val.error) props.error(val.error)
-            });
-        });
-    }
     
     useEffect(()=> {
         
     }, [])
 
     return(
-        <div className="List"
-            ref={refList}
-        >
+        <div className="List" ref={refList}>
             {props.list.map((elem, index)=> 
                 <div className="Cell"
                     key={index} 
                     onClick={props.click}
-                    draggable={'true'}
-                    onDragStart={(ev)=> setData(ev, elem)}                                  // сохраняем перетаскиваемый
                 >
-                    {elem.name}
+                    { elem.name }
                 </div>
             )}
         </div>
@@ -47,8 +30,22 @@ export function ListContainer(props) {
 
 
 export default function Catalog(props) {
+    const [list, setList] = useState(props.list)
     const [selectedIndex, setSelected] = useState(0)
-
+    const recombinationDevice =(device, idRoom)=> {
+        send("recombination", {login:user.login, password:user.password, roomId:idRoom, device:device}, "POST").then((res)=> {
+            res.json().then((val)=> {
+                if(val.error) props.error(val.error)
+                else store.set("user", val)
+            });
+        });
+    }
+    const useDrop =(indexRoom, device)=> {
+        device.room = indexRoom
+        list[indexRoom].list.push(device)
+        setList(list)
+        recombinationDevice(indexRoom, device)
+    }
     
     return(
         <Accordion
@@ -56,19 +53,23 @@ export default function Catalog(props) {
             selectedIndex={selectedIndex}
             onChange={(index, expanded, selectedIndex)=> setSelected(selectedIndex)}
         >
-            {props.list.map((elem, index)=> (
-                <div
+            {list.map((elem, index)=> (
+                <DropTarget 
                     key={index} 
-                    data-header={<div className="acordion-title">{elem.title}</div>}            // title list
+                    dropData={list[index].list} 
+                    onHit={(device)=> useDrop(index, device)} 
+                    targetKey="device"
                 >
-                    <ListContainer 
-                        error={props.error}
-                        add={props.onAdd}
-                        list={props.list[index].list} 
-                        category={elem.title} 
-                        click={props.click}                                                     // клик по устройству
-                    />
-                </div>
+                    <div data-header={<div className="acordion-title">{ elem.title }</div>}>
+                        <ListContainer 
+                            error={props.error}
+                            add={props.onAdd}
+                            list={list[index].list} 
+                            category={elem.title} 
+                            click={props.click}
+                        />
+                    </div>
+                </DropTarget>
             ))}
         </Accordion>
     );

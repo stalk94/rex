@@ -335,7 +335,7 @@ li:hover {
 
 .Error {
     text-align: center;
-    width: 80%;
+    width: 90%;
     color: #CA0B00;
 }
 #home { 
@@ -707,7 +707,7 @@ ul.szh-menu {
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
 }
 #szh-menu {
-    width: 92%;
+    width: 10%;
     text-align: left;
     margin-bottom: 3px;
 }
@@ -717,7 +717,13 @@ ul.szh-menu {
     margin-left: 5%;
     border: 1px solid rgba(22, 22, 22, 0.5);
 }
-#add:hover {
+#serve {
+    text-align: center;
+    width: 52%;
+    margin-left: 5%;
+    border: 1px solid rgba(22, 22, 22, 0.5);
+}
+#add, #serve:hover {
     border: 1px solid rgba(0, 128, 0, 0.25);
 }
 .szh-menu__item:hover {
@@ -760,6 +766,25 @@ ul.szh-menu {
 .table>input {
     padding: 0px;
     text-align: center;
+}
+select {
+    width: 117px;
+    height: 30px;
+    border-radius: 8px;
+    margin-top: 2px;
+}
+.jsx-2143160743 {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.jsx-590217695 {
+    margin-top: 0px;
+}
+.btn-group {
+    width: 40%;
+}
+.dropdown-menu {
+    width: 100%;
 }
 
 

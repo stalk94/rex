@@ -13,7 +13,7 @@ export const ICON = {
     onOff: onOff,
     wtor: wtor,
     logic: logic,
-    termostat: termostat
+    FSC: termostat
 }
 
 const sort =(devices, roomId)=> {

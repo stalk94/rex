@@ -1,6 +1,5 @@
 require("./api")
 import "./css/style.css";
-import "./css/fontawesome.css";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import React, { useState, useEffect } from "react";
@@ -83,33 +82,14 @@ const User =(props)=> {
         </div>
     );
 }
-const Main =(props)=> {
-    let rooms = store.get("user").rooms
+const Title =(props)=> {
+    const style = {color:props.color}
+
     return(
-        <React.Fragment>
-            <Menu menuButton={<MenuButton>{props.title}</MenuButton>}  transition>
-                <MenuItem onClick={()=> props.home({name:"Избранное"})}>
-                    <AiFillStar style={{marginBottom:"5px"}}/><div style={{marginBottom:"4%",color:"#fae247b3"}}>Избранное</div>
-                </MenuItem>
-                    {rooms.map((room, id)=> {
-                        if(id!==0) return(
-                            <MenuItem key={id} onClick={()=> props.room(room)}>
-                                <div style={{color:"#cccccc"}}>{room.name}</div>
-                            </MenuItem>
-                        )
-                    })}
-                <MenuItem onClick={props.add}>
-                    <div style={{marginTop:"6%",display:"flex",flexDirection:"row"}}>
-                        <AiFillDatabase/><div style={{color:"#fae247b3",padding:"3px"}}>Серверная</div>
-                    </div>
-                </MenuItem>
-                <MenuItem onClick={onExit}>
-                    <div style={{color:"brown"}}>Выход</div>
-                </MenuItem>
-            </Menu>
-            <h3 style={props.style} className="Error">{ props.error }</h3>
+        <>
+            <h3 style={style} className="Error">{ props.error }</h3>
             <img className="link" onClick={props.user} id="user" src={userIcon}/>
-        </React.Fragment>
+        </>
     );
 }
 
@@ -117,11 +97,11 @@ const Main =(props)=> {
 
 
 function App(props) {
-    const [user, setUser] = useState(store.get("user"));
+    const [user, setUser] = useState(store.get("user"))
     const [curentRoom, setCurentRoom] = useState()
-    const [leftNavigation, setLeftNavigations] = useState("Room");
-    const [view, setView] = useState(<div className="area"><Favorites user={user}/></div>);
-    const [error, setErr] = useState("");
+    const [view, setView] = useState(<div className="area"><Favorites user={user}/></div>)
+    const [errorColor, setErrColor] = useState("red")
+    const [error, setErr] = useState("")
 
     ////////////////////////////////////////
     useEffect(()=> {
@@ -130,7 +110,8 @@ function App(props) {
             triger.emit("user.update", newData)
         })
         triger.on("exit", ()=> send("exit", {login:user.login, password:user.password, data:user}))
-    }, [setUser])
+        !curentRoom ? setCurentRoom({name:"Избранное"}) : curentRoom.name
+    }, [])
     const setError =(textError)=> {
         setErr(textError)
         setTimeout(()=> setErr(""), 5000)
@@ -146,10 +127,11 @@ function App(props) {
         })
     }
     const readRoom =(newVal, id)=> {
-        send("readNameRoom", {login:user.state.login, password:user.state.password, name:newVal, id:id}, "POST").then((res)=> {
+        send("readNameRoom", {login:user.login, password:user.password, name:newVal, id:id}, "POST").then((res)=> {
             res.json().then((val)=> {
                 if(!val.error){
                     user.rooms = val
+                    store.set("user", user)
                 }
                 else console.log(val.error);
             })
@@ -187,7 +169,6 @@ function App(props) {
                 error={setError} 
                 onAdd={setUser}
             />
-            {setLeftNavigations("Devices")}
         </div>
     );
     Mod.User =()=> setView(
@@ -203,41 +184,29 @@ function App(props) {
                 <aside>
                     <header className="logo">
                         <img width="100%"
-                            onClick={()=> setLeftNavigations("Room")} 
+                            onClick={()=> setView(<div className="area"><Favorites user={user}/></div>)} 
                             src={logo}
                         />
                     </header>
                     <nav className="card">
-                        {leftNavigation==="Room"
-                            ? <NavigationHome 
-                                error={setError}
-                                user={user} 
-                                target={curentRoom}
-                                onTarget={setCurentRoom}
-                                setRoom={onAddRoom}
-                                readRoom={readRoom} 
-                                delRoom={delRoom}
-                            />
-                            : <Catalog 
-                                list={listDevicesSortable(user)}
-                                onAdd={setUser}
-                                onError={setError}
-                            />
-                        }
+                        <NavigationHome 
+                            error={setError}
+                            user={user} 
+                            target={curentRoom}
+                            onTarget={(room)=> Mod.Home(room)}
+                            setRoom={onAddRoom}
+                            readRoom={readRoom} 
+                            delRoom={delRoom}
+                            add={Mod.Add}
+                        />
                     </nav>
                 </aside>
                 <div className="base">
                     <header>
-                        <Main className="line top-panel"
-                            title={!curentRoom ? setCurentRoom({name:"Избранное"}) : curentRoom.name}
-                            error={error}
-                            user={Mod.User}
-                            add={Mod.Add}
-                            room={(room)=> Mod.Home(room)}
-                            home={()=> {
-                                setLeftNavigations("Room");
-                                setView(<div className="area"><Favorites user={user} />{setCurentRoom({name:"Избранное"})}</div>)
-                            }}
+                        <Title 
+                            user={Mod.User} 
+                            error={error} 
+                            color={errorColor} 
                         />
                     </header>
                     { view }

@@ -1,6 +1,6 @@
 const db = require("quick.db");
 const CryptoJS = require('crypto-js');
-const SHEME = require("./sheme.json");
+const SHEME = require("./sheme.json");  //! deprecate
 const log4js = require("log4js");
 log4js.configure({
     appenders: { cheese: { type: "file", filename: "log.log" } },
@@ -86,7 +86,6 @@ exports.registration = function(login, password, ip, optionsData) {
             kontact2: "",
             avatar: "./img/no-avatar.png",
             status: "off",
-            sheme: SHEME,
             devices: [],
             favorites: [],
             rooms: [{name:"Серверная", visibility:"block"}]
@@ -160,9 +159,16 @@ class User {
         if(data instanceof Array) this.devices = data
         this.#dump()
     }
+    recombination(roomId, device) {
+        this.devices.forEach((dev, index)=>{
+            if(dev.guid===device.guid) this.devices[index].room = roomId
+        })
+        this.#dump()
+    }
 
     addDevice(state, clb) {
         let {mac, type, name} = state
+        db.add("guid", 1)
 
         let find = this.devices.find((device, index)=> {
             if(device.mac===mac){
@@ -175,6 +181,7 @@ class User {
         if(!find){
             console.log("new devices: ", state)
             let device = {
+                guid: db.get("guid"),
                 mac: mac,
                 room: 0,
                 name: name??`newDevice-${this.devices.length}`,

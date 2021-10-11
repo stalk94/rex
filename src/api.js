@@ -28,14 +28,14 @@ client.devices.forEach((device)=> {
 });
 window.api.on("message", (...arg)=> {
     let u = store.get("user")
-    let target = arg[0].split("/")
-    let topic = target[target.length-1]
-    topic = topic.slice(0, topic.length-2)
+    let target = arg[0]
+    let topic = target      //[target.length-1]
+    //topic = topic.slice(0, topic.length-2)
 
     u.devices.forEach((device, index)=> {
         if(device.mac===target[0]){
-            console.log("[🔌]:", topic, String(arg[1]))
-            
+            console.log("[🔌]topic:", topic, "value:", String(arg[1]))
+
             device.payload[topic] = String(arg[1])
             u.devices[index] = device
             store.set("user", u)       // на сервер паралельно

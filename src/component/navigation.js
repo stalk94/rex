@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext, useCallback, useMemo } from 're
 import { ReactSortable, Sortable, MultiDrag, Swap } from "react-sortablejs";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import { send } from "../engine";
+import { AiFillDatabase } from "react-icons/ai";
+import { GrAdd, GrProjects } from "react-icons/gr";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 
@@ -88,17 +90,68 @@ const Fav =(props)=> {
         </svg>
     );
 }
+const Room =(props)=> {
+    const [name, setName] = useState(props.name)
+
+    return (
+        <div style={{display:"flex",flexDirection:"row"}}>
+            <button 
+                onClick={()=> props.onTarget(props.room)} 
+                style={{width:"85%",marginBottom:"3px",border:props.select?"2px solid white":""}}
+            >
+                { name }
+            </button>
+            <Menu
+                direction="right"
+                menuButton={<MenuButton id="szh-menu">:</MenuButton>}
+                transition
+            >
+                {props.devices.map((device, id)=> {
+                    if(device.room===props.id) return (
+                        <MenuItem key={id}>
+                            <Fav 
+                                click={()=> setFavorite(device, id, props.error)} 
+                                enable={device.favorite}
+                            />
+                            <var className="p2">{device.name}</var>
+                        </MenuItem>
+                    );
+                })}
+                <input 
+                    placeholder={"✏️переименовать"}
+                    onChange={(ev)=> setName(ev.target.value)} 
+                    type="text" 
+                    value={name}
+                    style={{width:"89%"}}
+                />
+                <button onClick={()=> props.readRoom(name, props.id)}> ✏️изменить </button>
+
+                {props.id > 0
+                    ?   <MenuItem onClick={()=> props.delRoom(props.id)}>
+                            <var style={{marginTop:"5%",color:"brown"}}> ❌удалить </var>
+                        </MenuItem>
+                    : ""
+                }
+            </Menu>
+        </div>
+    );
+}
 
 
 export default function Navigations(props) {
+    const [curent, setCurent] = useState()
     const [nameRoom, setName] = useState("")
     const [time, setTime] = useState()
     const clb = useCallback(()=> {
         store.watch("user", ()=> {
             setTime(<div style={{display:"none"}}>{Date.now()}</div>)
         })
-        triger.on("user.update", ()=>  setTime(<div style={{display:"none"}}>{Date.now()}</div>))
-    });
+        triger.on("user.update", ()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>))
+    })
+    const useTarget =(selectRoom, id)=> {
+        setCurent(id)
+        props.onTarget(selectRoom)
+    }
 
     const chek =()=> {
         nameRoom.length > 3 
@@ -109,37 +162,22 @@ export default function Navigations(props) {
     }
 
     return(
-        <React.Fragment>
+        <>
             <ul>
-                <h4 style={{marginLeft:"5%",marginTop:"0px",fontSize:"18px",opacity:"0.6"}}>
-                    Мой дом[{props.user.rooms.length}/10]:
-                </h4>
-
                 {props.user.rooms.map((room, index)=> {
-                    if(room.visibility==="block") return(
-                        <Menu key={index}
-                            direction="right"
-                            menuButton={
-                                <MenuButton onClick={()=> props.onTarget(room)} id="szh-menu">
-                                    { props.user.rooms[index].name }
-                                </MenuButton>
-                            }
-                            transition
-                        >
-                            {props.user.devices.map((device, id)=> {
-                                if(device.room===index) return (
-                                    <MenuItem key={id}>
-                                        <Fav 
-                                            click={()=> setFavorite(device, id, props.error)} 
-                                            enable={device.favorite}
-                                        />
-                                        <var className="p2">{device.name}</var>
-                                    </MenuItem>
-                                );
-                            })}
-                            {<MenuItem><var style={{color:"grey"}}>+ добавить</var></MenuItem>}
-                            {index>1?<MenuItem onClick={()=> props.delRoom(index)}><var style={{marginTop:"5%",color:"brown"}}>❌удалить</var></MenuItem>:""}
-                        </Menu>
+                    if(room.visibility==="block" && index!==0) return(
+                        <Room 
+                            key={index}
+                            id={index}
+                            name={room.name} 
+                            room={room}
+                            select={curent && curent===index?true:false}
+                            devices={props.user.devices} 
+                            readRoom={props.readRoom}
+                            delRoom={props.delRoom}
+                            error={props.error}
+                            onTarget={()=> useTarget(room, index)}
+                        />
                     );
                 })}
                 { time }
@@ -147,18 +185,29 @@ export default function Navigations(props) {
 
             <hr style={{width:"85%", opacity:"0.1"}}/>
 
-            <Menu 
-                direction="right"
-                menuButton={<MenuButton id="add"><div id="addRoom"> ➕ </div></MenuButton>}
-            >
-                <input placeholder="имя комнаты" 
-                    style={{width:"80%", marginLeft:"4%"}} 
-                    type="text" 
-                    onInput={(ev)=> setName(ev.target.value)} 
-                    value={nameRoom}
-                />
-                <MenuItem onClick={chek}>создать</MenuItem>
-            </Menu>
-        </React.Fragment>
+            <div style={{display:"flex",flexDirection:"row"}}>
+                <Menu 
+                    direction="right"
+                    menuButton={<MenuButton id="add"><div id="addRoom"> ➕ </div></MenuButton>}
+                >
+                    <input placeholder="имя комнаты" 
+                        style={{width:"80%", marginLeft:"4%"}} 
+                        type="text" 
+                        onInput={(ev)=> setName(ev.target.value)} 
+                        value={nameRoom}
+                    />
+                    <MenuItem onClick={chek}> создать </MenuItem>
+                </Menu>
+
+                <MenuButton 
+                    onClick={()=> {props.add();setCurent(0)}} 
+                    id="serve"
+                >
+                    <div style={{borderBottom:curent===0?"1px solid white":""}} >
+                        <AiFillDatabase/>
+                    </div>
+                </MenuButton>
+            </div>
+        </>
     );
 }

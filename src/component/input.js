@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import "../css/style.css"
 
 
 export function SlideBar(props) {
@@ -10,3 +10,19 @@ export function SlideBar(props) {
     );
 }
 
+
+export function Select(props) {
+    const [value, setValue] = useState(props.data[0])
+    const onValue =(e)=> {
+        setValue(e.target.value)
+        props.onValue(e.target.value)
+    }
+
+    return(
+        <select onChange={onValue} value={value}>
+            {props.data.map((v, i)=> (
+                <option key={i}>{ v }</option>
+            ))}
+        </select>
+    );
+}

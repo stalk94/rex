@@ -5,6 +5,7 @@ const app = express();
 const log4js = require("log4js");
 const path = require("path");
 const {User, registration, autorise} = require("./server/user");
+const SHEME = require("./server/sheme.json");
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -72,7 +73,9 @@ const mock = {
 app.get("/", (req, res)=> {
     res.sendFile(__dirname+"/dist/index.html")
 });
-
+app.get("/sheme", (req, res)=> {
+    res.send(SHEME)
+});
 
 
 // синхронизация с параметрами только через сервер
@@ -166,7 +169,15 @@ app.post("/exit", jsonParser, (req, res)=> {
     if(!user.error) user.dump(req.body.data)
     console.log("exit")
 });
+app.post("/recombination", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
 
+    if(!user.error){
+        user.recombination(req.body.roomId, req.body.device)
+        res.send(user)
+    }
+    else res.send(user)
+});
 
 // admin api
 app.post("/getUserList", jsonParser, (req, res)=> {

@@ -2,15 +2,20 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import { useTimeout, useLocalstorageState } from "rooks";
 import { FcSettings, FcHome, FcClock } from 'react-icons/fc';
-import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 
 
 ///////////////////////////////////////////////////////////
 export function ProgressBar(props) {
-    console.log(props)
+    const termostat = <ProgressBar 
+        toggle={()=> pub(mac, sheme, "onoff", payload.onoff==='0'?1:0)} 
+        enable={payload.onoff} 
+        brihtness={payload.brihtness} 
+        data={payload.data}
+    /> 
+
     return(
         <div onClick={props.toggle} className="top-device">  
-            <svg className="progress" data-progress={props.value} version="1.1" xmlns="http://www.w3.org/2000/svg" 
+            <svg className="progress" data-progress={props.brihtness} version="1.1" xmlns="http://www.w3.org/2000/svg" 
                 x={props.x ? props.x : "0px"} 
                 y={props.y ? props.y : "0px"} 
                 viewBox="0 0 80 80"
@@ -20,12 +25,13 @@ export function ProgressBar(props) {
                     d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
                 </path>
                 <text className="temp" x="37%" y="37%"> 
-                    {props.temperature+"°C"} 
+                    {props.data+"°C"} 
                 </text>
                 <text className="display" x="50%" y="60%"> 
-                    {props.enable==='0'?(props.value+"%"):"off"} 
+                    {props.enable==='0'?(props.brihtness+"%"):"off"} 
                 </text>
-                <path style={{stroke:props.enable==='0'?'rgb(255, 255, 255)':'rgb(227, 41, 97)'}} className="fill"
+                <path style={{stroke:props.enable==='0'?'rgb(255, 255, 255)':'rgb(227, 41, 97)'}} 
+                    className="fill"
                     transform="translate(-10 8) rotate(45 50 50)" 
                     d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
                 </path>
@@ -98,7 +104,7 @@ export default function Device(props) {
                             { room }
                         </h3>
                     </div>
-                        {payload.onoff === '0'
+                        {payload["/R0/onoff"] === '0'
                             ? <input style={{marginTop:"25%"}} 
                                 disabled
                                 type="range" 
@@ -113,24 +119,19 @@ export default function Device(props) {
                         }
                     </div>
                 <div className="device-icon">
-                    {props.type!=="termostat" 
+                    {props.type!=="FSC" 
                         ? <div style={{cursor:"pointer"}}
                             onClick={()=> pub(mac, sheme, "onoff", payload.onoff==='0'?1:0)} 
                         >
                             <h3 style={{position:"absolute", color:(payload.onoff==='1'?"#42f059":"red"), left:"40%",top:"30%"}}>
                                 { load ? load : (payload.onoff==='1'?payload.brihtness+"%":"off") }
                             </h3>
-                            <img  style={{width:"100%", opacity:payload.onoff==='1'?"1":"0.4"}} 
+                            <img style={{width:"100%", opacity:payload.onoff==='1'?"1":"0.4"}} 
                                 src={props.image} 
                             />
                         </div>
-                        : <ProgressBar 
-                                toggle={()=> pub(mac, sheme, "onoff", payload.onoff==='0'?1:0)} 
-                                enable={payload.onoff} 
-                                value={payload.brihtness} 
-                                temperature={payload.temperature}
-                        /> 
-                        }
+                        : "тут будет термостат"
+                    }
                 </div>
                 </>
             );
