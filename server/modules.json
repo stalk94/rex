@@ -1,0 +1,41 @@
+{
+    "reley": [
+        "/R$/ga1",      
+        "/R$/ga2", 
+        "/R$/gafb"    
+    ],
+    "button": [
+        "/B$/ga1",
+        "/B$/ga2",
+        "/B$/gafb", 
+        "/B$/ga1mode",  
+        "/B$/ga2mode"
+    ],
+    "termo": [
+        "/T$/Set5onoffGA",  
+        "/T$/onoffGA",      
+        "/T$/dataGA",       
+        "/T$/datastGA",     
+        "/T$/heat1GA",
+        "/T$/heat1stGA",    
+        "/T$/heat2GA",
+        "/T$/heat2stGA",
+        "/T$/heat3GA",
+        "/T$/heat3stGA",
+        "/T$/cool1GA",
+        "/T$/cool1stGA",
+        "/T$/cool2GA",
+        "/T$/cool2stGA",
+        "/T$/cool3GA",
+        "/T$/cool3stGA"
+    ],
+    "dimmer": [
+        "/D$/ga1",
+        "/D$/ga2",
+        "/D$/gafb",
+        "/D$/ga1relativ",
+        "/D$/ga2relativ",
+        "/D$/ga1absolut",
+        "/D$/ga2absolut"
+    ] 
+}

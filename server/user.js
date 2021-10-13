@@ -1,73 +1,23 @@
 const db = require("quick.db");
-const CryptoJS = require('crypto-js');
-const SHEME = require("./sheme.json");  //! deprecate
 const log4js = require("log4js");
+const CryptoJS = require('crypto-js');
+const { parser, getPasswordHash, setPasswordHash } = require("./func");
+const MODULES = require("./modules.json");  
+const NODES = require("./nodes.json");
+
+
+
+const log = log4js.getLogger("cheese")
+const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
+const master = 'rexMyHome';
 log4js.configure({
     appenders: { cheese: { type: "file", filename: "log.log" } },
     categories: { default: { appenders: ["cheese"], level: "error" } }
 });
 
 
-const log = log4js.getLogger("cheese")
-const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
-const master = 'rexMyHome';
 
 
-function setPasswordHash(pass) {
-    return CryptoJS.AES.encrypt(pass, master).toString()
-}
-function getPasswordHash(hashPass) {
-    return CryptoJS.AES.decrypt(hashPass, master).toString(CryptoJS.enc.Utf8)
-}
-function tokenGeneration(login, pass) {
-    return CryptoJS.AES.encrypt(login+'&'+time(), pass).toString()
-}
-function tokenDecriptor(token, pass) {
-    let rez = CryptoJS.AES.decrypt(token, pass).toString(CryptoJS.enc.Utf8)
-
-    return rez === '' 
-        ? '[❌]: error token'
-        : rez
-}
-/** Верификатор регистрации нового устройства */
-function verifyDevice(scheme) {
-    const protos = {
-        mac: ()=> {
-            let find;
-
-            if(scheme.length < 3) find = {error: "Вы не ввели mac id устройства"}
-            else {
-                let allUser = db.get("user");
-
-                Object.keys(allUser).forEach((login)=> {
-                    let devices = allUser[login].devices
-
-                    devices.forEach((obj)=> {
-                        if(obj.mac===device.mac) find = {error: "Данный девайс уже зарегистрирован, обратитесь в службу поддержки"}
-                    });
-                });
-            }
-
-            device.mac = find
-        },
-        name: ()=> {
-            if(device.name==="") device.name = device.type
-        },
-        type: ()=> {
-            let find = {error: "Такого типа устройства нет в базе данных"};
-            let types = db.get("sheme")
-
-            types.forEach((protos)=> {
-                if(protos.type===device.type) find = undefined;
-            });
-            return find
-        }
-    }
-    protos.mac()
-    protos.name()
-
-    return device
-}
 
 ////////////////////////////////////////////////////////////////////////
 exports.registration = function(login, password, ip, optionsData) {
@@ -108,6 +58,73 @@ exports.autorise = function(login, password, row, ip) {
     }
 }
 ////////////////////////////////////////////////////////////////////////
+const CARTS = [
+    "/R$/onoff",
+    "/T$/onoff",       
+    "/T$/data",       
+    "/T$/mode",        
+    "/T$/headmode", 
+    "/T$/coolmode",
+    "/T$/MAINset",         
+    "/T$/TIME1h",        
+    "/T$/TIME1m",
+    "/T$/TIME1set",         
+    "/T$/TIME1onoff",   
+    "/T$/TIME2h",        
+    "/T$/TIME2m",
+    "/T$/TIME2set",     
+    "/T$/TIME2onoff",  
+    "/T$/TIME3h",
+    "/T$/TIME3m",
+    "/T$/TIME3set",
+    "/T$/TIME3onoff",
+    "/T$/TIME4h",
+    "/T$/TIME4m",
+    "/T$/TIME4set",
+    "/T$/TIME4onoff",
+    "/T$/TIME5set",
+    "/T$/TIME5onoff",
+    "/D$/onoff",          
+    "/D$/brightness",      
+    "/D$/TIME1hour",        
+    "/D$/TIME1min",         
+    "/D$/TIME1set",         
+    "/D$/TIME1onoff",       
+    "/D$/TIME2hour",        
+    "/D$/TIME2min",         
+    "/D$/TIME2set",         
+    "/D$/TIME2onoff",       
+    "/D$/TIME3hour",        
+    "/D$/TIME3min",        
+    "/D$/TIME3set",        
+    "/D$/TIME3onoff",       
+    "/D$/TIME4hour",       
+    "/D$/TIME4min",         
+    "/D$/TIME4set",         
+    "/D$/TIME4onoff"     
+]
+// [литерал] - шыблон
+const META = {
+    PMR: {
+        relay: [
+            {type:"lable", data:"Реле"}, 
+            {type:'input', data:"name"}, 
+            {type:'select', name:"room", data:`[rooms]()`}, 
+            {type:'input', data:"GA1"}, 
+            {type:'input', data:"GA2"}, 
+            {type:'input', data:"GAstatus"}
+        ],
+        button: [
+            {type:"lable", data:"INPUT"}, 
+            {type:'input', data:"name"}, 
+            {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
+            {type:'input', data:"GA1"}, 
+            {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
+            {type:'input', data:"GA2"}, 
+            {type:'input', data:"status"}
+        ]
+    }
+}
 
 
 class User {
@@ -120,7 +137,7 @@ class User {
         db.set("user."+this.login, this)
     }
     _findShemeType(type) {
-        return SHEME[type]
+        return MODULES[type]
     }
 
     addNewRoom(name, clb) {
@@ -166,35 +183,34 @@ class User {
         this.#dump()
     }
 
-    addDevice(state, clb) {
-        let {mac, type, name} = state
-        db.add("guid", 1)
-
-        let find = this.devices.find((device, index)=> {
-            if(device.mac===mac){
-                this.devices[index].name = name
-                clb(this.devices[index])
-                return true
-            }
+    #addDevice(metaCarta) {
+        let kart = {room:0, guid:db.get("guid"), name:''}
+        Object.keys(metaCarta).map((v)=> {
+            if(metaCarta[v].length > 0) kart[v] = metaCarta[v]
         });
 
-        if(!find){
-            console.log("new devices: ", state)
-            let device = {
-                guid: db.get("guid"),
-                mac: mac,
-                room: 0,
-                name: name??`newDevice-${this.devices.length}`,
-                type: type,
-                sheme: SHEME[type],
-                payload: {}
-            }
-
-            this.devices.push(device)
-            this.#dump()
-            clb(this)
-        }
+        return kart
     }
+    addNewNode(meta) {
+        let metaCarta = {}
+        if(!this.nodes) this.nodes = {}
+        if(!this.nodes[meta.mac]) this.nodes[meta.mac] = {}
+        this.nodes[meta.mac]._type = meta.type
+        this.nodes[meta.mac]._name = meta.name
+        this.nodes[meta.mac]._frame = 0
+        this.nodes[meta.mac].table = {}
+
+
+        parser(NODES[meta.type]).map((row, i)=> {
+            let key = Object.keys(NODES[meta.type])[i]
+            if(cartParse(key)) metaCarta[key] = cartParse(key)
+            this.nodes[meta.mac].table[key] = row
+        });
+        
+        
+        this.nodes[meta.mac].cart = this.#addDevice(metaCarta)
+    }
+
     reNameDevice(name, id, clb) {
         if(name.length>3){
             if(this.devices[id]){
@@ -210,7 +226,8 @@ class User {
         this.devices.forEach((device, id)=> {
             if(data.devices[id]) this.devices[id].payload = data.devices[id].payload
             else log.error(this.login+" payload не совпадают(на сервере новее)")
-        })
+        });
+
         this.#dump()
         return "ok"
     }

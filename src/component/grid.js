@@ -105,9 +105,9 @@ const Row =(props)=> {
 export default function Grid(props) {
     const style = {border:"1px solid grey",marginTop:"10%"}
     const [state, setState] = useState(props.rows)
-    const [mac, setMac] = useState(props.title.meta.mac)
-    const [knx, setKnx] = useState(props.title.meta.knx)
-    const [room, setRoom] = useState(props.title.meta.room)
+    const [mac, setMac] = useState(props.meta.mac)
+    const [knx, setKnx] = useState(props.meta.knx)
+    const [room, setRoom] = useState(props.meta.room)
 
     const onChange =(keyId, data)=> {
         let copy = state
@@ -118,7 +118,7 @@ export default function Grid(props) {
     return(
         <Resizable style={style} defaultSize={{width:960, height:200}}>
             <Title 
-                type={props.title.meta.type} 
+                type={props.meta.type} 
                 name={room} 
                 mac={mac} 
                 knx={knx}

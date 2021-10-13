@@ -1,9 +1,9 @@
-import { send } from "../engine";
+import { send } from "../../engine";
 import React, {useState, useEffect} from 'react';
 import { useDidMount } from "rooks";
 import ReactDOM from 'react-dom';
 import {DragDropContainer, DropTarget} from "react-drag-drop-container";
-import { ICON } from "./device.panel";
+import { ICON } from "../device.panel";
 import "../css/store";
 
 

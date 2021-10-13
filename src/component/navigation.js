@@ -3,7 +3,6 @@ import { ReactSortable, Sortable, MultiDrag, Swap } from "react-sortablejs";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import { send } from "../engine";
 import { AiFillDatabase } from "react-icons/ai";
-import { GrAdd, GrProjects } from "react-icons/gr";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 

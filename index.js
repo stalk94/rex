@@ -163,6 +163,16 @@ app.post("/payload", jsonParser, (req, res)=> {
     if(!user.error) res.send(user.dump(req.body.data))
     else res.send(user)
 });
+app.post("/newNode", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+    
+    if(!user.error && req.body.state){
+        user.newNode(req.body.state)
+        res.send(user.dump(req.body.data))
+        res.send(user.nodes)
+    }
+    else res.send(user)
+});
 app.post("/exit", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
     

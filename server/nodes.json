@@ -1,0 +1,15 @@
+{
+    "PMR": {
+        "reley": 1,
+        "button": 1
+    },
+    "SMR": {
+        "reley": 8,
+        "button": 16
+    },
+    "FSC": {
+        "reley": 8,
+        "button": 4,
+        "termo": 4
+    }
+}

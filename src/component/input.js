@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "../css/style.css"
 
 
+
 export function SlideBar(props) {
     return(
         <div class="mb-3">
@@ -9,7 +10,6 @@ export function SlideBar(props) {
 		</div>
     );
 }
-
 
 export function Select(props) {
     const [value, setValue] = useState(props.data[0])

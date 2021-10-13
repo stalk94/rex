@@ -3,12 +3,13 @@ const engine = require('store/src/store-engine');
 const observe = require('store/plugins/observe');
 const ls = require('store/storages/localStorage');
 
+
 window.store = engine.createStore(ls, observe);
-//const canvas = document.querySelector("#stars")
 window.onresize =()=> {
     //canvas.style.width = window.innerWidth+"px"
     //canvas.style.height = window.innerHeight+"px"
 }
+
 
 
 class EventEmmitter {
@@ -66,7 +67,13 @@ export function send(url, data, metod) {
 }
 
 
+
 window.triger = new EventEmmitter()
 window.addEventListener("beforeunload", ()=> {
   triger.emit("exit")
+});
+send("sheme", {}, "GET").then((data)=> {
+	data.json().then((val)=> {
+		store.set("SCHEME", val)
+	});
 });

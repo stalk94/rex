@@ -4,7 +4,7 @@ import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import Favorites from "./component/favorites";
+import NodeDevice from "./component/node";
 import logo from "./img/logo.svg";
 import exit from "./img/exit.svg";
 import userIcon from "./img/user.svg";
@@ -99,7 +99,6 @@ const Title =(props)=> {
 function App(props) {
     const [user, setUser] = useState(store.get("user"))
     const [curentRoom, setCurentRoom] = useState()
-    const [view, setView] = useState(<div className="area"><Favorites user={user}/></div>)
     const [errorColor, setErrColor] = useState("red")
     const [error, setErr] = useState("")
 
@@ -147,44 +146,18 @@ function App(props) {
             })
         });
     }
-
-    
-    /////////////////////////////////////////
-    Mod.Home =(room)=> {
+    const setcurRoom =(room)=> {
         setCurentRoom(room)
-        setView(
-            <div className="area">
-                <DevicePanel 
-                    user={user}
-                    target={curentRoom}
-                    readRoom={readRoom}
-                />
-            </div>
-        );
     }
-    Mod.Add =()=> setView(
-        <div className="area">
-            <SchemeConstructor 
-                user={user}
-                error={setError} 
-                onAdd={setUser}
-            />
-        </div>
-    );
-    Mod.User =()=> setView(
-        <div className="area">
-            <User onExit={onExit}>{ user }</User>
-        </div>
-    );
-    /////////////////////////////////////////
     
+
     return(
         <article>
             <main>
                 <aside>
                     <header className="logo">
                         <img width="100%"
-                            onClick={()=> setView(<div className="area"><Favorites user={user}/></div>)} 
+                            onClick={()=> setcurRoom({name:"Избранное"})} 
                             src={logo}
                         />
                     </header>
@@ -193,7 +166,7 @@ function App(props) {
                             error={setError}
                             user={user} 
                             target={curentRoom}
-                            onTarget={(room)=> Mod.Home(room)}
+                            onTarget={(room)=> setcurRoom(room)}
                             setRoom={onAddRoom}
                             readRoom={readRoom} 
                             delRoom={delRoom}
@@ -204,12 +177,23 @@ function App(props) {
                 <div className="base">
                     <header>
                         <Title 
-                            user={Mod.User} 
+                            user={<User onExit={onExit}>{ user }</User>} 
                             error={error} 
                             color={errorColor} 
                         />
                     </header>
-                    { view }
+                    <div className="area">
+                        {curentRoom.name==="Серверная"
+                            ? <SchemeConstructor 
+                                user={user}
+                                error={setError} 
+                                onAdd={setUser}
+                            />
+                            : <NodeDevice 
+                                curentRoom={curentRoom} 
+                             />
+                        }
+                    </div> 
                 </div>
             </main>
         </article>
@@ -218,3 +202,12 @@ function App(props) {
 
 ///////////////////////////////////////////////////////////////////////////////////
 ReactDOM.render(<App />, document.querySelector(".root"))
+
+
+/**
+ * <DevicePanel 
+        user={user}
+        target={curentRoom}
+        readRoom={readRoom}
+    />
+ */

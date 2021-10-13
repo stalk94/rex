@@ -5,8 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "@babel/helper-module-imports": "^7.14.5",
-    "@dnd-kit/core": "^4.0.0",
-    "@dnd-kit/sortable": "^5.0.0",
     "@gumgum/react-script-tag": "0.0.3",
     "@nextui-org/react": "^1.0.1-alpha.47",
     "@szhsin/react-menu": "^2.0.1",
@@ -23,13 +21,11 @@
     "natural-drag-animation-rbdnd": "^2.1.0",
     "quick.db": "^7.1.3",
     "re-resizable": "^6.9.1",
-    "react": "^17.0.2",
     "react-accessible-accordion": "^3.3.5",
     "react-animations": "^1.0.0",
     "react-async": "^10.0.1",
     "react-compound-slider": "^3.3.1",
     "react-contenteditable": "^3.3.6",
-    "react-dom": "^17.0.2",
     "react-drag-drop-container": "^6.1.1",
     "react-dropzone": "^11.3.4",
     "react-dump": "^0.3.3",
@@ -40,9 +36,11 @@
     "react-tiny-accordion": "^2.0.5",
     "react-variable-width-grid": "^0.0.4",
     "rooks": "^5.7.1",
+    "rxjs": "^7.4.0",
     "sortablejs": "^1.14.0",
     "store": "^2.0.12",
-    "styled-components": "^5.3.1"
+    "styled-components": "^5.3.1",
+    "zustand": "^3.5.13"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
@@ -51,7 +49,11 @@
     "@babel/preset-react": "^7.14.5",
     "@types/sortablejs": "^1.10.7",
     "babel-loader": "^8.2.2",
-    "postcss": "^8.2.15"
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "postcss": "^8.2.15",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "scripts": {
     "start": "node index.js",
