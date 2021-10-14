@@ -21,6 +21,9 @@ export const ICON = {
     logic: logic,
     termostat: termostat
 }
+const useFiltre =(module, searchToken)=> {
+    module.find((topic)=> )
+}
 
 
 const OnOff =(props)=> {
@@ -96,11 +99,6 @@ class Device extends React.Component {
         this.onState = this.onState.bind(this)
     }
     componentDidMount() {
-        EVENT.on("curent.room", (v)=> {
-            let copy = this.state
-            copy.view = v===this.props.room
-            this.setState(copy)
-        });
         store.watch("user", (newData)=> {
             let copy = newData.devices[this.props.guid]
             copy.view = this.state.view
@@ -122,10 +120,6 @@ class Device extends React.Component {
         usePub(this.state.payload)
     }
     render() {
-        let data = this.state.payload.brihtness
-            ? this.state.payload.brihtness
-            : this.state.payload.data
-
         return(
             <div style={{display:this.state.view?"block":"none"}} className="container">
                 <div className="device-body">
@@ -138,9 +132,9 @@ class Device extends React.Component {
                 </div>
                 <div className="device-icon">
                     <Lable 
-                        type={this.props.cfg.type} 
+                        type={this.props.type} 
                         click={this.useClick} 
-                        data={this.state.payload}
+                        payload={this.state.payload}
                         onoff={this.state.payload.onoff}
                     >
                         <OnOff 
@@ -155,7 +149,7 @@ class Device extends React.Component {
 }
 
 
-/** узлы */
+/** узлы: принимает карточки */
 export default function NodeArea(props) {
     const [devices, setDevices] = useState(store.get("user").nodes)
     

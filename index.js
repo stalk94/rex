@@ -108,18 +108,11 @@ app.post("/regNewDevice", jsonParser, (req, res)=> {
     });
     else res.send(user)
 });
-app.post("/addRoom", jsonParser, (req, res)=> {
-    if(req.body.test){
-        mock.rooms.push({name: req.body.room})
-        res.send(mock)
-    }
-    else {
-        let user = autorise(req.body.login, req.body.password);
-        if(!user.error) user.addNewRoom(req.body.room, (data)=> {
-            res.send(user)
-        });
-        else res.send(user)
-    }
+app.post("/addNode", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+
+    if(!user.error) user.addNewNode(req.body.state);
+    else res.send(user)
 });
 app.post("/readNameRoom", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);

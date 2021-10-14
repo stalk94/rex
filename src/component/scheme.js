@@ -1,18 +1,12 @@
 import React, {useState} from "react";
 import { send } from "../engine";
-import { DragDropContainer, DropTarget } from "react-drag-drop-container";
 import Grid from "./grid"
 
 
 /////////////////////////////////////////////////
 const user = store.get("user")
 const style = {paddingLeft:"55px",paddingRight:"50px"}
-let SHEME;
-send("sheme", {}, "GET").then((data)=> {
-    data.json().then((val)=> {
-        SHEME = val;
-    });
-});
+let SHEME = ['PMR','SMR', "FSC"]
 ///////////////////////////////////////////////////
 
 
@@ -36,7 +30,7 @@ const FormRegistrationNewNode =(props)=> {
     return(
         <>
             <div style={{display:"flex",flexDirection:"row"}}>
-                {Object.keys(SHEME).map((type, i)=> (
+                {SHEME.map((type, i)=> (
                     <button onClick={useType} key={i}>{ type }</button>
                 ))}
             </div> 
@@ -64,7 +58,7 @@ const FormRegistrationNewNode =(props)=> {
 }
 
 
-/** ->Grid inut */
+/** -> Grid <- */
 export default class SchemeConstructor extends React.Component {
     constructor(props) {
         super(props)
@@ -72,16 +66,15 @@ export default class SchemeConstructor extends React.Component {
         this.create = this.create.bind(this)
     }
     create(meta) {
-        send("regNewNode", {login:this.props.user.login, password:this.props.user.password, state:meta}, "POST").then((res)=> {
-            res.json().then((data)=> {
-                if(!data.error){
-                    let copy = this.state
-                    copy[data.meta.mac] = <Grid title={data.meta} rows={data.rows}/>
-                    this.setState(copy)
-                }
-                else this.props.error(data.error)
+        send("addNode", {login:user.login, password:user.password, state:meta}, "POST").then((res)=> {
+            res.json().then((userData)=> {
+                if(!userData.error) store.set("user", userData)
+                else this.props.error(userData.error)
             });
         });
+    }
+    componentDidMount() {
+        store.watch("user", (newData)=> this.setState(newData.nodes))
     }
     render() {
         return(
@@ -90,7 +83,7 @@ export default class SchemeConstructor extends React.Component {
 
                 <div className="Table">
                     {Object.values(this.state).map((node, index)=> {
-                        <Grid key={index} rows={node.rows} meta={node.meta} />
+                        <Grid key={index} rows={node.table} meta={node.meta} />
                     })}
                 </div>
             </>  

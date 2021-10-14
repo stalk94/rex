@@ -1,40 +1,43 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Cat from './i';
+({
+    "plugins": ["jsdom-quokka-plugin"],
+    "babel": true
+});
+import React, {useEffect, useState} from "react";
+import { useDebounce, useLocalstorage, useLocalstorageState,useIsomorphicEffect } from "rooks";
+import ReactDOM from "react-dom";
 
 
+const App =(props)=> {
+    const [name, setName] = useLocalstorage("name", props.name)
 
-
-
-
-class App extends React.Component { 
-    constructor(props) {
-        super(props)
-        this.state = {value:1}
-        this.onMove = this.onMove.bind(this)
-    }
-    onMove(ev) {
-        this.setState({
-            x: ev.screenX,
-            y: ev.screenY
-        });
-    }
-    render() {
-        return(
-            <div onMouseMove={this.onMove}>
-                {this.props.render(this.state.x, )}
-            </div>
-        );
-    }
-}
-
-
-function Tick(props) { 
     return(
-        <App 
-            render={(val)=> <Cat>{val}</Cat>}
-        />
+        <>
+            <input onChange={(e)=> setName(e.target.value)} value={name}/>
+            <div style={{width:"100px",height:"40px",background:"red"}}>{name}</div>
+        </>
     );
 }
 
-ReactDOM.render(<Tick/>, document.querySelector(".root"))
+
+class Test extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state =()=> {
+            let s = useLocalstorage("test", {name:1})
+            return s
+        }
+    }
+    componentDidUpdate(prevProps, prevState) {
+        console.log(prevProps, prevState)
+    }
+    render() {
+        return(
+            <div>
+                <div>{"class:"+ this.state.name}</div>
+                <App name={this.state.name} />
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(<Test/>, document.querySelector("#root"))

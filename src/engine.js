@@ -1,7 +1,7 @@
 const gurl = "http://localhost:3000/";
 const engine = require('store/src/store-engine');
 const observe = require('store/plugins/observe');
-const ls = require('store/storages/localStorage');
+const ls = require('store/storages/all');
 
 
 window.store = engine.createStore(ls, observe);
