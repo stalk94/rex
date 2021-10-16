@@ -6,10 +6,31 @@ import { Select } from "./input";
 import { send } from "../engine";
 
 
+const META = {
+    reley: [
+        {type:"lable", data:"Реле"}, 
+        {type:'input', data:"name"}, 
+        {type:'select', name:"room", data:store.get("user").rooms.map((room)=> room.name)}, 
+        {type:'input', data:"GA1"}, 
+        {type:'input', data:"GA2"}, 
+        {type:'input', data:"GAstatus"}
+    ],
+    button: [
+        {type:"lable", data:"INP"}, 
+        {type:'input', data:"name"}, 
+        {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
+        {type:'input', data:"GA1"}, 
+        {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
+        {type:'input', data:"GA2"}, 
+    ]
+}
 const useSend =(macRootDevice, data, clb)=> {
     send("set", {[macRootDevice]: data}, "POST").then((res)=> {
         if(clb) clb(res)
     })
+}
+const useParse =(type, index)=> {
+    return META[type][index]
 }
 
 
@@ -20,21 +41,16 @@ const useSend =(macRootDevice, data, clb)=> {
  * `type`: тип устройства выбранный 
  */
 const Title =(props)=> {
-    const [knx, setKnx] = useState(props.knx)
-    const [name, setName] = useState(props.name)
-    const [mac, setMac] = useState(props.mac)
-    const [type, setType] = useState(props.type)
-
     const style = {margin:"10px"}
     const styleInput = {padding:"10px", marginRight:"5px"}
     const styleTitle = {display:"flex",flexDirection:"row",textAlign:"center",background:"#6c6a6acc"}
 
     return(
         <div style={styleTitle}>
-            <div style={style}>{ type }</div>
-            <Input style={styleInput} labelPlaceholder="NAME" onChange={(e)=> setName(e.target.value)} value={ name }/>
-            <Input style={styleInput} labelPlaceholder="KNX" onChange={(e)=> setKnx(e.target.value)} value={ knx }/>
-            <Input style={styleInput} labelPlaceholder="MAC" onChange={(e)=> setMac(e.target.value)} value={ mac }/>
+            <div style={style}>{ props.type }</div>
+            <Input style={styleInput} labelPlaceholder="NAME" onChange={(e)=> props.name.set(e.target.value)} value={props.name.name}/>
+            <Input style={styleInput} labelPlaceholder="KNX" onChange={(e)=> props.knx.set(e.target.value)} value={props.knx.knx}/>
+            <Input style={styleInput} labelPlaceholder="MAC" onChange={(e)=> props.mac.set(e.target.value)} value={props.mac.mac}/>
             <button style={style}>💾</button>
             <button style={style}>Считать</button>
             <button style={style}>Перепрошивка</button>
@@ -42,14 +58,10 @@ const Title =(props)=> {
         </div>
     );
 }
-/**
- * `placeholders`: массив плейсхолдеров     
- */
 const Row =(props)=> {
-    const [id, setId] = useState(props.id)
     const [selected, setSelected] = useState([])
-    const [state, setState] = useState(props.datas)
-
+    const [state, setState] = useState(props.module)
+    
     const onState =(id, val)=> {
         let copy = state
         copy[id] = val
@@ -58,20 +70,25 @@ const Row =(props)=> {
     const onSave =()=> {
         let request = {}
         
-        props.datas.map((elem, i)=> {
+        Object.values(props.module).map((e, i)=> {
+            let elem = useParse(props.id, index)
+
             if(i===0) console.log(elem[0]);
             else if(!selected[i]) request[elem.data] = state[i];
             else request[selected[i].key] = selected[i].val;
         });
         
-        props.change(id, request)
+        props.change(props.id, request)
     }
 
 
     return(
         <>
-            {props.datas.map((elem, index)=> {
-                if(elem.type==="input") return(
+            {Object.keys(state).map((e, index)=> {
+                let elem = useParse(props.id, index)
+                console.log(elem)
+
+                if(elem&&elem.type==="input") return(
                     <Input 
                         style={{maxWidth:"70px",height:"50px"}}
                         key={index} 
@@ -81,17 +98,24 @@ const Row =(props)=> {
                         value={state[index]}
                     />
                 )
-                else if(elem.type==="select") return(
-                    <Select
-                        key={index} 
-                        data={elem.data} 
-                        onValue={(e)=> {
-                            selected[index] = {key:elem.name, val:e}
-                            setSelected(selected)
-                        }} 
-                    />
+                else if(elem&&elem.type==="select"){
+                    return(
+                        <Select
+                            key={index} 
+                            data={elem.data} 
+                            onValue={(e)=> {
+                                selected[index] = {key:elem.name, val:e}
+                                setSelected(selected)
+                            }} 
+                        />
+                )}
+                else return (
+                    <div key={index} 
+                        style={{border:"1px solid grey",backgroundColor:"orange"}}
+                    >
+                        {elem?elem.data:"null"}
+                    </div>
                 )
-                else return <div key={index} style={{border:"1px solid grey",backgroundColor:id}}>{elem.data}</div>
             })}
 
             <button onClick={onSave} style={{maxWidth:"50px"}}>💾</button>
@@ -104,34 +128,32 @@ const Row =(props)=> {
 
 export default function Grid(props) {
     const style = {border:"1px solid grey",marginTop:"10%"}
-    const [state, setState] = useState(props.rows)
-    const [mac, setMac] = useState(props.meta.mac)
-    const [knx, setKnx] = useState(props.meta.knx)
-    const [room, setRoom] = useState(props.meta.room)
+    const [modules, setModules] = useState(props.rows)
+    const [mac, setMac] = useState(props.mac)
+    const [knx, setKnx] = useState(props.knx)
+    const [name, setName] = useState(props.name)
 
+    
     const onChange =(keyId, data)=> {
         let copy = state
         copy[keyId] = data
-        setState
+        setModules(copy)
     }
-
+    
     return(
         <Resizable style={style} defaultSize={{width:960, height:200}}>
             <Title 
-                type={props.meta.type} 
-                name={room} 
-                mac={mac} 
-                knx={knx}
-                set={{mac:setMac,knx:setKnx}}
+                type={props.type} 
+                name={{name:name,set:setName}} 
+                mac={{mac:mac,set:setMac}} 
+                knx={{knx:knx,set:setKnx}}
             />
             <div style={{paddingLeft:"10px",marginTop:"20px"}}>
-                {Object.keys(state).map((key, i)=> (
+                {Object.keys(modules).map((key, i)=> (
                     <VariableWidthGrid key={key}>
-                        <Row 
-                            key={i}
-                            change={onChange}
-                            id={key} 
-                            datas={state[key]} 
+                        <Row id={key}
+                            change={onChange} 
+                            module={modules[key]} 
                         />
                     </VariableWidthGrid>
                 ))}

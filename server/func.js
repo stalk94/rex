@@ -1,5 +1,8 @@
+const CryptoJS = require('crypto-js');
 const MODULES = require("./modules.json"); 
 const NODES = require("./nodes.json");
+
+
 const CARTS = [
     "/R0/onoff",
     "/T0/onoff",       
@@ -44,14 +47,15 @@ const CARTS = [
     "/D0/TIME4min",         
     "/D0/TIME4set",         
     "/D0/TIME4onoff"     
-]
+];
+const master = 'rexMyHome';
 
 
 /** 
  * заполнитель узла модулями 
  * node: конкретная нода
  */
-const parser = function(node) {
+exports.parser = function(node) {
     return Object.keys(node).map((keys)=> {
         let result = {}
 
@@ -67,15 +71,38 @@ const parser = function(node) {
         return result
     })
 }
-const cartParse =(moduleName)=> {
+exports.cartParse = function(moduleName) {
     let res = []
 
-    CARTS.forEach((k)=> {
-        if(moduleName[0]===k[1].toLowerCase()) res.push(k)
+
+    CARTS.forEach((key)=> {
+        if(moduleName[0]===key[1].toLowerCase()){
+            res.push(key)
+        }
     });
 
     return  res
 }
+exports.cartsCreate = function(type, result) {
+    Object.keys(NODES[type]).map((key, i)=> {
+        if(result[key]){
+            let count = NODES[type][key]
+    
+            for(let i=0; count>i; i++){
+                result[key].map((top, index)=>  {
+                    let token = result[key][index].split("/")
+                    if(i!==0){
+                        let str = "/"+token[1][0]+i+"/"+token[2];
+                        if(!result[key].includes(str)) result[key].push(str)
+                    }
+                })
+            }
+        }
+    });
+    
+    return result
+}
+
 
 exports.setPasswordHash = function(pass) {
     return CryptoJS.AES.encrypt(pass, master).toString()
@@ -132,7 +159,3 @@ exports.verifyDevice = function(scheme) {
 
     return device
 }
-
-
-
-

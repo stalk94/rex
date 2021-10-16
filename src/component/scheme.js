@@ -6,14 +6,14 @@ import Grid from "./grid"
 /////////////////////////////////////////////////
 const user = store.get("user")
 const style = {paddingLeft:"55px",paddingRight:"50px"}
-let SHEME = ['PMR','SMR', "FSC"]
+const SHEME = ['PMR','SMR',"FSC"]
 ///////////////////////////////////////////////////
 
 
 const FormRegistrationNewNode =(props)=> {
-    const [mac, setMac] = useState()
-    const [name, setName] = useState()
-    const [type, setType] = useState()
+    const [mac, setMac] = useState("")
+    const [name, setName] = useState("")
+    const [type, setType] = useState("")
 
     const verify =(ev)=> {
         if(ev.target.value.search("/")!==-1) window.alert("в mac недопустимо указывать группу и топик")
@@ -36,17 +36,16 @@ const FormRegistrationNewNode =(props)=> {
             </div> 
             <input 
                 style={{maxWidth:"50%"}}
-                placeholder="MAC" 
-                name="mac" 
+                placeholder="MAC"  
                 type="text" 
-                onInput={verify} 
+                onChange={verify} 
                 value={mac} 
             />
             <input 
                 style={{maxWidth:"50%"}}
                 placeholder="имя устройства(кастомное)" 
-                name="name" type="text" 
-                onInput={(e)=> setName(e.target.getAttribute("name"))} 
+                type="text" 
+                onChange={(e)=> setName(e.target.value)} 
                 value={name} 
             />
 
@@ -62,18 +61,18 @@ const FormRegistrationNewNode =(props)=> {
 export default class SchemeConstructor extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = store.get("user").nodes
         this.create = this.create.bind(this)
     }
-    create(meta) {
-        send("addNode", {login:user.login, password:user.password, state:meta}, "POST").then((res)=> {
+    create(meta, type) {
+        send("newNode", {login:user.login, password:user.password, state:meta}, "POST").then((res)=> {
             res.json().then((userData)=> {
                 if(!userData.error) store.set("user", userData)
                 else this.props.error(userData.error)
             });
         });
     }
-    componentDidMount() {
+    componentDidMount() {  
         store.watch("user", (newData)=> this.setState(newData.nodes))
     }
     render() {
@@ -82,9 +81,19 @@ export default class SchemeConstructor extends React.Component {
                 <FormRegistrationNewNode create={this.create} />
 
                 <div className="Table">
-                    {Object.values(this.state).map((node, index)=> {
-                        <Grid key={index} rows={node.table} meta={node.meta} />
-                    })}
+                    {Object.values(this.state).length > 0
+                        ? Object.values(this.state).map((node, index)=> (
+                            <Grid 
+                                key={index} 
+                                rows={node.table} 
+                                mac={node._mac} 
+                                type={node._type} 
+                                name={node._name}
+                                knx={node._knx}
+                            />
+                        ))
+                        : "узлов пока не добавлено"
+                    }
                 </div>
             </>  
         );

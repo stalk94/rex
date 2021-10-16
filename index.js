@@ -5,7 +5,6 @@ const app = express();
 const log4js = require("log4js");
 const path = require("path");
 const {User, registration, autorise} = require("./server/user");
-const SHEME = require("./server/sheme.json");
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -73,9 +72,7 @@ const mock = {
 app.get("/", (req, res)=> {
     res.sendFile(__dirname+"/dist/index.html")
 });
-app.get("/sheme", (req, res)=> {
-    res.send(SHEME)
-});
+
 
 
 // синхронизация с параметрами только через сервер
@@ -160,9 +157,8 @@ app.post("/newNode", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
     
     if(!user.error && req.body.state){
-        user.newNode(req.body.state)
-        res.send(user.dump(req.body.data))
-        res.send(user.nodes)
+        user.addNewNode(req.body.state)
+        res.send(user)
     }
     else res.send(user)
 });

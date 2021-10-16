@@ -12,7 +12,6 @@ import redact from './img/pen-tool.png';
 import NavigationHome from "./component/navigation";
 import SchemeConstructor from "./component/scheme";
 import { send } from "./engine";
-import DevicePanel from "./component/device.panel";
 import Catalog from "./component/lists";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import { AiFillDatabase, AiFillStar } from "react-icons/ai";
@@ -98,7 +97,7 @@ const Title =(props)=> {
 
 function App(props) {
     const [user, setUser] = useState(store.get("user"))
-    const [curentRoom, setCurentRoom] = useState()
+    const [curentRoom, setCurentRoom] = useState({name:"Избранное",id:0})
     const [errorColor, setErrColor] = useState("red")
     const [error, setErr] = useState("")
 
@@ -170,7 +169,7 @@ function App(props) {
                             setRoom={onAddRoom}
                             readRoom={readRoom} 
                             delRoom={delRoom}
-                            add={Mod.Add}
+                            add={()=> setcurRoom({name:"Серверная", id:0})}
                         />
                     </nav>
                 </aside>
@@ -183,15 +182,13 @@ function App(props) {
                         />
                     </header>
                     <div className="area">
-                        {curentRoom.name==="Серверная"
+                        {curentRoom && curentRoom.name==="Серверная"
                             ? <SchemeConstructor 
                                 user={user}
                                 error={setError} 
                                 onAdd={setUser}
                             />
-                            : <NodeDevice 
-                                curentRoom={curentRoom} 
-                             />
+                            : <div>{curentRoom.name}</div>
                         }
                     </div> 
                 </div>

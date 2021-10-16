@@ -1,5 +1,19 @@
 import React from 'react';
+import { useDebounce } from "rooks";
+import lamp from '../img/lamp.png';
+import onOff from '../img/onOff.png';
+import wtor from '../img/wtor.png';
+import logic from '../img/logic.png';
+import termostat from '../img/termostat.png';
 
+
+export const ICON = {
+    lamp: lamp,
+    toogler: onOff,
+    wtor: wtor,
+    logic: logic,
+    termostat: termostat
+}
 
 
 export function ProgressBar(props) {
@@ -43,3 +57,52 @@ export function ProgressBar(props) {
         </div>
     );
 }
+
+export const OnOff =(props)=> {
+    return(
+        <>
+            {props.onoff === '0'
+                ?   <h3 style={{position:"absolute", color:(props.onoff==='1'?"#42f059":"red"), left:"40%",top:"30%"}}>
+                        { props.onoff==='1' ? props.brihtness+"%" : (props.onoff==='0'?"off":props.onoff) }
+                    </h3>
+                : ""
+            }
+        </>
+    );
+}
+export const Lable =(props)=> {
+    const style = {position:"relative",top:"50%",left:"50%"}
+
+    return(
+        <>
+            {props.type==="FSC"
+                ? <ProgressBar enable={props.onOff} brihtness={props.brihtness} data={props.data} children={props.children}/>
+                : { "PMR": <div style={style}>{ props.children }<img height="80%" src={ICON.lamp}/></div>,
+                    "SMR": <div style={style}>{ props.children }<img height="80%" src={ICON.lamp}/></div>
+                }[props.type]
+            }
+        </>
+    );
+}
+
+export const Centr =(props)=> {
+    const [brihtness, setBr] = useState(props.value)
+    const setDeb = useDebounce((v)=>props.onState(props.mac, v), 1500)
+
+    return(
+        <input style={{marginTop:"25%"}} 
+            disabled={props.onoff}
+            type="range" 
+            onChange={(ev)=> {setDeb(ev.target.value); setBr(ev.target.value)}} 
+            value={brihtness}
+        />                       
+    );
+}
+export const Title =(props)=> (
+    <div className="device-title">
+        <div className="line" style={{borderBottom:"1px solid rgba(0,0,0,.2)"}}>
+            <div>{ props.name }</div>
+            <var>{ props.room }</var>
+        </div>
+    </div>
+);

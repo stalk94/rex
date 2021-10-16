@@ -1,20 +1,17 @@
 const db = require("quick.db");
 const log4js = require("log4js");
-const CryptoJS = require('crypto-js');
-const { parser, getPasswordHash, setPasswordHash } = require("./func");
+const { parser, cartParse, cartsCreate, getPasswordHash, setPasswordHash } = require("./func");
 const MODULES = require("./modules.json");  
 const NODES = require("./nodes.json");
 
 
 
-const log = log4js.getLogger("cheese")
+const log = log4js.getLogger("cheese");
 const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
-const master = 'rexMyHome';
 log4js.configure({
     appenders: { cheese: { type: "file", filename: "log.log" } },
     categories: { default: { appenders: ["cheese"], level: "error" } }
 });
-
 
 
 
@@ -58,73 +55,6 @@ exports.autorise = function(login, password, row, ip) {
     }
 }
 ////////////////////////////////////////////////////////////////////////
-const CARTS = [
-    "/R$/onoff",
-    "/T$/onoff",       
-    "/T$/data",       
-    "/T$/mode",        
-    "/T$/headmode", 
-    "/T$/coolmode",
-    "/T$/MAINset",         
-    "/T$/TIME1h",        
-    "/T$/TIME1m",
-    "/T$/TIME1set",         
-    "/T$/TIME1onoff",   
-    "/T$/TIME2h",        
-    "/T$/TIME2m",
-    "/T$/TIME2set",     
-    "/T$/TIME2onoff",  
-    "/T$/TIME3h",
-    "/T$/TIME3m",
-    "/T$/TIME3set",
-    "/T$/TIME3onoff",
-    "/T$/TIME4h",
-    "/T$/TIME4m",
-    "/T$/TIME4set",
-    "/T$/TIME4onoff",
-    "/T$/TIME5set",
-    "/T$/TIME5onoff",
-    "/D$/onoff",          
-    "/D$/brightness",      
-    "/D$/TIME1hour",        
-    "/D$/TIME1min",         
-    "/D$/TIME1set",         
-    "/D$/TIME1onoff",       
-    "/D$/TIME2hour",        
-    "/D$/TIME2min",         
-    "/D$/TIME2set",         
-    "/D$/TIME2onoff",       
-    "/D$/TIME3hour",        
-    "/D$/TIME3min",        
-    "/D$/TIME3set",        
-    "/D$/TIME3onoff",       
-    "/D$/TIME4hour",       
-    "/D$/TIME4min",         
-    "/D$/TIME4set",         
-    "/D$/TIME4onoff"     
-]
-// [литерал] - шыблон
-const META = {
-    PMR: {
-        relay: [
-            {type:"lable", data:"Реле"}, 
-            {type:'input', data:"name"}, 
-            {type:'select', name:"room", data:`[rooms]()`}, 
-            {type:'input', data:"GA1"}, 
-            {type:'input', data:"GA2"}, 
-            {type:'input', data:"GAstatus"}
-        ],
-        button: [
-            {type:"lable", data:"INPUT"}, 
-            {type:'input', data:"name"}, 
-            {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
-            {type:'input', data:"GA1"}, 
-            {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
-            {type:'input', data:"GA2"}, 
-            {type:'input', data:"status"}
-        ]
-    }
-}
 
 
 class User {
@@ -177,16 +107,17 @@ class User {
         this.#dump()
     }
     recombination(roomId, device) {
-        this.devices.forEach((dev, index)=>{
+        this.devices.forEach((dev, index)=> {
             if(dev.guid===device.guid) this.devices[index].room = roomId
         })
         this.#dump()
     }
 
-    #addDevice(metaCarta) {
-        let kart = {room:0, guid:db.get("guid"), name:''}
-        Object.keys(metaCarta).map((v)=> {
-            if(metaCarta[v].length > 0) kart[v] = metaCarta[v]
+    #addDevice(metaCarta, count) {
+        let kart = {guid:db.get("guid")}
+
+        Object.keys(metaCarta).map((moduleName)=> {
+            if(metaCarta[moduleName].length > 0) kart[moduleName] = metaCarta[moduleName]
         });
 
         return kart
@@ -195,20 +126,24 @@ class User {
         let metaCarta = {}
         if(!this.nodes) this.nodes = {}
         if(!this.nodes[meta.mac]) this.nodes[meta.mac] = {}
+        this.nodes[meta.mac]._mac = meta.mac
         this.nodes[meta.mac]._type = meta.type
         this.nodes[meta.mac]._name = meta.name
         this.nodes[meta.mac]._frame = 0
+        this.nodes[meta.mac]._knx = ""
         this.nodes[meta.mac].table = {}
 
-
-        parser(NODES[meta.type]).map((row, i)=> {
+        // modules:count
+        parser(NODES[meta.type]).map((module, i)=> {
             let key = Object.keys(NODES[meta.type])[i]
             if(cartParse(key)) metaCarta[key] = cartParse(key)
-            this.nodes[meta.mac].table[key] = row
+            this.nodes[meta.mac].table[key] = module
         });
-        
-        
-        this.nodes[meta.mac].cart = this.#addDevice(metaCarta)
+
+        let cart = this.#addDevice(metaCarta)
+        this.nodes[meta.mac].cart = cartsCreate(meta.type, cart)
+
+        this.#dump()
     }
 
     reNameDevice(name, id, clb) {
