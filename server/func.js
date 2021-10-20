@@ -1,4 +1,5 @@
 const CryptoJS = require('crypto-js');
+const { TaskTimer, Task } = require("tasktimer");
 const MODULES = require("./modules.json"); 
 const NODES = require("./nodes.json");
 

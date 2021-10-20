@@ -1,11 +1,14 @@
 const db = require("quick.db");
+const { MongoClient } = require('mongodb');
 const log4js = require("log4js");
+const { TaskTimer, Task } = require("tasktimer");
 const { parser, cartParse, cartsCreate, getPasswordHash, setPasswordHash } = require("./func");
 const MODULES = require("./modules.json");  
 const NODES = require("./nodes.json");
 
 
-
+const timer = new TaskTimer(1000)
+const client = new MongoClient('mongodb://localhost:27017')
 const log = log4js.getLogger("cheese");
 const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
 log4js.configure({
@@ -15,8 +18,18 @@ log4js.configure({
 
 
 
-
 ////////////////////////////////////////////////////////////////////////
+function newTask(login, clb, day=1) {
+    db.add("TASK_ID", 1)
+    timer.add(
+        new Task({
+            id: `${login}_${db.get("TASK_ID")}`, 
+            removeOnCompleted: true,
+            tickInterval: ((((60*1000)*60)*24)*day), 
+            callback: clb
+        })
+    ).start()
+}
 exports.registration = function(login, password, ip, optionsData) {
     if(db.has("user."+login)) return {error: "login bussy"};
     else {
@@ -32,9 +45,9 @@ exports.registration = function(login, password, ip, optionsData) {
             kontact1: "",
             kontact2: "",
             avatar: "./img/no-avatar.png",
-            status: "off",
-            devices: [],
+            payloads: [],
             favorites: [],
+            nodes: [],
             rooms: [{name:"Серверная", visibility:"block"}]
         }
         db.set("user."+login, newUser)
@@ -96,11 +109,21 @@ class User {
         clb(this.rooms)
         this.#dump()
     }
-    payload(devices, rooms) {
-        console.log("payload:devices", devices)
-        console.log("payload:rooms", rooms)
 
-        db.set("dumps."+this.login+"."+TIME(), {devices:devices, rooms:rooms})
+    async payload(data) {
+        await client.connect()
+        const DB = client.db("rex")
+        const payloads = DB.collection("payloads")
+        let res = await payloads.insertOne({
+            _id: this.login, 
+            time: TIME(),
+            payload: data
+        });
+        
+        // таск на очистку через 5 дней
+        newTask(this.login, ()=> payloads.dropIndex(res.insertedId), 5);
+        this.payloads = data
+        this.#dump()
     }
     setFavorite(data) {
         if(data instanceof Array) this.devices = data
@@ -144,6 +167,10 @@ class User {
         this.nodes[meta.mac].cart = cartsCreate(meta.type, cart)
 
         this.#dump()
+    }
+    /** ?реализовать */
+    setTable(mac, data) {
+
     }
 
     reNameDevice(name, id, clb) {

@@ -1,4 +1,5 @@
-require("./api")
+require("./engine");
+require("./api");
 import "./css/style.css";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
@@ -12,13 +13,13 @@ import redact from './img/pen-tool.png';
 import NavigationHome from "./component/navigation";
 import SchemeConstructor from "./component/scheme";
 import { send } from "./engine";
-import Catalog from "./component/lists";
+import NodeArea from "./component/node"
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import { AiFillDatabase, AiFillStar } from "react-icons/ai";
 
 
 
-const Mod = {}
+
 //////////////////////////////////////////////////////////////
 const listDevicesSortable =(user)=> {
     let find = []
@@ -73,7 +74,7 @@ const User =(props)=> {
                 <h5 style={{textAlign:"left", margin:"0px", color:"grey"}}>Контактное лиццо2:</h5>
                 <input type="text" onInput={(ev)=> setKontact2(ev.target.value)} value={kontact2}/>
 
-                <div className="line" id="exit" onClick={props.onExit}>
+                <div className="line" id="exit" onClick={onExit}>
                     <img src={exit}/>
                     <h3>Выход</h3>
                 </div>
@@ -94,7 +95,7 @@ const Title =(props)=> {
 
 
 
-
+/** EVENTS: `error`,`errorColor`,`exit` */
 function App(props) {
     const [user, setUser] = useState(store.get("user"))
     const [curentRoom, setCurentRoom] = useState({name:"Избранное",id:0})
@@ -103,12 +104,17 @@ function App(props) {
 
     ////////////////////////////////////////
     useEffect(()=> {
+        EVENT.on("error", (text)=> {
+            setErr(text)
+            setTimeout(()=> setErr(""), 5000)
+        });
+        EVENT.on("errorColor", (color)=> setErrColor(color));
+        EVENT.on("exit", ()=> send("exit", {login:user.login, password:user.password, data:user}))
         store.watch("user", (newData)=> {
             setUser(newData)
             triger.emit("user.update", newData)
         })
-        triger.on("exit", ()=> send("exit", {login:user.login, password:user.password, data:user}))
-        !curentRoom ? setCurentRoom({name:"Избранное"}) : curentRoom.name
+        !curentRoom ? setCurentRoom({name:"Избранное",id:-1}) : curentRoom.name
     }, [])
     const setError =(textError)=> {
         setErr(textError)
@@ -156,7 +162,7 @@ function App(props) {
                 <aside>
                     <header className="logo">
                         <img width="100%"
-                            onClick={()=> setcurRoom({name:"Избранное"})} 
+                            onClick={()=> setcurRoom({name:"Избранное",id:-1})} 
                             src={logo}
                         />
                     </header>
@@ -176,7 +182,7 @@ function App(props) {
                 <div className="base">
                     <header>
                         <Title 
-                            user={<User onExit={onExit}>{ user }</User>} 
+                            user={()=> setcurRoom({name:"user", id:0})} 
                             error={error} 
                             color={errorColor} 
                         />
@@ -188,8 +194,10 @@ function App(props) {
                                 error={setError} 
                                 onAdd={setUser}
                             />
-                            : <div>{curentRoom.name}</div>
-                        }
+                            :(curentRoom.name!=="user"
+                                ? <div><NodeArea room={curentRoom}/></div>
+                                : <User onExit={onExit}>{user}</User>
+                        )}
                     </div> 
                 </div>
             </main>

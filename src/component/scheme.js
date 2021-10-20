@@ -1,15 +1,14 @@
 import React, {useState} from "react";
 import { send } from "../engine";
-import Grid from "./grid"
+import Grid from "./grid";
+
 
 
 /////////////////////////////////////////////////
 const user = store.get("user")
-const style = {paddingLeft:"55px",paddingRight:"50px"}
+const style = {paddingLeft:"55px",paddingRight:"5%"}
 const SHEME = ['PMR','SMR',"FSC"]
 ///////////////////////////////////////////////////
-
-
 const FormRegistrationNewNode =(props)=> {
     const [mac, setMac] = useState("")
     const [name, setName] = useState("")

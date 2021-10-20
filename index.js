@@ -1,6 +1,7 @@
 const express = require("express");
 const jsonParser = require("body-parser").json();
 const db = require("quick.db");
+const { MongoClient } = require('mongodb');
 const app = express();
 const log4js = require("log4js");
 const path = require("path");
@@ -150,7 +151,17 @@ app.post("/favorites", jsonParser, (req, res)=> {
 app.post("/payload", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
     
-    if(!user.error) res.send(user.dump(req.body.data))
+    if(!user.error) user.payload(req.body.data).then(()=> res.send(user))
+    else res.send(user)
+});
+app.post("/set", jsonParser, (req, res)=> {
+    // {mac:string, data:{}}
+    let user = autorise(req.body.login, req.body.password);
+    
+    if(!user.error){
+        user.setTable(req.body.mac, req.body.data)
+        res.send(user)
+    }
     else res.send(user)
 });
 app.post("/newNode", jsonParser, (req, res)=> {

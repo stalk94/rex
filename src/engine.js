@@ -11,7 +11,7 @@ window.onresize =()=> {
 }
 
 
-
+if(!store.get("payload")) store.set("payload", {})
 class EventEmmitter {
     constructor() {
       this.events = {};
@@ -68,12 +68,7 @@ export function send(url, data, metod) {
 
 
 
-window.triger = new EventEmmitter()
+window.EVENT = new EventEmmitter()
 window.addEventListener("beforeunload", ()=> {
-  triger.emit("exit")
-});
-send("sheme", {}, "GET").then((data)=> {
-	data.json().then((val)=> {
-		store.set("SCHEME", val)
-	});
+    EVENT.emit("exit")
 });

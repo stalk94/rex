@@ -13,9 +13,9 @@
         "package-lock.json": true,
         "node_modules": true,
         "webpack.config.js": true,
-        "src\\css/bootstrap.min.css.map": false,
-        "src\\css/bootstrap.min.css": false,
-        "src\\css/pace.min.css": false,
+        "src\\css/bootstrap.min.css.map": true,
+        "src\\css/bootstrap.min.css": true,
+        "src\\css/pace.min.css": true,
         ".babelrc.json": true,
         "src/images": true,
         "src/fonts": true,
@@ -64,19 +64,14 @@
         "src/logo.js": true,
         "test/i.js": false,
         "babel.config.js": true,
-        ".git": true
+        ".git": true,
+        "src\\component/authorize.js": true,
+        "jest.config.js": true,
+        "src\\css/icons.css": true,
+        "src\\css/fontawesome.css": true,
+        "src\\css/app.css": true
     },
     "explorerExclude.backup": null,
     "svg.preview.background": "transparent",
-    "editor.fontWeight": "1",
-    "editor.fontSize": 13.4,
-    "[markdown]": {
-        "editor.fontSize": 14,
-        "editor.lineHeight": 26,
-        "editor.wordWrap": "wordWrapColumn",
-        "editor.wordWrapColumn": 64,
-        "editor.lineNumbers": "off",
-        "editor.quickSuggestions": false,
-        "editor.minimap.enabled": false
-    }
+    "editor.fontWeight": "1"
 }

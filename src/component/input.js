@@ -11,6 +11,7 @@ export function SlideBar(props) {
     );
 }
 
+
 export function Select(props) {
     const [value, setValue] = useState(props.data[0])
     const onValue =(e)=> {
@@ -19,10 +20,27 @@ export function Select(props) {
     }
 
     return(
-        <select onChange={onValue} value={value}>
+        <select style={props.style} onChange={onValue} value={value}>
             {props.data.map((v, i)=> (
-                <option key={i}>{ v }</option>
+                <option style={{color:"black",margin:"5px"}} key={i}>{ v }</option>
             ))}
         </select>
+    );
+}
+/**
+ * `type`
+ * `value`
+ * `onChange`
+ * `placeholder`
+ */
+export function Input(props) {
+    console.log(props.size)
+    return(
+        <input style={{...props.size,display:""}}
+            placeholder={props.placeholder}
+            type={props.type??"text"} 
+            value={props.value} 
+            onChange={props.onChange}
+        />
     );
 }
