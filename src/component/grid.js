@@ -175,9 +175,6 @@ export default function Grid(props) {
             copy[keyModule][name] = data
             setModules(copy)
             let meta = {mac:mac,knx:knx,name:name}
-            
-            //Object.keys(copy).map((key)=> usePub(mac+))
-            //console.log(copy)
         }
         else EVENT.emit("error", "переданы не все атрибуты")
     }

@@ -156,9 +156,9 @@ export const OnOff =(props)=> {
     return(
         <div 
             style={{position:"relative",left:"65%"}}
-            onClick={()=> usePub(onoff==='1'?0:1)}
+            onClick={()=> usePub(props.topic, onoff==='1'?0:1)}
         >
-            <img style={{position:"absolute",height:"18vh"}} src={ICON.logic}/>
+            <img style={{position:"absolute",height:"18vh"}} src={ICON.lamp}/>
             <h3 style={{position:"absolute",color:onoff==='1'?"#42f059":"red"}}>
                 { onoff==='1'?"on":"off" }
             </h3>
