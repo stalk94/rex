@@ -195,7 +195,7 @@ function App(props) {
                                 onAdd={setUser}
                             />
                             :(curentRoom.name!=="user"
-                                ? <div><NodeArea room={curentRoom}/></div>
+                                ? <NodeArea room={curentRoom}/>
                                 : <User onExit={onExit}>{user}</User>
                         )}
                     </div> 

@@ -34,7 +34,6 @@ export function Select(props) {
  * `placeholder`
  */
 export function Input(props) {
-    console.log(props.size)
     return(
         <input style={{...props.size,display:""}}
             placeholder={props.placeholder}

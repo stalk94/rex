@@ -168,9 +168,19 @@ class User {
 
         this.#dump()
     }
-    /** ?реализовать */
-    setTable(mac, data) {
+    setTable(mac, meta, data) {
+        this.nodes[mac]._mac = meta.mac 
+        this.nodes[mac]._knx = meta.knx
+        this.nodes[mac]._name = meta.name 
+        this.nodes[mac]._frame++
+        this.nodes[mac].table = data
 
+        if(mac!==meta.mac){
+            let copy = this.nodes[mac]
+            this.nodes[meta.mac] = copy
+            delete this.nodes[mac]
+        }
+        this.#dump()
     }
 
     reNameDevice(name, id, clb) {

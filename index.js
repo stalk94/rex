@@ -155,12 +155,12 @@ app.post("/payload", jsonParser, (req, res)=> {
     else res.send(user)
 });
 app.post("/set", jsonParser, (req, res)=> {
-    // {mac:string, data:{}}
+    // {mac:string, meta:{}, data:{}}
     let user = autorise(req.body.login, req.body.password);
     
     if(!user.error){
-        user.setTable(req.body.mac, req.body.data)
-        res.send(user)
+        user.setTable(req.body.mac, req.body.meta, req.body.data)
+        setTimeout(()=> res.send(user), 500)
     }
     else res.send(user)
 });

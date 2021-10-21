@@ -76,25 +76,25 @@ export default class SchemeConstructor extends React.Component {
     }
     render() {
         return(
-            <>
+            <div>
                 <FormRegistrationNewNode create={this.create} />
-
-                <div className="Table">
+                <div className="tables">
                     {Object.values(this.state).length > 0
                         ? Object.values(this.state).map((node, index)=> (
-                            <Grid 
-                                key={index} 
-                                rows={node.table} 
-                                mac={node._mac} 
-                                type={node._type} 
-                                name={node._name}
-                                knx={node._knx}
-                            />
+                            <div key={index} className="Table">
+                                <Grid 
+                                    rows={node.table} 
+                                    mac={node._mac} 
+                                    type={node._type} 
+                                    name={node._name}
+                                    knx={node._knx}
+                                />
+                            </div>
                         ))
                         : "узлов пока не добавлено"
                     }
-                </div>
-            </>  
+                </div>  
+            </div>
         );
     }
 }
