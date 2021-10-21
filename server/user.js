@@ -120,7 +120,7 @@ class User {
             payload: data
         });
         
-        // таск на очистку через 5 дней
+        //таск на очистку через 5 дней
         newTask(this.login, ()=> payloads.dropIndex(res.insertedId), 5);
         this.payloads = data
         this.#dump()
@@ -180,6 +180,10 @@ class User {
             this.nodes[meta.mac] = copy
             delete this.nodes[mac]
         }
+        this.#dump()
+    }
+    deleteNode(mac) {
+        delete this.nodes[mac]
         this.#dump()
     }
 

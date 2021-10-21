@@ -1,7 +1,6 @@
 require("../engine")
 import React, {useEffect, useState} from "react";
 import { OnOff, Lable, Centr, Title, OnOffDeamer, Timer } from "./device.f";
-import { useLocalstorage } from "rooks";
 
 
 const devices = store.get("user").devices

@@ -32,6 +32,7 @@ export function ListContainer(props) {
 export default function Catalog(props) {
     const [list, setList] = useState(props.list)
     const [selectedIndex, setSelected] = useState(0)
+    
     const recombinationDevice =(device, idRoom)=> {
         send("recombination", {login:user.login, password:user.password, roomId:idRoom, device:device}, "POST").then((res)=> {
             res.json().then((val)=> {

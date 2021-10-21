@@ -1,10 +1,15 @@
 {
     "reley": [
+        "/R$/all",
+        "/R$/name",
+        "/R$/room",
         "/R$/ga1",      
         "/R$/ga2", 
-        "/R$/gafb"    
+        "/R$/gafb"
     ],
     "button": [
+        "/B$/all",
+        "/B$/name",
         "/B$/ga1",
         "/B$/ga2",
         "/B$/gafb", 
@@ -12,6 +17,8 @@
         "/B$/ga2mode"
     ],
     "termo": [
+        "/T$/all",
+        "/T$/name",
         "/T$/Set5onoffGA",  
         "/T$/onoffGA",      
         "/T$/dataGA",       
@@ -27,9 +34,12 @@
         "/T$/cool2GA",
         "/T$/cool2stGA",
         "/T$/cool3GA",
-        "/T$/cool3stGA"
+        "/T$/cool3stGA",
+        "/T$/room"
     ],
     "dimmer": [
+        "/D$/all",
+        "/D$/name",
         "/D$/ga1",
         "/D$/ga2",
         "/D$/gafb",

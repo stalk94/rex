@@ -63,13 +63,19 @@ export default class SchemeConstructor extends React.Component {
         this.state = store.get("user").nodes
         this.create = this.create.bind(this)
     }
-    create(meta, type) {
-        send("newNode", {login:user.login, password:user.password, state:meta}, "POST").then((res)=> {
-            res.json().then((userData)=> {
-                if(!userData.error) store.set("user", userData)
-                else this.props.error(userData.error)
+    create(meta) {
+        if(meta.type){
+            send("newNode", {login:user.login, password:user.password, state:meta}, "POST").then((res)=> {
+                res.json().then((userData)=> {
+                    if(!userData.error){
+                        store.set("user", userData)
+                        window.location.reload()
+                    }
+                    else this.props.error(userData.error)
+                });
             });
-        });
+        }
+        else EVENT.emit("error", "не указан тип ноды")
     }
     componentDidMount() {  
         store.watch("user", (newData)=> this.setState(newData.nodes))

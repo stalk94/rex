@@ -2,21 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { Resizable } from "re-resizable";
 import { Select, Input } from "./input";
 import { send } from "../engine";
-import { FaArrowsAltV } from "react-icons/fa"
+import { FaArrowsAltV } from "react-icons/fa";
+import { usePub } from "./device.f";
 
 
 const user = store.get("user")
 const META = {
     reley: [
-        {type:"lable", data:"Реле", color:"#90e160cc"}, 
-        {type:'input', data:"name"}, 
-        {type:'select', name:"room", data:store.get("user").rooms.map((room)=> room.name)}, 
+        {type:"lable", data:"Реле", color:"#90e160cc"},         //скрытый топик вызова (всех реле группы)  
+        {type:'input', data:"name"},                            //не обязательный топик имени
+        {type:'select', name:"room", data:store.get("user").rooms.map((room)=> room.name)},
         {type:'input', data:"GA1"}, 
         {type:'input', data:"GA2"}, 
-        {type:'input', data:"GAstatus"}
+        {type:'input', data:"GAstatus"}                       
     ],
     button: [
-        {type:"lable", data:"INP", color:"#f4ea7c"}, 
+        {type:"lable", data:"INP", color:"#f4ea7c"},            //скрытый топик вызова (всех кнопок группы)
         {type:'input', data:"name"}, 
         {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
         {type:'input', data:"GA1"}, 
@@ -30,6 +31,7 @@ const useSend =(mac, meta, data, clb)=> {
         if(clb) res.json().then((v)=> clb(v))
     })
 }
+
 const useParse =(type, index)=> {
     return META[type][index]
 }
@@ -54,6 +56,15 @@ const Title =(props)=> {
     const styleInput = {padding:"10px", marginRight:"5px"}
     const styleTitle = {display:"flex",flexDirection:"row",textAlign:"center",background:"#6c6a6acc"}
 
+    const onDel =()=> {
+        send("delete", {login:user.login,password:user.password,mac:props.mac.mac}, "POST").then((data)=> {
+            data.json().then((v)=> {
+                store.set("user", v)
+                window.location.reload()
+            })
+        })
+    }
+
     return(
         <div style={styleTitle}>
             <div style={{...style,marginRight:"30px"}}>{ props.type }</div>
@@ -63,7 +74,7 @@ const Title =(props)=> {
             <button onClick={props.change} style={{...style,marginRight:"50px"}}>💾</button>
             <button style={style}>Считать</button>
             <button style={style}>Перепрошивка</button>
-            <button style={{margin:"10px",padding:"8px",marginLeft:"20%"}} id="del">❌</button>
+            <button style={{margin:"10px",padding:"8px",marginLeft:"20%"}} onClick={onDel} id="del">❌</button>
         </div>
     );
 }
@@ -72,6 +83,10 @@ const Row =(props)=> {
     const [state, setState] = useState(useArray(props.module))
     
     const onSave =()=> {
+        Object.keys(state).map((key)=> {
+            window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st", (data)=> console.log("onSub:", data))
+            usePub(props.mac+"/"+props.name+"/"+key, state[key])
+        })
         props.change(props.name, props.id, state)
     }
     const onRender =()=> {
@@ -101,7 +116,11 @@ const Row =(props)=> {
                         data={elem.data} 
                         onValue={(e)=> {
                             let states = state
-                            states[key] = e
+                            if(elem.name==="room"){
+                                states.room = e
+                            }
+                            else states[key] = e
+
                             setState(states)
                             onRender()
                         }} 
@@ -149,18 +168,16 @@ export default function Grid(props) {
     const [knx, setKnx] = useState(props.knx)
     const [name, setName] = useState(props.name)
 
+   
     const onChange =(name, keyModule, data)=> {
         if(name && keyModule && data){
             let copy = modules
             copy[keyModule][name] = data
             setModules(copy)
             let meta = {mac:mac,knx:knx,name:name}
-
-            useSend(props.mac, meta, copy, (res)=> {
-                setModules(copy)
-                if(!res.error) store.set("user", res)
-                else EVENT.emit("error", res.error)
-            });
+            
+            //Object.keys(copy).map((key)=> usePub(mac+))
+            //console.log(copy)
         }
         else EVENT.emit("error", "переданы не все атрибуты")
     }
@@ -185,6 +202,7 @@ export default function Grid(props) {
                 {Object.keys(modules).map((key)=> (
                     Object.keys(modules[key]).map((kid)=> (
                         <Row 
+                            mac={mac}
                             id={key}
                             name={kid}
                             key={kid}
@@ -198,3 +216,12 @@ export default function Grid(props) {
         </div>
     );
 }
+
+
+
+/**useSend(props.mac, meta, copy, (res)=> {
+    setModules(copy)
+    if(!res.error) store.set("user", res)
+    else EVENT.emit("error", res.error)
+});
+*/

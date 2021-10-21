@@ -188,6 +188,14 @@ app.post("/recombination", jsonParser, (req, res)=> {
     }
     else res.send(user)
 });
+app.post("/delete", jsonParser, (req, res)=> {
+    let user = autorise(req.body.login, req.body.password);
+
+    if(!user.error && req.body.mac){
+        user.deleteNode(req.body.mac)
+        res.send(user)
+    }
+});
 
 // admin api
 app.post("/getUserList", jsonParser, (req, res)=> {

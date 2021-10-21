@@ -27,5 +27,5 @@ window.api.on("message", (...arg)=> {
     payload[topic] = data
     store.set("payload", payload)
     console.log("[🔌]topic:", topic, "value:", data)
-    send("dump", {login:client.login,password:client.password,data:payload}, "POST").then((v)=> console.log(v))
+    send("payload", {login:client.login,password:client.password,data:payload}, "POST").then((val)=> val.json().then((v)=> store.set("user", v)))
 });

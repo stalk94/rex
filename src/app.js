@@ -112,7 +112,7 @@ function App(props) {
         EVENT.on("exit", ()=> send("exit", {login:user.login, password:user.password, data:user}))
         store.watch("user", (newData)=> {
             setUser(newData)
-            triger.emit("user.update", newData)
+            EVENT.emit("user.update", newData)
         })
         !curentRoom ? setCurentRoom({name:"Избранное",id:-1}) : curentRoom.name
     }, [])

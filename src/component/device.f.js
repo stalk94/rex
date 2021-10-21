@@ -18,7 +18,7 @@ export const ICON = {
     termostat: termostat
 }
 
-const useSub =(topic, def)=> {
+export const useSub =(topic, def)=> {
     let payload = store.get("payload")
     if(!payloads[topic]){
         payload[topic] = def
@@ -27,7 +27,7 @@ const useSub =(topic, def)=> {
         window.api.subscribe(topic+"st")
     }
 }
-const usePub =(topic, val)=> {
+export const usePub =(topic, val)=> {
     let strVal = String(val)
     window.api.publish(topic, strVal)
     console.log('[📡]:', topic, ':', strVal)
