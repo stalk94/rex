@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { send } from "../engine";
+import { send, useCokie } from "../engine";
 import Grid from "./grid";
 
 
@@ -65,7 +65,7 @@ export default class SchemeConstructor extends React.Component {
     }
     create(meta) {
         if(meta.type){
-            send("newNode", {login:user.login, password:user.password, state:meta}, "POST").then((res)=> {
+            send("newNode", {login:useCokie().login, password:useCokie().password, state:meta}, "POST").then((res)=> {
                 res.json().then((userData)=> {
                     if(!userData.error){
                         store.set("user", userData)

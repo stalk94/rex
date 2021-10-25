@@ -1,36 +1,49 @@
 require("../engine")
 import React, {useEffect, useState} from "react";
-import { OnOff, Lable, Centr, Title, OnOffDeamer, Timer } from "./device.f";
+import { useDidUpdate, useLocalstorage } from "rooks";
+import { OnOff, Lable, Centr, Title, OnOffDeamer } from "./device.f";
 
 
-const devices = store.get("user").devices
-const useRoomsName =(id)=> {
-    let res = "not-room";
-    let rooms = store.get("user").rooms
-    rooms.map((room)=> {
-        if(room.id===id) res = room.name 
-    })
-    return res
-}
 
 
-function Carts(props) {
-    const [view, setView] = useState(true)
-    const [name, setName] = useState(devices[props.topic]?(devices[props.topic].name??props.id):props.id)
-    const [room, setRoom] = useState(devices[props.topic]?(devices[props.topic].room??-1):-1)
-
-    const useRoom =()=> {
-
+/**
+ * 
+ * 
+ */
+export function Carts(props) {
+    const [curent, setCur] = useState(props.room)
+    const [name, setName] = useState("")
+    const [room, setRoom] = useState({name:1})
+    
+    const update =()=> {
+        let rooms = store.get("user").rooms
+        let roomTopic = props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/room"
+        setTimeout(()=> {
+            if(rooms[store.get("payload")[roomTopic]]) setRoom(rooms[store.get("payload")[roomTopic]])
+            setName(store.get("payload")[props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/name"])
+        }, 500)
     }
-    const useName =()=> {
-
-    }
-
+    useEffect(()=> {
+            store.watch("curent.room", (nroom)=> {
+                console.log(nroom)
+                setCur(nroom)
+                update()
+            })
+            update()
+    }, [])
+    useDidUpdate(()=> {
+        setCur(props.room)
+    }, [props])
+    
     return(
-        <div style={{display:view?"block":"none"}} className="container">
+        <div style={{
+                display:(curent&&curent.name===room.name)?"block":"none"
+            }} 
+            className="container"
+            >
             <Title 
                 name={name} 
-                room={useRoomsName(room)}
+                room={props.room.name}
             />
             {props.children}
         </div>
@@ -52,21 +65,17 @@ class Node extends React.Component {
     constructor(props) {
         super(props) 
         this.state = {}
-        this.onUpdate = this.onUpdate.bind(this)
     }
     componentDidMount() {
         store.watch("user", (newData)=> {
             this.setState(newData.nodes[this.props.mac])
         });
     }
-    onUpdate(topic, prop, value) {
-
-    }
     render() {
         return(
             <>
                 {this.props.type === "PMR"
-                 ? <Carts id={`#pmr-0`} topic={this.props.mac+this.props.cart.reley[0]}> 
+                 ? <Carts room={this.props.room} id={`#pmr-0`} topic={this.props.mac+this.props.cart.reley[0]}> 
                         <Lable type="PMR">
                             <OnOff topic={this.props.mac+this.props.cart.reley[0]}/>
                         </Lable>
@@ -74,7 +83,7 @@ class Node extends React.Component {
         
                  :  Object.keys(this.props.cart).map((key, i)=> {
                         if(this.props.type!=="PMR" && key==="dimmer") return this.props.cart[key].map((topic, i)=> (
-                            <Carts key={i} id={`#new-device-${i}`} topic={this.props.mac+topic}>
+                            <Carts room={this.props.room} key={i} id={`#new-device-${i}`} topic={this.props.mac+topic}>
                                 <Lable 
                                     type={this.props.type} 
                                     topic={this.props.mac+topic} 
@@ -88,14 +97,14 @@ class Node extends React.Component {
                             </Carts>
                         ))
                         else if(this.props.type==="SMR" && key==="reley") return this.props.cart[key].map((topic, i)=> (
-                            <Carts key={i} id={`#new-smr-${i}`} topic={this.props.mac+topic}>
+                            <Carts room={this.props.room} key={i} id={`#new-smr-${i}`} topic={this.props.mac+topic}>
                                 <Lable type={"SMR"} >
                                     <OnOff topic={this.props.mac+topic}/>
                                 </Lable>
                             </Carts>
                         ))
                         else if(this.props.type==="FSC") return this.props.cart[key].map((topic, i)=> (
-                            <Carts key={i} id={`#new-fsc-${i}`} topic={this.props.mac+topic}>
+                            <Carts room={this.props.room} key={i} id={`#new-fsc-${i}`} topic={this.props.mac+topic}>
                                 <Lable
                                     type={"FSC"} 
                                     topic={this.props.mac+topic}
@@ -133,7 +142,7 @@ export default function NodeArea(props) {
                     name={nodes[mac]._name}
                     mac={mac}
                     cart={nodes[mac].cart}
-                    curentRoom={props.room}
+                    room={props.room}
                 />
             ))}
         </div>

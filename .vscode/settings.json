@@ -69,9 +69,15 @@
         "jest.config.js": true,
         "src\\css/icons.css": true,
         "src\\css/fontawesome.css": true,
-        "src\\css/app.css": true
+        "src\\css/app.css": true,
+        "mock": true,
+        "test/test.html": true,
+        "json.sqlite": true,
+        "manifest.json": true,
+        "src/config.js": true
     },
     "explorerExclude.backup": null,
     "svg.preview.background": "transparent",
-    "editor.fontWeight": "1"
+    "editor.fontWeight": "1",
+    "livePreview.defaultPreviewPath": "/test/index.html"
 }

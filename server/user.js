@@ -97,7 +97,6 @@ class User {
     }
     reWriteRoom(name, id, clb) {
         if(name.length>3){
-            console.log(this.rooms, id, name)
             this.rooms[id].name = name
             clb(this.rooms)
             this.#dump()
@@ -110,21 +109,6 @@ class User {
         this.#dump()
     }
 
-    async payload(data) {
-        await client.connect()
-        const DB = client.db("rex")
-        const payloads = DB.collection("payloads")
-        let res = await payloads.insertOne({
-            _id: this.login, 
-            time: TIME(),
-            payload: data
-        });
-        
-        //таск на очистку через 5 дней
-        newTask(this.login, ()=> payloads.dropIndex(res.insertedId), 5);
-        this.payloads = data
-        this.#dump()
-    }
     setFavorite(data) {
         if(data instanceof Array) this.devices = data
         this.#dump()
@@ -197,15 +181,6 @@ class User {
             else clb({error:"девайс не найден"})
         }
         else clb({error:"название не может быть менее 3-х символов"})
-    }
-    dump(data) {
-        this.devices.forEach((device, id)=> {
-            if(data.devices[id]) this.devices[id].payload = data.devices[id].payload
-            else log.error(this.login+" payload не совпадают(на сервере новее)")
-        });
-
-        this.#dump()
-        return "ok"
     }
     exit() {
         this.status = "off"

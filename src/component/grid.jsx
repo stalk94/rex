@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Resizable } from "re-resizable";
+import React, { useState, useEffect, useRef } from 'react';
 import { Select, Input } from "./input";
-import { send } from "../engine";
+import { send, useCokie } from "../engine";
 import { FaArrowsAltV } from "react-icons/fa";
 import { usePub } from "./device.f";
 
 
 const user = store.get("user")
-const META = {
+const META =()=> ({
     reley: [
         {type:"lable", data:"Реле", color:"#90e160cc"},         //скрытый топик вызова (всех реле группы)  
         {type:'input', data:"name"},                            //не обязательный топик имени
@@ -23,25 +22,41 @@ const META = {
         {type:'input', data:"GA1"}, 
         {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
         {type:'input', data:"GA2"}, 
+        {type:'input', data:"GAstatus"}
     ]
-}
+})
 
 const useSend =(mac, meta, data, clb)=> {
-    send("set", {login:user.login,password:user.password,mac:mac,meta:meta,data:data}, "POST").then((res)=> {
-        if(clb) res.json().then((v)=> clb(v))
-    })
+    send("set", {
+            login:useCokie().login,
+            password:useCokie().password,
+            mac:mac,
+            meta:meta,
+            data:data
+        }, "POST").then((res)=> clb && res.json().then((v)=> clb(v))
+    )
 }
-
+const useChek =(topic)=> {
+   let payload = store.get("payload")
+   return payload[topic]
+}
 const useParse =(type, index)=> {
-    return META[type][index]
+    return META()[type][index]
 }
-const useArray =(data)=> {
+const useArray =(data, def)=> {
+    let payload = store.get("payload")
     if(data instanceof Array){
         let rezult = {}
-        data.map((val, i)=> rezult[val]='')
+        data.map((val, i)=> rezult[val]=payload[def+val])
         return rezult
     }
-    else return data
+    else {
+        let rezult = {}
+        Object.keys(data).map((key)=> {
+            rezult[key] = payload[def+key]
+        })
+        return rezult
+    }
 }
 
 
@@ -52,18 +67,21 @@ const useArray =(data)=> {
  * `type`: тип устройства выбранный 
  */
 const Title =(props)=> {
+    const inputRef = useRef(null)
     const style = {margin:"10px",textDecoration:"underline"}
     const styleInput = {padding:"10px", marginRight:"5px"}
     const styleTitle = {display:"flex",flexDirection:"row",textAlign:"center",background:"#6c6a6acc"}
 
     const onDel =()=> {
-        send("delete", {login:user.login,password:user.password,mac:props.mac.mac}, "POST").then((data)=> {
+        send("delete", {login:useCokie().login,password:useCokie().password,mac:props.mac.mac}, "POST").then((data)=> {
             data.json().then((v)=> {
                 store.set("user", v)
                 window.location.reload()
             })
         })
     }
+    const onLoad =(e)=> inputRef.current.click()
+    
 
     return(
         <div style={styleTitle}>
@@ -72,7 +90,11 @@ const Title =(props)=> {
             <Input style={styleInput} placeholder="KNX" onChange={(e)=> props.knx.set(e.target.value)} value={props.knx.knx}/>
             <Input style={styleInput} placeholder="MAC" onChange={(e)=> props.mac.set(e.target.value)} value={props.mac.mac}/>
             <button onClick={props.change} style={{...style,marginRight:"50px"}}>💾</button>
-            <button style={style}>Считать</button>
+            <label className="custom-file-upload">
+                <input ref={inputRef} type="file" style={{display:"none"}}/>
+                <button onClick={onLoad} style={style}>📁</button>
+            </label>
+            <button onClick={()=> usePub(props.mac.mac+"/STATUS", 1)} style={style}>Считать</button>
             <button style={style}>Перепрошивка</button>
             <button style={{margin:"10px",padding:"8px",marginLeft:"20%"}} onClick={onDel} id="del">❌</button>
         </div>
@@ -80,16 +102,18 @@ const Title =(props)=> {
 }
 const Row =(props)=> {
     const [render, setRender] = useState()
-    const [state, setState] = useState(useArray(props.module))
+    const [state, setState] = useState(useArray(props.module, props.mac+"/"+props.name+"/"))
     
     const onSave =()=> {
         Object.keys(state).map((key)=> {
-            window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st", (data)=> console.log("onSub:", data))
+            window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st")
             usePub(props.mac+"/"+props.name+"/"+key, state[key])
         })
-        props.change(props.name, props.id, state)
+        //props.change(props.name, props.id, state)
     }
     const onRender =()=> {
+        let payload = store.get("payload")
+       
         setRender(Object.keys(state).map((key, index)=> {
             let elem = useParse(props.id, index)
             let color = props.id==="reley"?"#90e160cc":(props.id==="button"?"#f4ea7c":"grey")
@@ -101,24 +125,26 @@ const Row =(props)=> {
                         key={key} 
                         type="text"
                         placeholder={elem.data} 
-                        onChange={(e)=> {
-                            state[key] = e.target.value
-                            setState(state)
+                        onInput={(e)=> {
+                            let states = state
+                            states[key] = e.target.value
+                            payload[props.mac+"/"+props.name+"/"+key] = e.target.value
+                            store.set("payload", payload)
+                            setState(states)
                             onRender()
                         }}
-                        value={state[key]}
+                        value={payload[props.mac+"/"+props.name+"/"+key]}
                     />
             )}
             else if(elem && elem.type==="select"){
                 return(
                     <Select key={index} 
                         style={{border:`1px solid ${color}`}}
+                        value={elem.data[useChek(props.mac+"/"+props.name+"/"+key)]}
                         data={elem.data} 
                         onValue={(e)=> {
                             let states = state
-                            if(elem.name==="room"){
-                                states.room = e
-                            }
+                            if(elem.name==="room") states.room = e
                             else states[key] = e
 
                             setState(states)
@@ -131,6 +157,7 @@ const Row =(props)=> {
                     <div 
                         key={index} 
                         style={{
+                            fontSize:"24px",
                             marginTop:"5px",
                             marginBottom:"5px",
                             borderRadius:"5px",
@@ -142,12 +169,20 @@ const Row =(props)=> {
                             border:`1px solid ${color}`
                         }}
                     >
-                        { elem ? props.id : "null" }
+                        { elem ? props.name[0]+(+props.name.slice(1, props.name.length)+1) : "null" }
                     </div>
             )}
         }))
+
     }
+
+    useEffect(()=> {
+        store.watch("payload", (payload)=> {
+            onRender()
+        })
+    }, [])
     
+
     return(
         <div className="Row">
             { render??onRender() }
@@ -179,7 +214,8 @@ export default function Grid(props) {
         else EVENT.emit("error", "переданы не все атрибуты")
     }
     const onTitleChange =()=> {
-        let meta = {mac:mac,knx:knx,name:name}
+        let meta = {mac:mac, knx:knx, name:name}
+
         useSend(props.mac, meta, modules, (res)=> {
             if(!res.error) store.set("user", res)
             else EVENT.emit("error", res.error)
@@ -213,12 +249,3 @@ export default function Grid(props) {
         </div>
     );
 }
-
-
-
-/**useSend(props.mac, meta, copy, (res)=> {
-    setModules(copy)
-    if(!res.error) store.set("user", res)
-    else EVENT.emit("error", res.error)
-});
-*/

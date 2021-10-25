@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import bpc from "@blueprintjs/core";
+import { BsArrowUpLeftSquareFill, BsArrowDownRightSquareFill } from "react-icons/bs";
 
 
 /**
@@ -28,3 +28,17 @@ const NameRoom =(props)=> (
         <img id="read-b" height="31px" src={redact} onClick={props.changeName}/>
     </>
 );
+
+export const Rotater =(props)=> {
+    const [orient, setOrient] = useState("front")
+    const onOrinet =()=> {
+        setOrient(orient==="front"?"revers":"front")
+        props.orientation(orient)
+    }
+
+    return(
+        <div onClick={onOrinet}>
+            {props.orient==="front" ? <BsArrowUpLeftSquareFill/> : <BsArrowDownRightSquareFill/>}
+        </div>
+    );
+}

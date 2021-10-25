@@ -1,23 +1,21 @@
-<!DOCTYPE html>
 <head>
-    <meta name="viewport" content="width=device-width,user-scalable=no">
-    <meta charset="utf-8">
+    <meta charset="UTF-8" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link href="css/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
-	<link href="css/plugins/input-tags/css/tagsinput.css" rel="stylesheet" />
-	<link href="css/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
-	<link href="css/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js"></script>
+
 	<!-- loader-->
-    <link href="css/app.css" rel="stylesheet">
-	<link href="css/icons.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="config.js"></script>
 </head>
 
 
 <body>
+    <script>const socket = io();</script>
     <div class="root"></div>
-    <canvas id="stars"></canvas>
-    
-    <script src="lib/stars.js"></script>
-    <script src="index.js"></script>
+    <script src="app.jsx"></script>
 </body>
-</html>

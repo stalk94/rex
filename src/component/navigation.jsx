@@ -1,60 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
-import { ReactSortable, Sortable, MultiDrag, Swap } from "react-sortablejs";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
-import { send } from "../engine";
+import { send, useCokie } from "../engine";
 import { AiFillDatabase } from "react-icons/ai";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 
 
-/**
- * Навигационное меню
- * category: []:elems
- * 
- */
-export class Nav extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            category: []
-        }
-        this.onAdd = this.onAdd.bind(this)
-        this.goTo = this.goTo.bind(this)
-        this.exit = this.exit.bind(this)
-    }
-    onAdd() {
-        
-    }
-    goTo(ev) {
-        
-    }
-    render() {
-        return(
-            <React.Fragment>
-                <ul>
-                    <h4 style={{marginLeft:"5%",marginTop:"0px",fontSize:"18px",opacity:"0.6"}}>Мой дом:</h4>
-                    <ReactSortable
-                        list={this.state.rooms}
-                        setList={(newState)=> this.setState({ rooms: newState })}
-                    >
-                        {this.state.rooms.map((item, id)=> (
-                            <li id="rooms" key={id}>
-                                <i style={{fontSize:"19px",fontStyle:"normal"}}>🏛️ </i> 
-                                    {item.name}
-                            </li>
-                        ))}
-                    </ReactSortable>
-                </ul>
-                    
-                <hr style={{width:"85%", opacity:"0.1"}}/>
-                <div id="addRoom" onClick={this.onAdd}> ➕ </div>
-            </React.Fragment>
-        );
-    }
-    exit() {
-        
-    }
-}
+
 
 
 const setFavorite =(device, id, errorFn)=> {
@@ -62,7 +14,7 @@ const setFavorite =(device, id, errorFn)=> {
     device.favorite = device.favorite===true?false:true
     user.devices[id] = device
     
-    send("favorites", {login:user.login, password:user.password, data:user.devices}, "POST").then((val)=> {
+    send("favorites", {login:useCokie().login, password:useCokie().password, data:user.devices}, "POST").then((val)=> {
         if(val.error) errorFn(val.error)
     });
     store.set("user", user)
@@ -105,7 +57,7 @@ const Room =(props)=> {
                 menuButton={<MenuButton id="szh-menu">:</MenuButton>}
                 transition
             >
-                {props.devices.map((device, id)=> {
+                {Object.keys(props.devices).map((device, id)=> {
                     if(device.room===props.id) return (
                         <MenuItem key={id}>
                             <Fav 
@@ -141,17 +93,15 @@ export default function Navigations(props) {
     const [curent, setCurent] = useState()
     const [nameRoom, setName] = useState("")
     const [time, setTime] = useState()
+
     const clb = useCallback(()=> {
-        store.watch("user", ()=> {
-            setTime(<div style={{display:"none"}}>{Date.now()}</div>)
-        })
-        triger.on("user.update", ()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>))
+        store.watch("user", ()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>))
+        EVENT.on("user.update", ()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>))
     })
     const useTarget =(selectRoom, id)=> {
         setCurent(id)
         props.onTarget(selectRoom)
     }
-
     const chek =()=> {
         nameRoom.length > 3 
             ? props.setRoom(nameRoom) && setName("")
@@ -160,6 +110,9 @@ export default function Navigations(props) {
         setTimeout(()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>), 1000)
     }
 
+    useEffect(()=> store.watch("user", ()=> setName("")))
+
+    
     return(
         <>
             <ul>
@@ -171,7 +124,7 @@ export default function Navigations(props) {
                             name={room.name} 
                             room={room}
                             select={curent && curent===index?true:false}
-                            devices={props.user.devices} 
+                            devices={props.user.nodes} 
                             readRoom={props.readRoom}
                             delRoom={props.delRoom}
                             error={props.error}

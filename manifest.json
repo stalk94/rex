@@ -1,0 +1,10 @@
+{
+    "name": "rex my home",
+    "short_name": "rex",
+    "theme_color": "#7aabd1",
+    "background_color": "#2196f3",
+    "display": "browser",
+    "orientation": "landscape",
+    "scope": "/",
+    "start_url": "/"
+}

@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "nwjs",
+            "type": "node",
+            "name": "vscode-jest-tests",
             "request": "launch",
-            "name": "Launch NWjs",
-            "nwjsVersion": "any",
-            "webRoot": "${workspaceFolder}",
-            "reloadAfterAttached": true
-        },
-        {
-            "name": "Launch Microsoft Edge and open the Edge DevTools",
-            "request": "launch",
-            "type": "vscode-edge-devtools.debug",
-            "url": "" // Provide your project's url to finish configuring
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "disableOptimisticBPs": true,
+            "program": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--runInBand",
+                "--watchAll=false"
+            ]
         }
     ]
 }

@@ -5,7 +5,11 @@
         "/R$/room",
         "/R$/ga1",      
         "/R$/ga2", 
-        "/R$/gafb"
+        "/R$/gafb",
+        "/R$/Set1h",
+        "/R$/Set1m",
+        "/R$/Set1",
+        "/R$/Set1onoff"
     ],
     "button": [
         "/B$/all",
@@ -14,7 +18,11 @@
         "/B$/ga2",
         "/B$/gafb", 
         "/B$/ga1mode",  
-        "/B$/ga2mode"
+        "/B$/ga2mode",
+        "/B$/Set1h",
+        "/B$/Set1m",
+        "/B$/Set1",
+        "/B$/Set1onoff"
     ],
     "termo": [
         "/T$/all",
@@ -35,7 +43,11 @@
         "/T$/cool2stGA",
         "/T$/cool3GA",
         "/T$/cool3stGA",
-        "/T$/room"
+        "/T$/room",
+        "/T$/Set1h",
+        "/T$/Set1m",
+        "/T$/Set1",
+        "/T$/Set1onoff"
     ],
     "dimmer": [
         "/D$/all",
@@ -46,6 +58,10 @@
         "/D$/ga1relativ",
         "/D$/ga2relativ",
         "/D$/ga1absolut",
-        "/D$/ga2absolut"
+        "/D$/ga2absolut",
+        "/D$/Set1h",
+        "/D$/Set1m",
+        "/D$/Set1",
+        "/D$/Set1onoff"
     ] 
 }

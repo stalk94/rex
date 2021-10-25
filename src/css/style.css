@@ -45,11 +45,7 @@ h2 {
     text-align: center;
     margin-left: 5%;
 }
-.root {
-    position: absolute;
-    top: 40%;
-    left: 40%;
-}
+
 article {
     position: fixed;
     width: 100%;

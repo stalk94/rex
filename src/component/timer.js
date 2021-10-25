@@ -1,8 +1,14 @@
 import { useDebounce } from "rooks";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
-import React,{useState, useEffect} from "react"
+import React,{useState, useEffect} from "react";
+import { AiOutlineFieldTime } from "react-icons/ai";
+import { Carts } from "./node";
+import { OnOff } from "./device.f";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import ReactDOM from "react-dom";
+
+
 
 //////////////////////////////////////////////////////////
 const hours = []
@@ -17,7 +23,7 @@ for(let i=15; i<=35; i++){
 ///////////////////////////////////////////////////////////
 
 
-export default function Timer(props) {
+export function Timer(props) {
     const style= {
         border:"1px solid #3e97ea",
         width:"20%",
@@ -52,7 +58,7 @@ export default function Timer(props) {
         <div style={{textAlign:"center",fontSize:"24px",display:"flex",flexDirection:"row"}}>
             <Menu menuButton={
                     <div style={style}>
-                        <span>{hour}</span>
+                        <span>{ hour }</span>
                     </div>
                 } 
                 transition
@@ -62,20 +68,43 @@ export default function Timer(props) {
             <div>:</div>
             <Menu menuButton={
                     <div style={style}>
-                        <span>{min}</span>
+                        <span>{ min }</span>
                     </div>
                 } 
                 transition
             >
                 {mins.map((m)=> <MenuItem onClick={()=> setMin(m)}>{m}</MenuItem>)}
             </Menu>
-            <select style={styleSelect} onChange={(e)=> {setCell(e.target.value);setDeb()}} value={cell}>
-                <option value={0}>OFF</option>
-                <option value={1}>ON</option>
-                {cells.map((val)=> (
-                    <option value={val}>{ val+"C" }</option>
-                ))}
-            </select>
+            { props.chilldren }
         </div>
     );
 }
+
+
+/** 
+ * `topic`: 'mac/module/topic',
+ * `module`: 
+ * `type`: 
+ */
+export default function TimerManager(props) {
+    
+
+    return(
+        <div style={{border:"1px solid "}}>
+            test
+        </div>
+    );
+}
+
+
+
+const Test =(props)=> {
+    return(
+        <Carts>
+            {props.children}
+        </Carts>
+    )
+}
+
+
+ReactDOM.render(<Test room={{name:"test"}} topic={"test/test/topic"} children={<OnOff topic={"test/test"}/>}/>, document.querySelector(".root"))

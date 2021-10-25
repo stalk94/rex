@@ -1,3 +1,4 @@
+import { apiInit } from "../api";
 import React, { useEffect, useState } from 'react';
 import { useDebounce } from "rooks";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
@@ -6,9 +7,9 @@ import onOff from '../img/onOff.png';
 import wtor from '../img/wtor.png';
 import logic from '../img/logic.png';
 import termostat from '../img/termostat.png';
-import { MdOutlineMeetingRoom } from "react-icons/md";
 import { BsCardText } from "react-icons/bs";
 
+let init = false
 const payloads = {}
 export const ICON = {
     lamp: lamp,
@@ -18,13 +19,23 @@ export const ICON = {
     termostat: termostat
 }
 
+
 export const useSub =(topic, def)=> {
+    if(!init){
+        apiInit()
+        init = true
+    }
     let payload = store.get("payload")
+
     if(!payloads[topic]){
         payload[topic] = def
         payloads[topic] = def
         store.set("payload", payload)
-        window.api.subscribe(topic+"st")
+        if(window.api) window.api.subscribe(topic+"st")
+        else {
+            apiInit()
+            window.api.subscribe(topic+"st")
+        }
     }
 }
 export const usePub =(topic, val)=> {
@@ -84,37 +95,6 @@ export function ProgressBar(props) {
         </div>
     );
 }
-export function Timer(props) {
-    const style= {
-        border:"1px solid #3e97ea",
-        width:"20%",
-        height:"3%",
-        textAlign:"center",
-        background:"#73c5de85"
-    }
-    const [time, setTime] = useState("00:00")
-    
-    useEffect(()=> {
-        useSub(props.topic, '00:00')
-        store.watch("payload", (data)=> {
-            setTime(data[props.topic])
-        })
-    }, [])
-
-    return(
-        <Menu 
-            menuButton={<div style={style}><p>{time}</p></div>} 
-            transition
-        >
-            {props.timers.map((timer, i)=> (
-                <MenuItem onClick={()=> usePub(props.topic, timer)} key={i}>
-                    <var>{timer}</var>
-                </MenuItem>
-            ))}
-            <MenuItem>x</MenuItem>
-        </Menu>
-    )
-}
 
 
 /** topic,brihtness */
@@ -144,7 +124,8 @@ export const OnOffDeamer =(props)=> {
 }
 /** topic */
 export const OnOff =(props)=> {
-    const [onoff, setOnoff] = useState(store.get("payload")[props.topic]??'0')
+    const useOn =()=> store.get("payload")[props.topic]??'0'
+    const [onoff, setOnoff] = useState(useOn())
 
     useEffect(()=> {
         useSub(props.topic, '0')
@@ -212,14 +193,7 @@ export const Title =(props)=> {
 
     return(
         <div className="line" style={{borderBottom:"1px solid rgba(0,0,0,0.2)"}}>
-            <Menu menuButton={<div style={nameStyle}><BsCardText style={iconStyle}/>{props.name}</div>} transition>
-                <input type="text"/>
-                <MenuItem>изменить</MenuItem>
-            </Menu>
-            <Menu menuButton={<var style={roomStyle}><MdOutlineMeetingRoom style={iconStyle}/>{props.room}</var>} transition>
-                <input type="text"/>
-                <MenuItem>изменить</MenuItem>
-            </Menu>
+            <div style={nameStyle}><BsCardText style={iconStyle}/>{props.name}</div>
         </div>
     );
 }

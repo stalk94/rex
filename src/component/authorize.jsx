@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { send } from "../engine";
 
 
-/**
- * @param {*} props 
- * `onOk()`  
- * `onErr()`
- */
 export default function Authorize(props) {
     const [login, setLogin] = useState("")
     const [password, setPass] = useState("")
