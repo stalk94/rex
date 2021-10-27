@@ -1,46 +1,8 @@
 require("../engine")
 import React, {useEffect, useState} from "react";
-import { useDidUpdate, useLocalstorage } from "rooks";
 import { OnOff, Lable, Centr, Title, OnOffDeamer } from "./device.f";
 import TimerManager from "./timer";
-
-
-
-export const useUser =()=> {
-    return store.get("user")
-}
-
-
-export function Carts(props) {
-    const [name, setName] = useState("")
-    const [room, setRoom] = useState({name:1})
-    
-    const update =(newRoom)=> {
-        let roomTopic = props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/room"
-        let roomCartId = useUser().payloads[roomTopic]
-        let cartName = useUser().payloads[props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/name"] 
-
-        setRoom(useUser().rooms[roomCartId])
-        setName(cartName)
-    }
-
-    useEffect(()=> {
-        update(props.room)
-    }, [props.room])
-
-    
-
-    return(
-        <div className="container"
-            style={{
-                display: (room && store.get("curent.room").name===room.name) ? "block" : "none"
-            }}
-        >
-            <Title name={name} />
-            { props.children }
-        </div>
-    );
-}
+import Carts from "./cart-bar"
 
 
 
@@ -82,7 +44,7 @@ const Node =(props)=> {
                     if(topic.split("/")[2]==="onoff") return(
                         <Carts room={props.room} key={i} id={`#new-smr-${i}`} topic={props.mac+topic}>
                             <Lable type="SMR" >
-                                <TimerManager mac={props.mac} module={"R"+i} timers={[1]} />
+                                <TimerManager mac={props.mac} module={"R"+i} timers={[1,2,3,4]} />
                                 <OnOff topic={props.mac+topic} />
                             </Lable>
                         </Carts>
@@ -110,11 +72,11 @@ const Node =(props)=> {
 
 /** узлы: принимает карточки */
 export default function NodeArea(props) {
-    const [nodes, setDevices] = useState(store.get("user").nodes)
+    const [nodes, setDevices] = useState(props.nodes)
     
     useEffect(()=> {
-        store.watch("user", (data)=> setDevices(data.nodes))
-    }, [])
+        setDevices(props.nodes)
+    }, [props.nodes])
 
 
     return(

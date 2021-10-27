@@ -26,15 +26,20 @@ export function Timer(props) {
         border:"1px solid #3e97ea",
         textAlign:"center",
         fontSize: "28px",
-        paddingRight: "5px",
+        paddingRight:"15px",
+        paddingLeft:"15px",
+        marginLeft:"15px",
+        marginRight:"15px",
         background:"#73c5de85",
-        cursor:"pointer"
+        cursor:"pointer",
     }
     const styleSelect = {
         margin:"1px",
         background: "#fe771026",
         border:"1px solid orange",
-        color:"#c44708"
+        color:"#c44708",
+        paddingLeft:"15px",
+        marginLeft:"15px"
     }
     const [hour, setHour] = useState("00")
     const [min, setMin] = useState("00")
@@ -56,7 +61,7 @@ export function Timer(props) {
 
 
     return(
-        <div style={{textAlign:"center",fontSize:"28px",display:"flex",flexDirection:"row"}}>
+        <div style={{textAlign:"center",fontSize:"28px",display:"flex",flexDirection:"row",marginBottom:"3%"}}>
             <Menu menuButton={
                     <div style={style}>
                         { hour }
@@ -77,7 +82,7 @@ export function Timer(props) {
                 {mins.map((m,i)=> <MenuItem key={i} onClick={()=> setMin(m)}>{m}</MenuItem>)}
             </Menu>
             { props.children }
-            <button onClick={()=> {setDeb();props.click()}} style={enable?styleSelect:{margin:"1px",border:"1px solid green"}}><MdTimer/></button> 
+            <button onClick={()=> {setDeb();props.click()}} style={enable?styleSelect:{margin:"1px",border:"1px solid green",paddingLeft:"15px",marginLeft:"15px"}}><MdTimer/></button> 
         </div>
     );
 }
@@ -89,7 +94,7 @@ export function Timer(props) {
  * `timers`: [] 
  */
 export default function TimerManager(props) {
-    const style = {border:"1px solid black",display:"flex",flexDirection:"row"}
+    const style = {border:"1px solid black",display:"flex",flexDirection:"column"}
     const [value, setValue] = useState("off")
 
     const useTimer =()=> {
@@ -109,10 +114,10 @@ export default function TimerManager(props) {
                 <Timer 
                     key={i} 
                     id={"timer_"+i}
-                    topicHour={props.mac+"/"+props.module+"/Set1h"} 
-                    topicMin={props.mac+"/"+props.module+"/Set1m"} 
-                    topicCell={props.mac+"/"+props.module+"/Set1"} 
-                    topicEnable={props.mac+"/"+props.module+"/Set1onoff"} 
+                    topicHour={props.mac+"/"+props.module+`/Set${i}h`} 
+                    topicMin={props.mac+"/"+props.module+`/Set${i}m`} 
+                    topicCell={props.mac+"/"+props.module+`/Set${i}]`} 
+                    topicEnable={props.mac+"/"+props.module+`/Set${i}onoff`} 
                     children={<Select style={{height:"32px",width:"60px",margin:"1px"}} onValue={setValue} data={useTimerData()} value={value}/>}
                     click={useTimer}
                 />

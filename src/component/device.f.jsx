@@ -151,14 +151,13 @@ export const OnOff =(props)=> {
 
     
     return(
-        <div 
-            style={{position:"relative",left:"65%"}}
+        <div style={{position:"relative",left:"65%"}}
             onClick={()=> usePub(props.topic, onoff==='1'?0:1)}
         >
-            <img style={{position:"absolute",height:"18vh",cursor:"pointer",opacity:onoff==='1'?"1":"0.4"}} src={ICON.lamp}/>
-            <h3 style={{position:"absolute",color:onoff==='1'?"#42f059":"red"}}>
+            <div style={{color:onoff==='1'?"#42f059":"red",width:"35%",fontSize:"20px"}}>
                 { onoff==='1'?"on":"off" }
-            </h3>
+            </div>
+            <img style={{height:"18vh",maxWidth:"35%",cursor:"pointer",opacity:onoff==='1'?"1":"0.4"}} src={ICON.lamp}/>
         </div>
     );
 }
@@ -207,14 +206,21 @@ export const Centr =(props)=> {
     );
 }
 export const Title =(props)=> {
-    const nameStyle = {fontSize:"19px",width:"50%",color:"#00000099",textAlign:"centr",cursor:"pointer"}
-    const iconStyle = {paddingTop:"2px",marginRight:"3px",textAlign:"centr"}
+    const nameStyle = {
+        textAlign:"center",
+        fontSize:"24px",
+        width:"50%",
+        textAlign:"centr",
+        cursor:"pointer",
+        color:"#fcfcfc99",
+        marginLeft:"5px"
+    }
+    const iconStyle = {marginRight:"3px"}
 
     return(
-        <div className="line" style={{borderBottom:"1px solid rgba(0,0,0,0.2)"}}>
+        <div onClick={props.onClick} className="line" style={{borderBottom:"1px solid rgba(0,0,0,0.2)"}}>
             <div style={nameStyle}>
-                <BsCardText style={iconStyle}/>
-                { props.name }
+                { props.name!==""?props.name:"not name" }
             </div>
         </div>
     );

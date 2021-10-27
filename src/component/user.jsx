@@ -22,10 +22,6 @@ export default function User(props) {
             kontact1:kontact1, 
             kontact2:kontact2
         }
-
-        Object.keys(user).forEach((key)=> {
-            socket.emit("set", [key, user[key]])
-        });
     }, [firsName, lastName, phone, adres, kontact1, kontact2])
 
     return(
