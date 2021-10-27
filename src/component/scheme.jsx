@@ -56,51 +56,45 @@ const FormRegistrationNewNode =(props)=> {
 }
 
 
-/** -> Grid <- */
-export default class SchemeConstructor extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = store.get("user").nodes
-        this.create = this.create.bind(this)
-    }
-    create(meta) {
+
+export default function SchemeConstructor(props) {
+    const [state, setState] = useState(store.get("user").nodes)
+
+    const onCreate =(meta)=> {
         if(meta.type){
-            send("newNode", {login:useCokie().login, password:useCokie().password, state:meta}, "POST").then((res)=> {
+            send("newNode", {login:useCokie().login, password:useCokie().password+"=", state:meta}, "POST").then((res)=> {
                 res.json().then((userData)=> {
                     if(!userData.error){
                         store.set("user", userData)
-                        window.location.reload()
+                        //window.location.reload()
                     }
-                    else this.props.error(userData.error)
-                });
+                    else props.error(userData.error)
+                })
             });
         }
         else EVENT.emit("error", "не указан тип ноды")
     }
-    componentDidMount() {  
-        store.watch("user", (newData)=> this.setState(newData.nodes))
-    }
-    render() {
-        return(
-            <div>
-                <FormRegistrationNewNode create={this.create} />
-                <div className="tables">
-                    {Object.values(this.state).length > 0
-                        ? Object.values(this.state).map((node, index)=> (
-                            <div key={index} className="Table">
-                                <Grid 
-                                    rows={node.table} 
-                                    mac={node._mac} 
-                                    type={node._type} 
-                                    name={node._name}
-                                    knx={node._knx}
-                                />
-                            </div>
-                        ))
-                        : "узлов пока не добавлено"
-                    }
-                </div>  
-            </div>
-        );
-    }
+
+
+    return(
+        <div>
+            <FormRegistrationNewNode create={onCreate} />
+            <div className="tables">
+                {Object.values(state).length > 0
+                    ? Object.values(state).map((node, index)=> (
+                        <div key={index} className="Table">
+                            <Grid 
+                                rows={node.table} 
+                                mac={node._mac} 
+                                type={node._type} 
+                                name={node._name}
+                                knx={node._knx}
+                            />
+                        </div>
+                    ))
+                    : "узлов пока не добавлено"
+                }
+            </div>  
+        </div>
+    )
 }

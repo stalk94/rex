@@ -74,7 +74,12 @@
         "test/test.html": true,
         "json.sqlite": true,
         "manifest.json": true,
-        "src/config.js": true
+        "src/config.js": true,
+        "src\\component/move.js": true,
+        "src\\component/lists.js": true,
+        "src\\component/authorize.jsx": true,
+        "src\\component/app": true,
+        "rex-admin": true
     },
     "explorerExclude.backup": null,
     "svg.preview.background": "transparent",

@@ -14,7 +14,7 @@ import SchemeConstructor from "./component/scheme";
 import NodeArea from "./component/node"
 
 
-if(!store.get("payload")) store.set("payload", {})
+
 //////////////////////////////////////////////////////////////
 const Title =(props)=> {
     const style = {color:props.color}
@@ -26,12 +26,14 @@ const Title =(props)=> {
         </>
     );
 }
-
+socket.on("get.user", (newData)=> {
+    store.set("user", newData)
+});
 
 
 /** EVENTS: `error`,`errorColor`,`exit` */
 function App(props) {
-    const [user, setUser] = useState(props.user)
+    const [user, setUser] = useLocalstorageState("user", props.user)
     const [curentRoom, setCurentRoom] = useLocalstorageState("curent.room", {name:"Избранное",id:0})
     const [errorColor, setErrColor] = useState("red")
     const [error, setErr] = useState("")
@@ -42,6 +44,7 @@ function App(props) {
             setErr(text)
             setTimeout(()=> setErr(""), 5000)
         });
+        
         EVENT.on("errorColor", (color)=> setErrColor(color));
         EVENT.on("exit", ()=> send("exit", {login:user.login, password:user.password, data:user, payload:store.get("payload")}))
         !curentRoom ? setCurentRoom({name:"Избранное",id:-1}) : curentRoom.name
@@ -123,7 +126,7 @@ function App(props) {
                                 onAdd={setUser}
                             />
                             :(curentRoom.name!=="user"
-                                ? <NodeArea room={curentRoom}/>
+                                ? <NodeArea room={ curentRoom }/>
                                 : <User>{ user }</User>
                         )}
                     </div> 
@@ -139,9 +142,9 @@ const UI =()=> {
     const [render, setRender] = useState("")
 
     useEffect(()=> {
-        if(useCokie().login&&useCokie().password) setRender(<App user={store.get("user")} />)
-        else setRender(<Main useRender={(data)=> {store.set("payload", data.payloads);setRender(<App user={data} />)}} />)
-        store.watch("user", (newData)=> setRender(<App user={newData} />))
+        if(useCokie().login && useCokie().password) setRender(<App user={store.get("user")} />)
+        else setRender(<Main useRender={(data)=> {setRender(<App user={data} />)}} />)
+        store.watch("user", (newData)=> Cache["user"] = newData)
     }, [])
 
 

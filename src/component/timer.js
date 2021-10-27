@@ -1,13 +1,11 @@
 import { useDebounce } from "rooks";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
-import React,{useState, useEffect} from "react";
-import { AiOutlineFieldTime } from "react-icons/ai";
-import { Carts } from "./node";
-import { OnOff } from "./device.f";
+import React, {useState, useEffect} from "react";
+import { usePub, useSub } from "./device.f";
+import { MdTimer } from "react-icons/md";
+import { Select } from "./input";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
-import ReactDOM from "react-dom";
-
 
 
 //////////////////////////////////////////////////////////
@@ -22,89 +20,103 @@ for(let i=15; i<=35; i++){
 }
 ///////////////////////////////////////////////////////////
 
-
+/** topicHour, topicMin, topicCell, topicEnable */
 export function Timer(props) {
     const style= {
         border:"1px solid #3e97ea",
-        width:"20%",
-        height:"3%",
         textAlign:"center",
-        background:"#73c5de85"
+        fontSize: "28px",
+        paddingRight: "5px",
+        background:"#73c5de85",
+        cursor:"pointer"
     }
     const styleSelect = {
-        border:"2px dotted orange",
-        color:"#c44708",
-        padding:"7px"
+        margin:"1px",
+        background: "#fe771026",
+        border:"1px solid orange",
+        color:"#c44708"
     }
-    
     const [hour, setHour] = useState("00")
     const [min, setMin] = useState("00")
-    const [cell, setCell] = useState("")
     const [enable, setEnable] = useState(0)
     const setDeb = useDebounce(()=> {
         usePub(props.topicHour, hour)
         usePub(props.topicMin, min)
-        usePub(props.topicCell, cell)
+        usePub(props.topicCell, props.children.props.value)
         usePub(props.topicEnable, enable)
     }, 1000)
     
     
     useEffect(()=> {
-        //useSub(props.topic, '00:00')
+        useSub(props.topicHour, hour)
+        useSub(props.topicMin, min)
+        useSub(props.topicCell, props.children.props.value)
+        useSub(props.topicEnable, enable)
     }, [])
 
 
     return(
-        <div style={{textAlign:"center",fontSize:"24px",display:"flex",flexDirection:"row"}}>
+        <div style={{textAlign:"center",fontSize:"28px",display:"flex",flexDirection:"row"}}>
             <Menu menuButton={
                     <div style={style}>
-                        <span>{ hour }</span>
+                        { hour }
                     </div>
                 } 
                 transition
             >
-                {hours.map((h)=> <MenuItem onClick={()=> setHour(h)}>{h}</MenuItem>)}
+                {hours.map((h,i)=> <MenuItem key={i} onClick={()=> setHour(h)}>{h}</MenuItem>)}
             </Menu>
-            <div>:</div>
+            : 
             <Menu menuButton={
                     <div style={style}>
-                        <span>{ min }</span>
+                        { min }
                     </div>
                 } 
                 transition
             >
-                {mins.map((m)=> <MenuItem onClick={()=> setMin(m)}>{m}</MenuItem>)}
+                {mins.map((m,i)=> <MenuItem key={i} onClick={()=> setMin(m)}>{m}</MenuItem>)}
             </Menu>
-            { props.chilldren }
+            { props.children }
+            <button onClick={()=> {setDeb();props.click()}} style={enable?styleSelect:{margin:"1px",border:"1px solid green"}}><MdTimer/></button> 
         </div>
     );
 }
 
 
 /** 
- * `topic`: 'mac/module/topic',
- * `module`: 
- * `type`: 
+ * `mac`: 111,
+ * `module`: "R0"
+ * `timers`: [] 
  */
 export default function TimerManager(props) {
-    
+    const style = {border:"1px solid black",display:"flex",flexDirection:"row"}
+    const [value, setValue] = useState("off")
 
+    const useTimer =()=> {
+        console.log(value)
+        socket.emit("set", ["timer", {topic:props.mac+"/"+props.module}])
+    }
+    const useTimerData =()=> {
+        if(props.module[0]==="R") return ["on", "off"]
+        else if(props.module[0]==="D") return ["on", "off", 5, 10, 15, 25, 50, 75, 100]
+        else if(props.module[0]==="T") return ["on", "off", ...cells]
+    }
+    
+    
     return(
-        <div style={{border:"1px solid "}}>
-            test
+        <div style={style}>
+            {props.timers.map((i)=> (
+                <Timer 
+                    key={i} 
+                    id={"timer_"+i}
+                    topicHour={props.mac+"/"+props.module+"/Set1h"} 
+                    topicMin={props.mac+"/"+props.module+"/Set1m"} 
+                    topicCell={props.mac+"/"+props.module+"/Set1"} 
+                    topicEnable={props.mac+"/"+props.module+"/Set1onoff"} 
+                    children={<Select style={{height:"32px",width:"60px",margin:"1px"}} onValue={setValue} data={useTimerData()} value={value}/>}
+                    click={useTimer}
+                />
+            ))}
         </div>
     );
 }
-
-
-
-const Test =(props)=> {
-    return(
-        <Carts>
-            {props.children}
-        </Carts>
-    )
-}
-
-
-ReactDOM.render(<Test room={{name:"test"}} topic={"test/test/topic"} children={<OnOff topic={"test/test"}/>}/>, document.querySelector(".root"))

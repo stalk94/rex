@@ -11,13 +11,14 @@ export function SlideBar(props) {
     );
 }
 
-
+/** value:"", data:[] */
 export function Select(props) {
     const [value, setValue] = useState(props.value)
     
     const onValue =(e)=> {
         setValue(e.target.value)
-        props.onValue(props.data.indexOf(e.target.value))
+        if(!props.room) props.onValue(e.target.value)
+        else props.onValue(props.data.indexOf(e.target.value))
     }
 
     return(

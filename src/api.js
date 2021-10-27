@@ -1,17 +1,20 @@
 import mqtt from "mqtt";
 
 
-const client =()=> store.get("user")
-const payload = store.get("payload")
+
+
+
 
 
 export const apiInit =()=> {
-    if(client() && client().id){
+    const user = store.get("user")
+
+    if(user && user.id){
         window.api = mqtt.connect("ws://31.172.65.58:8083/mqtt", {
             clean: true,
             connectTimeout: 1000,
-            clientId: client().id,
-            username: client().login
+            clientId: user.id,
+            username: user.login
         });
         window.api.on('reconnect', (error)=> {
             console.log('reconnecting:', error)
@@ -26,8 +29,9 @@ export const apiInit =()=> {
             let topic = arg[0].slice(0, arg[0].length-2)
             let data = String(arg[1])
             
-            payload[topic] = data
-            store.set("payload", payload)
+            let payloads = user.payloads
+            payloads[topic] = data
+            socket.emit("set", ["payloads", payloads])
             console.log("[🔌]topic:", topic, "value:", data)
         });
     }

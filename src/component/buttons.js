@@ -3,7 +3,6 @@ import { BsArrowUpLeftSquareFill, BsArrowDownRightSquareFill } from "react-icons
 
 
 /**
- * @param {*} props 
  * title: string   
  * icon: blob   
  */

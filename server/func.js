@@ -6,6 +6,10 @@ const NODES = require("./nodes.json");
 
 const CARTS = [
     "/R0/onoff",
+    "/R0/Set1h",
+    "/R0/Set1m",
+    "/R0/Set1",
+    "/R0/Set1onoff",
     "/T0/onoff",       
     "/T0/data",       
     "/T0/mode",        

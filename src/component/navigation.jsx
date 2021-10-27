@@ -110,7 +110,7 @@ export default function Navigations(props) {
         setTimeout(()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>), 1000)
     }
 
-    useEffect(()=> store.watch("user", ()=> setName("")))
+    useEffect(()=> store.watch("user", ()=> setName("")), [])
 
     
     return(

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { apiInit } from "../api";
 import { Select, Input } from "./input";
 import { send, useCokie } from "../engine";
 import { FaArrowsAltV } from "react-icons/fa";
 import { usePub } from "./device.f";
+import { useUser } from "./node";
 
 
-const user = store.get("user")
+
 const META =()=> ({
     reley: [
         {type:"lable", data:"Реле", color:"#90e160cc"},         //скрытый топик вызова (всех реле группы)  
@@ -24,7 +26,7 @@ const META =()=> ({
         {type:'input', data:"GA2"}, 
         {type:'input', data:"GAstatus"}
     ]
-})
+});
 
 const useSend =(mac, meta, data, clb)=> {
     send("set", {
@@ -37,14 +39,13 @@ const useSend =(mac, meta, data, clb)=> {
     )
 }
 const useChek =(topic)=> {
-   let payload = store.get("payload")
-   return payload[topic]
+   return store.get("user").payloads[topic]
 }
 const useParse =(type, index)=> {
     return META()[type][index]
 }
 const useArray =(data, def)=> {
-    let payload = store.get("payload")
+    let payload = store.get("user").payloads
     if(data instanceof Array){
         let rezult = {}
         data.map((val, i)=> rezult[val]=payload[def+val])
@@ -58,6 +59,10 @@ const useArray =(data, def)=> {
         return rezult
     }
 }
+const useSocket =(key, val)=> {
+    socket.emit("set", [key, val])
+}
+
 
 
 /**
@@ -100,92 +105,90 @@ const Title =(props)=> {
         </div>
     );
 }
+
+
 const Row =(props)=> {
-    const [render, setRender] = useState()
     const [state, setState] = useState(useArray(props.module, props.mac+"/"+props.name+"/"))
+    const [payload, setPayload] = useState(useUser().payloads) 
     
     const onSave =()=> {
         Object.keys(state).map((key)=> {
-            window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st")
-            usePub(props.mac+"/"+props.name+"/"+key, state[key])
+            if(window.api){
+                window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st")
+                usePub(props.mac+"/"+props.name+"/"+key, state[key])
+            }
+            else {
+                apiInit()
+                window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st")
+                usePub(props.mac+"/"+props.name+"/"+key, state[key])
+            }
         })
-        //props.change(props.name, props.id, state)
-    }
-    const onRender =()=> {
-        let payload = store.get("payload")
-       
-        setRender(Object.keys(state).map((key, index)=> {
-            let elem = useParse(props.id, index)
-            let color = props.id==="reley"?"#90e160cc":(props.id==="button"?"#f4ea7c":"grey")
-    
-            if(elem && elem.type==="input"){
-                return(
-                    <input 
-                        style={{width:"100px",height:"50px",border:`1px solid ${color}`}}
-                        key={key} 
-                        type="text"
-                        placeholder={elem.data} 
-                        onInput={(e)=> {
-                            let states = state
-                            states[key] = e.target.value
-                            payload[props.mac+"/"+props.name+"/"+key] = e.target.value
-                            store.set("payload", payload)
-                            setState(states)
-                            onRender()
-                        }}
-                        value={payload[props.mac+"/"+props.name+"/"+key]}
-                    />
-            )}
-            else if(elem && elem.type==="select"){
-                return(
-                    <Select key={index} 
-                        style={{border:`1px solid ${color}`}}
-                        value={elem.data[useChek(props.mac+"/"+props.name+"/"+key)]}
-                        data={elem.data} 
-                        onValue={(e)=> {
-                            let states = state
-                            if(elem.name==="room") states.room = e
-                            else states[key] = e
-
-                            setState(states)
-                            onRender()
-                        }} 
-                    />
-            )}
-            else if(elem && elem.type==="lable"){
-                return (
-                    <div 
-                        key={index} 
-                        style={{
-                            fontSize:"24px",
-                            marginTop:"5px",
-                            marginBottom:"5px",
-                            borderRadius:"5px",
-                            textAlign:"center",
-                            border:"1px solid grey",
-                            width:"70px",
-                            height:"48px",
-                            backgroundColor:elem.color,
-                            border:`1px solid ${color}`
-                        }}
-                    >
-                        { elem ? props.name[0]+(+props.name.slice(1, props.name.length)+1) : "null" }
-                    </div>
-            )}
-        }))
-
+        useSocket("payloads", payload)
     }
 
-    useEffect(()=> {
-        store.watch("payload", (payload)=> {
-            onRender()
-        })
-    }, [])
-    
 
     return(
         <div className="Row">
-            { render??onRender() }
+            {Object.keys(state).map((key, index)=> {
+                let elem = useParse(props.id, index)
+                let color = props.id==="reley"?"#90e160cc":(props.id==="button"?"#f4ea7c":"grey")
+            
+                if(elem && elem.type==="input"){
+                    return(
+                        <input 
+                            style={{width:"100px",height:"50px",border:`1px solid ${color}`}}
+                            key={key} 
+                            type="text"
+                            placeholder={elem.data} 
+                            onChange={(e)=> {
+                                let states = state
+                                states[key] = e.target.value
+                                payload[props.mac+"/"+props.name+"/"+key] = e.target.value
+                                setPayload(payload)
+                                setState(states)
+                            }}
+                            defaultValue={payload[props.mac+"/"+props.name+"/"+key]}
+                        />
+                )}
+                else if(elem && elem.type==="select"){
+                    return(
+                        <Select key={index} 
+                            style={{border:`1px solid ${color}`}}
+                            value={elem.data[useChek(props.mac+"/"+props.name+"/"+key)]}
+                            data={elem.data} 
+                            room={true}
+                            onValue={(e)=> {
+                                let states = state
+                                if(elem.name==="room") states.room = e
+                                else states[key] = e
+                                payload[props.mac+"/"+props.name+"/"+key] = e
+                                setPayload(payload)
+                                setState(states)
+                            }} 
+                        />
+                )}
+                else if(elem && elem.type==="lable"){
+                    return (
+                        <div 
+                            key={index} 
+                            style={{
+                                fontSize:"24px",
+                                marginTop:"5px",
+                                marginBottom:"5px",
+                                borderRadius:"5px",
+                                textAlign:"center",
+                                border:"1px solid grey",
+                                width:"70px",
+                                height:"48px",
+                                backgroundColor:elem.color,
+                                border:`1px solid ${color}`
+                            }}
+                        >
+                        { elem ? props.name[0]+(+props.name.slice(1, props.name.length)+1) : "null" }
+                        </div>
+                    );
+                }}
+            )}
             <button onClick={onSave} style={{maxWidth:"50px",height:"50px",marginTop:"5px",marginLeft:"10px"}}>
                 💾
             </button>
@@ -195,7 +198,7 @@ const Row =(props)=> {
 
 
 
-/** !размеры таблиц */
+
 export default function Grid(props) {
     const [visible, setVisible] = useState(true)
     const [modules, setModules] = useState(props.rows)
@@ -203,13 +206,12 @@ export default function Grid(props) {
     const [knx, setKnx] = useState(props.knx)
     const [name, setName] = useState(props.name)
 
-   
     const onChange =(name, keyModule, data)=> {
         if(name && keyModule && data){
             let copy = modules
             copy[keyModule][name] = data
             setModules(copy)
-            let meta = {mac:mac,knx:knx,name:name}
+            let meta = {mac:mac, knx:knx, name:name}
         }
         else EVENT.emit("error", "переданы не все атрибуты")
     }
@@ -222,8 +224,9 @@ export default function Grid(props) {
         });
     }
     
+    
     return(
-        <div style={{border:"1px solid gray",backgroundColor:"#00000033"}}>
+        <div style={{border:"1px solid gray",overflowY:"visible",backgroundColor:"#00000033"}}>
             <Title 
                 type={props.type} 
                 name={{name:name, set:setName}} 

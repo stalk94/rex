@@ -1,498 +1,485 @@
-[2021-10-25T17:57:32.172] [INFO] cheeses - server start
-[2021-10-25T18:08:56.838] [INFO] cheeses - server start
-[2021-10-25T18:13:25.461] [INFO] cheeses - server start
-[2021-10-25T18:17:52.473] [INFO] cheeses - server start
-[2021-10-25T18:20:00.482] [INFO] cheeses - server start
-[2021-10-25T18:22:10.227] [INFO] cheeses - server start
-[2021-10-25T18:24:12.686] [INFO] cheeses - server start
-[2021-10-25T18:24:30.448] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:24:34.687] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:24:38.073] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:24:40.121] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:24:42.782] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:24:46.674] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:24:58.469] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:25:00.746] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:25:02.742] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:28:54.270] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:28:55.711] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:29:03.053] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:30:45.635] [INFO] cheeses - server start
-[2021-10-25T18:31:10.765] [INFO] cheeses - server start
-[2021-10-25T18:35:33.497] [INFO] cheeses - server start
-[2021-10-25T18:37:04.235] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:38:20.147] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:38:55.352] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:39:00.405] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:39:47.216] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:05.234] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:08.715] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:14.085] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:20.701] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:26.696] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:30.925] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:54.417] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:56.260] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:40:58.582] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:41:04.583] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:43:25.541] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:43:27.598] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:43:32.105] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:43:35.234] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:43:41.091] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:43:53.694] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:13.446] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:16.437] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:24.708] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:27.388] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:36.367] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:40.543] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:42.407] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:46.151] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:53.394] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:44:55.788] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:45:00.277] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:45:03.795] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:45:09.594] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:45:11.282] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:45:20.241] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:47:21.697] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:47:23.728] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:47:34.616] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:47:37.468] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:47:59.258] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:48:06.872] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:48:34.376] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:48:36.624] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:51:40.889] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:51:44.761] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:51:56.874] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:53:24.889] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:53:41.101] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:54:16.056] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:55:14.894] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:55:17.329] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:55:54.939] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:55:56.626] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:57:19.870] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:58:28.258] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:58:30.590] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:58:32.935] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:59:16.766] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:59:19.139] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:59:33.467] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:59:36.613] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:59:49.162] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T18:59:52.797] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:01.942] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:04.350] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:15.612] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:23.670] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:29.730] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:33.021] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:34.663] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:37.892] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:51.379] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:00:53.708] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:01:28.022] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:01:31.034] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:02:07.555] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:02:14.131] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:02:57.787] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:02:59.603] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:03:02.763] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:04:11.164] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T19:04:11.173] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:07:02.293] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:07:06.013] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:07:08.070] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:07:44.110] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:07:49.456] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:07:53.004] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:07:55.000] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:11.043] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:13.056] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:29.667] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:36.523] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:41.054] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:44.055] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:48.498] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:50.557] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:08:57.990] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:09:04.838] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:09:07.737] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:09:09.708] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:09:31.851] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:09:35.353] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:09:56.289] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:09:58.856] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:10:06.391] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:10:11.342] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:10:21.622] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:10:48.099] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:10:52.341] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:11:17.507] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:11:31.300] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:11:36.744] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:11:38.464] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:12:28.761] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:12:46.023] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:12:49.069] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:13:24.331] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:13:38.793] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:13:40.523] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:16:04.635] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:16:21.961] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:16:35.997] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:18:58.110] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:19:08.611] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:19:17.365] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:19:26.130] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:19:31.079] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:19:36.167] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:19:42.990] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:19:54.459] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:21:26.460] [INFO] cheeses - server start
-[2021-10-25T19:21:58.194] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:22:17.500] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:22:45.072] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:22:48.872] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:22:56.035] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:22:59.351] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:23:02.353] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:23:06.063] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:23:20.583] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:23:41.510] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:25:29.342] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:25:34.715] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:25:36.715] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:26:03.375] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:26:05.637] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:26:21.297] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:26:39.400] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:26:40.904] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:26:43.432] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:27:17.371] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:27:30.806] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:27:35.146] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:27:42.198] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:28:12.122] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:28:18.239] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:28:27.819] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:29:11.040] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:29:24.203] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:30:00.299] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:30:03.388] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:30:06.284] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:30:11.892] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:30:13.197] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:30:29.297] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:30:43.698] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:31:06.043] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:31:29.326] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:31:35.562] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:31:50.903] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:32:07.905] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:32:33.961] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:32:36.091] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:32:39.819] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:33:08.584] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:33:10.631] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:33:11.996] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:33:13.300] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:33:15.635] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:33:39.910] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:33:55.356] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:34:52.355] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:34:58.325] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:34:59.770] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:35:01.079] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:35:08.101] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:35:25.290] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:35:26.601] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:35:31.825] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:36:50.688] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:00.002] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:02.849] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:05.390] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:28.204] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:34.739] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:38.128] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:43.316] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:37:46.232] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:39:27.492] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:39:29.257] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:40:11.557] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T19:40:11.564] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:42:40.931] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T19:42:40.939] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:45:13.595] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:46:12.632] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:47:31.691] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:48:18.186] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:48:19.788] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:48:24.136] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:48:26.799] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:48:47.691] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:48:52.726] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:51:02.495] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:51:10.083] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:51:13.330] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:51:19.264] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:51:20.598] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:52:14.880] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T19:53:03.554] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:53:07.631] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:53:09.786] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:53:29.292] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:53:36.430] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:53:45.705] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:54:28.315] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:54:42.883] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:54:58.610] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T19:55:55.276] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:56:10.636] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:56:20.865] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:56:22.825] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:56:27.086] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:56:36.285] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:56:50.527] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T19:58:08.564] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:58:14.771] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:58:20.373] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:58:25.056] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:58:38.849] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:58:42.724] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:59:11.909] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:59:16.575] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:59:21.586] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:59:28.245] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T19:59:37.525] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:04:37.663] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:04:41.289] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:04:46.728] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:05:37.105] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:05:42.035] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:07:34.998] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:07:38.839] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:09:55.915] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:09:57.620] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:09:59.094] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:10:04.912] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:10:06.594] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:10:11.112] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:10:13.330] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:10:18.074] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:10:18.886] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:10:25.853] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:10:26.485] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:11:20.945] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:11:21.901] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:12:12.956] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:12:13.838] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:12:28.077] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:12:29.184] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:13:01.753] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:13:02.872] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:13:47.068] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:14:45.104] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:14:47.791] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:14:48.602] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:15:21.162] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:15:41.544] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:15:42.567] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:15:47.372] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:15:48.266] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:15:52.053] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:15:52.867] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:16:24.984] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:16:26.277] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:16:29.143] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:16:30.040] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:18:16.948] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:20:05.006] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:20:06.755] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:20:08.119] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:20:52.136] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:22:03.212] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:22:26.011] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:23:31.875] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:23:35.618] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:23:36.652] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:23:44.880] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:24:03.078] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:25:10.797] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:25:12.210] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:25:22.349] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:25:23.416] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:25:27.013] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:26:06.106] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:26:07.725] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:26:51.460] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:27:31.489] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:27:33.827] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:28:10.325] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:28:11.925] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:28:16.391] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:28:17.446] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:28:19.624] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:28:36.687] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:28:37.912] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:29:21.999] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:29:30.795] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:29:33.234] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:34:39.444] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:34:41.116] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:34:44.186] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:36:54.874] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:36:56.453] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:37:40.846] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:46:05.228] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:46:12.252] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:46:16.214] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:46:17.255] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:46:22.956] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:48:35.576] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:48:53.669] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:48:54.533] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:48:57.173] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:49:56.306] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:49:58.869] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:49:59.795] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:50:06.294] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:50:06.467] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:52:30.975] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:52:32.427] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:53:16.395] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:53:21.713] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:53:25.730] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T20:53:40.342] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:53:56.858] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:54:02.498] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:55:22.239] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:55:41.140] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:55:44.929] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:56:06.329] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:56:07.365] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:56:22.106] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:56:23.048] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:56:24.171] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:56:24.972] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:56:42.723] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:56:45.666] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:57:41.478] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:57:48.177] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:57:50.468] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:57:52.965] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:58:00.955] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:58:03.824] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:58:08.567] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:58:24.006] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:58:27.944] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T20:58:28.845] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T20:58:51.890] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:01:52.996] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:01:56.632] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:01:57.732] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:02:41.973] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:04:42.551] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:04:45.995] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:06:54.051] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:06:57.865] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:06:58.789] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:07:02.433] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:08:20.070] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:08:22.025] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:08:23.176] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:09:07.453] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:10:55.412] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:10:58.124] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:12:27.356] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:12:28.699] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:13:12.826] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:14:43.545] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:14:46.650] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:15:56.788] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:15:58.139] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:16:01.709] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:16:31.491] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:16:32.676] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:17:16.834] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:22:54.214] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:23:37.104] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:23:38.714] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:23:45.154] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:23:46.112] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:24:02.972] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:24:04.066] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:24:35.951] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:24:48.329] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:26:23.776] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:26:27.515] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:26:28.732] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:26:42.924] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:26:44.074] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:26:47.118] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:27:14.107] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:27:15.416] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:27:59.507] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:30:12.169] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:30:15.200] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:32:10.215] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:32:11.137] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:32:14.808] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:33:19.503] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:33:20.898] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:33:29.262] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:33:30.374] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:33:34.429] [INFO] cheeses - [🔌]авторизация:  test3 { ip: '5.105.238.158' }
-[2021-10-25T21:34:25.436] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:34:27.085] [INFO] cheeses - [🔌]авторизация:  test3 undefined
-[2021-10-25T21:35:11.117] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:36:39.698] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:37:25.186] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:37:46.502] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:38:22.301] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:38:25.796] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:38:28.506] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:38:35.671] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:38:41.035] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:38:44.352] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:38:46.410] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:39:15.266] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:40:26.239] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:40:30.718] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:40:32.135] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:40:34.803] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:40:38.242] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:40:54.284] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:41:22.430] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:41:32.355] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:41:36.538] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:41:41.542] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:41:43.495] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:41:55.353] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:41:58.155] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:42:00.150] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:42:02.090] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:42:04.079] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:42:07.290] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:42:09.528] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:43:28.965] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:43:38.273] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:43:39.852] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:43:44.812] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:43:47.785] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:44:01.702] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:44:10.935] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:44:54.593] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:45:14.925] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:45:18.952] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:45:54.288] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:45:56.495] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:46:51.531] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:48:32.569] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:48:35.884] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:49:19.280] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:49:26.728] [ERROR] cheeses - [❗]: error socket disconection
-[2021-10-25T21:49:59.668] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T13:22:25.302] [INFO] cheeses - server start
+[2021-10-27T13:46:12.475] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T14:25:08.559] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T14:26:44.994] [INFO] cheeses - server start
+[2021-10-27T14:31:53.061] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T14:43:46.434] [INFO] cheeses - server start
+[2021-10-27T14:49:03.114] [INFO] cheeses - server start
+[2021-10-27T14:49:49.350] [INFO] cheeses - server start
+[2021-10-27T14:52:24.076] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:00:03.153] [INFO] cheeses - server start
+[2021-10-27T15:06:18.323] [INFO] cheeses - server start
+[2021-10-27T15:23:19.132] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:23:30.496] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:23:46.081] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:23:49.342] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:23:57.535] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:24:02.062] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:24:05.128] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:24:07.183] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:25:50.399] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:25:53.185] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:26:08.218] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:26:46.913] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:26:55.887] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:27:04.487] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:27:34.542] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:27:46.885] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:27:51.178] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:28:56.964] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:30:14.856] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:30:18.748] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:30:25.266] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:30:30.653] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:30:32.859] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:30:36.861] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:31:38.553] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:32:43.901] [INFO] cheeses - server start
+[2021-10-27T15:35:47.557] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:35:51.924] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:36:16.070] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:36:18.082] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:36:20.137] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:37:23.800] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:37:25.999] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:37:27.930] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:37:29.847] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:37:37.137] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:37:41.786] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:38:16.708] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:38:26.588] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:38:35.217] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:38:38.527] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:38:42.370] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:38:55.411] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:06.088] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:08.580] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:21.591] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:27.771] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:38.985] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:41.363] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:43.851] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:45.822] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:54.469] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:56.412] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:39:58.264] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:40:00.964] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:40:02.891] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:40:06.088] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:40:18.908] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:40:57.024] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:04.015] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:06.072] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:09.292] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:11.304] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:14.143] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:25.098] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:33.519] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:35.640] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:37.707] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:39.781] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:42.101] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:44.402] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:46.388] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:41:48.493] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:42:05.275] [INFO] cheeses - server start
+[2021-10-27T15:42:20.054] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:43:55.900] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:44:08.376] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:44:18.975] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:44:25.024] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:44:43.192] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:44:46.822] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:44:49.666] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:45:15.105] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:46:01.526] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:46:06.237] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:46:18.945] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:46:23.105] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:48:13.640] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:48:18.833] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:50:47.089] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:51:37.027] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:53:52.551] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:53:54.711] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:53:56.806] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:54:14.158] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:54:22.352] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:54:55.664] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:54:59.169] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:55:01.362] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:55:12.319] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T15:55:34.880] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:11:17.526] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:11:23.098] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:25:08.242] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:26:35.495] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:27:05.778] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:29:47.415] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:31:33.540] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:31:36.107] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:31:39.589] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:31:41.289] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:31:50.905] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:32:03.196] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:32:28.180] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:33:07.964] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:33:33.818] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:33:58.134] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:34:06.493] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:34:59.769] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:35:19.549] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:35:47.192] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:36:27.084] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:36:31.823] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:36:33.938] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:36:46.410] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:36:49.188] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:37:02.606] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:38:30.030] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:38:36.225] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:38:38.418] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:39:59.483] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:41:13.891] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:41:16.296] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:41:43.932] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:41:52.609] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:41:54.585] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:42:00.976] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:43:17.953] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:43:20.585] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:43:24.437] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:43:26.907] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:43:29.518] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:43:31.813] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:44:10.083] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:44:39.972] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:44:42.292] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:45:07.456] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:45:21.869] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:45:26.328] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:45:40.597] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:45:47.126] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:45:49.089] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:45:59.881] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:46:15.950] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:46:20.032] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:46:22.811] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:46:33.570] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:46:46.343] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:46:53.079] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:47:04.171] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:47:23.513] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:47:29.747] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:47:34.303] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:47:49.145] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:47:53.067] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:48:03.079] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:48:06.931] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:48:25.375] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:48:28.501] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:48:33.791] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:48:41.668] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:48:44.613] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:49:05.020] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:49:11.871] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:49:29.861] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:49:31.869] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:50:06.684] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:50:19.454] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:50:28.854] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:50:53.733] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:50:57.427] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:50:59.546] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:51:48.169] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:51:58.331] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:52:09.388] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:52:17.837] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:52:53.589] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:53:00.016] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:54:01.003] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:54:03.080] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:54:09.869] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:54:21.410] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:54:24.968] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:54:37.942] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:54:59.390] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:56:21.362] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:56:25.357] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:56:41.881] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:56:45.641] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:56:52.340] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:57:16.114] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:58:06.981] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:58:13.609] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:58:17.946] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:58:30.763] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:58:41.004] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:58:47.081] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:59:23.518] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:59:29.421] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:59:33.379] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T16:59:54.398] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:00:00.839] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:00:02.912] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:00:20.173] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:00:24.881] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:00:34.492] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:01:31.464] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:01:36.362] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:02:38.070] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:03:38.552] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:04:21.652] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:04:37.091] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:04:53.824] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:05:21.847] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:05:26.728] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T17:10:08.514] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:09:49.173] [INFO] cheeses - server start
+[2021-10-27T18:11:33.404] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:11:38.877] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:11:41.451] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:12:34.856] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:13:14.051] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:13:19.591] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:13:22.124] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:13:28.183] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:14:04.426] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:14:45.851] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:15:16.407] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:15:38.116] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:15:41.861] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:15:44.829] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:16:11.775] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:16:15.852] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:16:25.866] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:16:33.308] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:16:36.060] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:16:38.949] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:17:32.311] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:17:39.253] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:17:50.889] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:17:54.923] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:18:02.024] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:18:04.516] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:18:11.356] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:18:17.294] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:18:20.092] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:18:30.459] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:18:34.461] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:19:02.486] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:19:05.685] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:19:08.934] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:19:36.884] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:19:40.562] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:19:45.432] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:20:11.893] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:20:14.987] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:20:20.536] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:20:27.693] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:21:08.118] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:21:45.572] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:21:48.649] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:21:53.572] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:22:31.711] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:22:36.940] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:22:39.356] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:22:46.796] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:23:41.782] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:23:46.444] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:24:06.303] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:24:08.110] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:25:18.037] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:25:19.962] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:25:29.167] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:25:31.464] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:25:38.844] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:25:49.313] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:25:51.806] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:26:23.336] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:26:25.876] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:26:27.785] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:26:37.498] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:26:41.112] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:26:50.660] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:27:33.231] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:27:46.646] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:27:51.939] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:06.424] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:09.451] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:11.516] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:14.785] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:22.331] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:25.273] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:33.574] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:43.252] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:53.377] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:28:58.142] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:29:00.718] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:29:05.281] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:29:09.857] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:30:08.111] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:30:15.624] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:30:17.649] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:30:42.528] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:31:52.006] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:31:56.319] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:32:47.548] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:32:55.290] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:33:05.500] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:33:15.847] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:34:06.771] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:34:12.585] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:34:16.577] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:34:25.790] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:34:27.955] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:34:39.536] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:35:07.349] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:35:09.808] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:41:17.724] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:41:27.220] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:41:29.789] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:41:31.320] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:41:46.871] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:41:51.672] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:01.564] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:03.502] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:05.476] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:11.203] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:14.283] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:19.311] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:22.540] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:42:33.201] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:43:12.488] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:43:14.177] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:43:35.032] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:43:45.450] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:43:47.472] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:43:49.355] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:44:08.729] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:44:11.830] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:44:13.612] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:44:38.545] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:44:49.730] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:44:57.493] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:45:22.881] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:45:56.166] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:51:35.235] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:52:14.451] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:52:16.720] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:52:44.507] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:52:46.748] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:53:12.163] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:53:22.413] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:54:43.389] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:55:45.037] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:56:56.902] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:57:02.983] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:57:43.577] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:57:54.456] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:58:00.795] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:58:05.008] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:58:15.473] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:58:17.352] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:58:25.054] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:58:30.505] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:58:45.105] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:59:35.685] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:59:48.054] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:59:50.243] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:59:53.220] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:59:55.324] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T18:59:58.001] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:00:00.222] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:00:07.433] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:16.707] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:23.149] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:28.685] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:34.938] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:39.071] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:44.958] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:47.490] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:01:52.273] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:03:08.345] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:03:12.288] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:03:20.221] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:03:22.146] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:03:24.013] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:03:35.365] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:03:42.973] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:10.596] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:13.428] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:17.183] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:24.607] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:34.940] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:41.177] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:43.350] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:05:56.413] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:06:03.681] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:06:11.352] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:07:40.584] [INFO] cheeses - server start
+[2021-10-27T19:07:43.403] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:07:48.014] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:09:19.276] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:09:54.372] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:09:57.291] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:09:59.936] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:02.244] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:08.845] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:10.880] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:17.277] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:20.184] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:29.455] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:52.072] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:55.518] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:10:57.989] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:11:30.412] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:11:40.890] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:11:43.332] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:11:50.922] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:03.264] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:05.661] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:09.932] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:16.288] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:40.650] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:44.037] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:46.216] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:53.446] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:56.283] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:12:58.702] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:13:01.088] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:13:03.175] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:13:33.923] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:13:52.641] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:13:56.032] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:14:57.187] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:11.014] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:17.148] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:19.005] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:21.195] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:24.621] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:31.799] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:33.732] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:15:36.161] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:17:32.537] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:17:46.082] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:17:52.414] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:17:59.489] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:01.415] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:11.210] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:13.490] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:23.317] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:30.326] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:41.192] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:45.999] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:18:50.833] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:19:04.287] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:19:07.305] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:19:09.962] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:19:27.084] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:19:41.488] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:19:44.072] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:19:54.034] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:20:06.000] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:20:39.973] [ERROR] cheeses - [❗]: error socket disconection
+[2021-10-27T19:20:47.856] [ERROR] cheeses - [❗]: error socket disconection

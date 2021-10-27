@@ -1,6 +1,6 @@
 import { apiInit } from "../api";
 import React, { useEffect, useState } from 'react';
-import { useDebounce } from "rooks";
+import { useDebounce, useWillUnmount } from "rooks";
 import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import lamp from '../img/lamp.png';
 import onOff from '../img/onOff.png';
@@ -20,17 +20,18 @@ export const ICON = {
 }
 
 
+
 export const useSub =(topic, def)=> {
     if(!init){
         apiInit()
         init = true
     }
-    let payload = store.get("payload")
+    let payload = store.get("user").payloads
 
     if(!payloads[topic]){
         payload[topic] = def
         payloads[topic] = def
-        store.set("payload", payload)
+        socket.emit("set", ["payloads", payload])
         if(window.api) window.api.subscribe(topic+"st")
         else {
             apiInit()
@@ -45,20 +46,24 @@ export const usePub =(topic, val)=> {
 }
 
 
-/** topic,data,brihtness */
+/** 
+ * topic:   
+ * data:    
+ * brihtness:
+ */
 export function ProgressBar(props) { 
-    const [onoff, setOnoff] = useState(store.get("payload")[props.topic]??'0')
-    const [data, setData] = useState(store.get("payload")[props.data]??'0')
-    const [brihtness, setBrihtness] = useState(store.get("payload")[props.brihtness]??50)
+    const [onoff, setOnoff] = useState(store.get("user").payloads[props.topic]??'0')
+    const [data, setData] = useState(store.get("user").payloads[props.data]??'0')
+    const [brihtness, setBrihtness] = useState(store.get("user").payloads[props.brihtness]??50)
 
     useEffect(()=> {
         useSub(props.topic, '0')
         useSub(props.data, '0')
         useSub(props.brihtness, '50')
-        store.watch("payload", (data)=> {
-            setOnoff(data[props.topic])
-            setData(data[props.data])
-            setBrihtness(data[props.brihtness])
+        store.watch("user", (data)=> {
+            setOnoff(data.payloads[props.topic])
+            setData(data.payloads[props.data])
+            setBrihtness(data.payloads[props.brihtness])
         })
     }, [])
 
@@ -97,49 +102,60 @@ export function ProgressBar(props) {
 }
 
 
-/** topic,brihtness */
+/** 
+ * topic:   
+ * brihtness:
+ */
 export const OnOffDeamer =(props)=> {
-    const [onoff, setOnoff] = useState(store.get("payload")[props.topic]??'0')
-    const [brihtness, setBrihtness] = useState(store.get("payload")[props.brihtness]??50)
+    const [onoff, setOnoff] = useState(store.get("user").payloads[props.topic]??'0')
+    const [brihtness, setBrihtness] = useState(50)
 
     useEffect(()=> {
         useSub(props.topic, '0')
         useSub(props.brihtness, '50')
-        store.watch("payload", (data)=> {
-            setOnoff(data[props.topic])
-            setBrihtness(data[props.brihtness])
+        setBrihtness(store.get("user").payloads[props.brihtness])
+
+        store.watch("user", (data)=> {
+            setOnoff(data.payloads[props.topic])
+            setBrihtness(data.payloads[props.brihtness])
         })
     }, [])
 
+
     return(
         <>
-            {onoff === '0'
-                ?   <h3 style={{color:onoff==='1'?"#42f059":"red",left:"40%"}}>
-                        { onoff==='1' ? brihtness+"%" : (onoff==='0'?"off":onoff) }
-                    </h3>
-                :   "null"
+            {onoff==='0'
+                ? <h3 style={{color:onoff==='1'?"#42f059":"red",left:"40%"}}>
+                    { onoff==='1' ? brihtness+"%" : (onoff==='0'?"off":onoff) }
+                </h3>
+                : "null"
             }
         </>
     );
 }
 /** topic */
 export const OnOff =(props)=> {
-    const useOn =()=> store.get("payload")[props.topic]??'0'
-    const [onoff, setOnoff] = useState(useOn())
+    const [onoff, setOnoff] = useState(store.get("user").payloads[props.topic]??'0')
+    let onData =()=> {
+        useSub(props.topic, '0')
+        store.watch("user", (data)=> {
+            setOnoff(data.payloads[props.topic])
+        })
+    }
+
 
     useEffect(()=> {
-        useSub(props.topic, '0')
-        store.watch("payload", (data)=> {
-            setOnoff(data[props.topic])
-        })
+        onData()
     }, [])
+    useWillUnmount(()=> onData = undefined)
 
+    
     return(
         <div 
             style={{position:"relative",left:"65%"}}
             onClick={()=> usePub(props.topic, onoff==='1'?0:1)}
         >
-            <img style={{position:"absolute",height:"18vh"}} src={ICON.lamp}/>
+            <img style={{position:"absolute",height:"18vh",cursor:"pointer",opacity:onoff==='1'?"1":"0.4"}} src={ICON.lamp}/>
             <h3 style={{position:"absolute",color:onoff==='1'?"#42f059":"red"}}>
                 { onoff==='1'?"on":"off" }
             </h3>
@@ -162,20 +178,24 @@ export const Lable =(props)=> {
 
 
 
-/** topic,brihtness */
+/** 
+ * topic:   
+ * brihtness:
+ */
 export const Centr =(props)=> {
-    const [onoff, setOnoff] = useState(store.get("payload")[props.topic]??'0')
-    const [brihtness, setBrihtness] = useState(store.get("payload")[props.brihtness]??50)
+    const [onoff, setOnoff] = useState(store.get("user").payloads[props.topic]??'0')
+    const [brihtness, setBrihtness] = useState(store.get("user").payloads[props.brihtness]??50)
     const setDebounce = useDebounce((v)=> usePub(props.brihtness, v), 1500)
 
     useEffect(()=> {
         useSub(props.topic, '0')
         useSub(props.brihtness, 50)
-        store.watch("payload", (data)=> {
-            setOnoff(data[props.topic])
-            setBrihtness(data[props.brihtness])
+        store.watch("user", (data)=> {
+            setOnoff(data.payloads[props.topic])
+            setBrihtness(data.payloads[props.brihtness])
         })
     }, [])
+
 
     return(
         <input style={{marginTop:"5%"}} 
@@ -188,12 +208,14 @@ export const Centr =(props)=> {
 }
 export const Title =(props)=> {
     const nameStyle = {fontSize:"19px",width:"50%",color:"#00000099",textAlign:"centr",cursor:"pointer"}
-    const roomStyle = {fontSize:"19px",color:"#00000099",textAlign:"centr",cursor:"pointer"}
     const iconStyle = {paddingTop:"2px",marginRight:"3px",textAlign:"centr"}
 
     return(
         <div className="line" style={{borderBottom:"1px solid rgba(0,0,0,0.2)"}}>
-            <div style={nameStyle}><BsCardText style={iconStyle}/>{props.name}</div>
+            <div style={nameStyle}>
+                <BsCardText style={iconStyle}/>
+                { props.name }
+            </div>
         </div>
     );
 }

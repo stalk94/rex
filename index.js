@@ -133,105 +133,82 @@ app.post("/getUser", jsonParser, (req, res)=> {
 });
 
 
-globalThis.online = {}
+const online = {}
 const useAuthorise =(login, password, id)=> {
-    let user = autorise(login, password)
-    if(user && !user.error) {
-        globalThis.online[id] = user
-    }
-
-    return [user, id]
-}
-const chekSocket =()=> {
-    let users = {}
-
-    Object.keys(globalThis.online).forEach((key)=> {
-        if(!users[globalThis.online[key].login]){
-            users[globalThis.online[key].login] = ''
-        }
-        else delete globalThis.online[key]
-    });
+    let user = autorise(login, password+"=")
+    if(user && !user.error) online[id] = user
+    
+    return user
 }
 function useStorage(id) {
-    let user = globalThis.online[id]
+    let user = online[id]
+    
     db.set("user."+user.login, user)
+    console.log("saved")
 }
 
 
 io.on('connection', (socket)=> {
     console.log('[🔌]соединение установлено:', socket.id)
-    socket.on("connect", chekSocket)
 
     socket.on("init", (data)=> {
-        let res = useAuthorise(...data, socket.id)
-        if(res[1]) {
+        let res = useAuthorise(data[0], data[1], socket.id)
+        
+        if(res) {
             socket.emit("on.connect", {user:res[0], token:res[1]})
             useStorage(socket.id)
         }
-        else {
-            socket.emit("error", socket.id)
-            socket.disconnect()
-        }
+        else socket.emit("error", "error init")
     });
     socket.on("set", (data)=> {
-        let user = globalThis.online[socket.id]
-
-        if(user && data[0] && data[2]){
-            user[data[0]] = data[2]
+        let user = online[socket.id]
+        
+        if(user && data[0] && data[1]){
+            user[data[0]] = data[1]
             useStorage(socket.id)
+            if(data[0]==="payloads") socket.emit("get.payload", user.payloads)
+            else socket.emit("get.user", user)
         }
-        else if(!user) {
-            socket.emit("multiconnect", "")
-            socket.disconnect()
-        }
+        else socket.emit("error", "error set")
     });
     socket.on("get", (data)=> {
-        let user = globalThis.online[socket.id]
+        let user = online[socket.id]
         if(user){
-            socket.emit("on.get", user[data])
+            socket.emit("get."+data, user[data])
             useStorage(socket.id)
         }
-        else {
-            socket.emit("multiconnect", "")
-            socket.disconnect()
-        }
+        else socket.emit("error", "user multi session")
     })
     socket.on("del", (data)=> {
-        let user = globalThis.online[socket.id]
+        let user = online[socket.id]
         if(user){
             user.delete(data)
             useStorage(socket.id)
         }
-        else {
-            socket.emit("multiconnect", "")
-            socket.disconnect()
-        }
+        else socket.emit("error", "user multi session")
     });
     socket.on("dump", (data)=> {
-        let user = globalThis.online[socket.id]
-        if(user) useStorage(socket.id)
-        else {
-            socket.emit("multiconnect", "")
-            socket.disconnect()
+        let user = online[socket.id]
+        if(user){
+            useStorage(socket.id)
+            socket.emit("get.user", user)
         }
+        else socket.emit("error", "user multi session")
     });
     socket.on("app", (data)=> {
-        let user = globalThis.online[socket.id]
+        let user = online[socket.id]
         if(user){
             user.set("app", dompurify.sanitize(data))
             useStorage(socket.id)
         }
-        else {
-            socket.emit("multiconnect", "")
-            socket.disconnect()
-        }
+        else socket.emit("error", "user multi session")
     });
     socket.on("exit", ()=> {
-        if(globalThis.online[socket.id]){
+        if(online[socket.id]){
             console.log('[🆑]соединение разорвано:', socket.id)
-            let user = globalThis.online[socket.id]
-            db.set("user."+user.login, globalThis.online[socket.id])
-            delete globalThis.online[socket.id]
+            let user = online[socket.id]
+            db.set("user."+user.login, online[socket.id])
+            delete online[socket.id]
             socket.disconnect()
         }
         else {
@@ -240,11 +217,11 @@ io.on('connection', (socket)=> {
         }
     });
     socket.on("disconnect", ()=> {
-        if(globalThis.online[socket.id]){
+        if(online[socket.id]){
             console.log('[🆑]соединение разорвано:', socket.id)
-            let user = globalThis.online[socket.id]
-            db.set("user."+user.login, globalThis.online[socket.id])
-            delete globalThis.online[socket.id]
+            let user = online[socket.id]
+            db.set("user."+user.login, online[socket.id])
+            delete online[socket.id]
         }
         else logger.error("[❗]: error socket disconection")
     });

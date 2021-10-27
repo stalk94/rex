@@ -1,5 +1,4 @@
-const ReactDOMServer = require('react-dom/server');
-
+//const ReactDOMServer = require('react-dom/server');
 
 
 export const useCokie =(login, password)=> {
@@ -20,7 +19,6 @@ export const useCokie =(login, password)=> {
     return res
   } 
 }
-
 class EventEmmitter {
   constructor() {
     this.events = {};
@@ -42,9 +40,11 @@ class EventEmmitter {
       }
   }
 }
+
+
+window.Cache = {}
 const gurl = "http://localhost:3000/";
 window.EVENT = new EventEmmitter()
-
 
 
 window.serverStore = {
@@ -76,9 +76,10 @@ window.serverStore = {
 	},
   domStore(app) {
     //const testRenderer = TestRenderer.create(app)
-    socket.emit("app", ReactDOMServer.renderToString(app))
+    //socket.emit("app", ReactDOMServer.renderToString(app))
   }
 }
+
 
 
 window.onExit =()=> {
@@ -91,12 +92,20 @@ window.onExit =()=> {
     store.remove("payload")
   }, 1000);
 }
-window.onbeforeunload =()=> {
-  socket.emit("set")
-}
+
 socket.on("multiconnect", ()=> {
   EVENT.emit("error", "Обнаружено новое соединение, это было отключено от сервера!!!")
 });
+socket.on("connect", ()=> socket.emit("init", [useCokie().login, useCokie().password]))
+socket.on("on.connect", (data)=> console.log("init", data))
+socket.on("get.payload", (data)=> {
+  const user = store.get("user")
+  user.payloads = data
+  store.set("user", user)
+});
+
+socket.on("error", (txt)=> EVENT.emit("error", txt))
+
 
 export function send(url, data, metod) {
   let response;

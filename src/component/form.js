@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 
 /**
- * @param {*} props 
  * top: заголовочная строка    
  * bottom: нижняя строка
  * icon?: blob
@@ -90,8 +89,6 @@ export function DropDown2(props) {
 
 
 /**
- * 
- * @param {*} props 
  * data: Array  
  * title: String      
  */
