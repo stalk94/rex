@@ -11,5 +11,15 @@
         "reley": 8,
         "button": 4,
         "termo": 4
+    },
+    "BUT8": {
+        "button": 8
+    },
+    "DIM8": {
+        "dimmer": 8
+    },
+    "CUR4": {
+        "reley": 8,
+        "button": 4
     }
 }

@@ -51,7 +51,6 @@ export default function Main(props) {
     const [regForm, setRegForm] = useState(
         <Authorize 
             onOk={(userData)=> {
-                useCokie(userData.login, userData.password)
                 delete userData.password
                 store.set("user", userData)
                 props.useRender(userData)
@@ -74,7 +73,6 @@ export default function Main(props) {
         if(data.login && data.password) send("auth", {login:data.login, password:data.password}, "POST").then((res)=> {
             res.json().then((userData)=> {
                 if(!userData.error){
-                    useCokie(userData.login, userData.password)
                     delete userData.password
                     store.set("user", userData)
                     props.useRender(userData)
@@ -92,7 +90,6 @@ export default function Main(props) {
             setRegForm(
                 <Authorize 
                     onOk={(userData)=> {
-                        useCokie(userData.login, userData.password)
                         delete userData.password
                         store.set("user", userData)
                         props.useRender(userData)
@@ -112,7 +109,7 @@ export default function Main(props) {
         }
     }
     const [head, onHead] = useState(<GM open={verify}/>)
-    useEffect(()=> verify(), [])
+    useEffect(()=> setTimeout(()=> verify(), 400), [])
     
     return(
         <FullPage>

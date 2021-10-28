@@ -4,10 +4,10 @@ import { Select, Input } from "./input";
 import { send, useCokie } from "../engine";
 import { FaArrowsAltV } from "react-icons/fa";
 import { usePub } from "./device.f";
-import { useUser } from "./node";
 
 
 
+const useUser =()=> store.get("user")
 const META =()=> ({
     reley: [
         {type:"lable", data:"Реле", color:"#90e160cc"},         //скрытый топик вызова (всех реле группы)  

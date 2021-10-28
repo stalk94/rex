@@ -1,6 +1,5 @@
 const db = require("quick.db");
 const { MongoClient } = require('mongodb');
-const log4js = require("log4js");
 const { TaskTimer, Task } = require("tasktimer");
 const { parser, cartParse, cartsCreate, getPasswordHash, setPasswordHash } = require("./func");
 const MODULES = require("./modules.json");  
@@ -9,12 +8,7 @@ const NODES = require("./nodes.json");
 
 const timer = new TaskTimer(1000)
 const client = new MongoClient('mongodb://localhost:27017')
-const log = log4js.getLogger("cheese");
 const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
-log4js.configure({
-    appenders: { cheese: { type: "file", filename: "log.log" } },
-    categories: { default: { appenders: ["cheese"], level: "error" } }
-});
 
 
 
@@ -167,6 +161,7 @@ class User {
         this.#dump()
     }
     deleteNode(mac) {
+        console.log(mac)
         delete this.nodes[mac]
         this.#dump()
     }
@@ -185,89 +180,6 @@ class User {
     exit() {
         this.status = "off"
         this.#dump()
-    }
-
-    
-    // админ апи
-    static deleteDevice(login, adminPassword, idDevices, clb) {
-        let admin = db.get("user.admin")
-        let user = db.get("user."+login)
-
-        if(user){
-            if(admin.password === adminPassword){
-                let finds = user.devices.find((devices, i)=> {
-                    if(devices.mac===mac){
-                        delete user.devices[i];
-                        return 1
-                    }
-                });
-                
-                if(finds) db.set("user."+login, user)
-                else clb({error: "устройство не найдено в списке устройств юзера"})
-            }
-            else clb({error: "пароль администратора не верен"})
-        }
-        else clb({error: "юзер с таким логином не найден"})
-    }
-    static addDevice(login, mac, name, type, adminPassword, clb) {
-        let admin = db.get("user.admin")
-        let user = db.get("user."+login)
-
-        if(user){
-            if(admin.password === adminPassword){
-                let finds = user.devices.find((devices)=> {
-                    if(devices.mac===mac) return devices;
-                });
-                
-                if(!finds){
-                    user.devices.push({
-                        mac: mac,
-                        room: undefined,
-                        name: name,
-                        type: type,
-                        status: 'created',
-                        payload: {}
-                    })
-                    db.set("user."+login, user)
-                }
-                else clb({error: mac+" уже привязан к данному юзеру"})
-            }
-            else clb({error: "пароль администратора не верен"})
-        }
-        else clb({error: "юзер с таким логином не найден"})
-    }
-    static readTodo(login, mac, todo, adminPassword, clb) {
-        let admin = db.get("user.admin")
-        let user = db.get("user."+login)
-        
-        if(user){
-            if(admin.password === adminPassword){
-                let finds = user.devices.find((devices, i)=> {
-                    if(devices.mac===mac){
-                        user.devices[i].todo = todo
-                        db.set("user."+login, user)
-                        return user.devices[i]
-                    }
-                });
-
-                if(finds) clb(finds)
-                else clb({error: "не найдено кстройство"})
-            }
-            else clb({error: "пароль администратора не верен"})
-        }
-        else clb({error: "юзер с таким логином не найден"})
-    }
-    static getUserDevices(login, adminPassword, clb) {
-        let admin = db.get("user.admin")
-        let user = db.get("user."+login)
-
-        if(user){
-            if(admin.password === adminPassword){
-                clb(user.devices)
-            }
-            else clb({error: "пароль администратора не верен"})
-        }
-        else clb({error: "юзер с таким логином не найден"})
     }
 }
 

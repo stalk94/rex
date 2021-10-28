@@ -144,7 +144,6 @@ const UI =()=> {
     useEffect(()=> {
         if(useCokie().login && useCokie().password) setRender(<App user={store.get("user")} />)
         else setRender(<Main useRender={(data)=> {setRender(<App user={data} />)}} />)
-        store.watch("user", (newData)=> Cache["user"] = newData)
     }, [])
 
 

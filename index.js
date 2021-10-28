@@ -7,19 +7,21 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app)
 const io = new Server(server);
-const log4js = require("log4js");
+const fs = require("fs");
+const pinoms = require('pino-multi-stream');
 const path = require("path");
+const cookieParser = require('cookie-parser');
 const {registration, autorise} = require("./server/user");
 
 
 ////////////////////////////////////////////////////////////////////////////
 const TIME =()=> [new Date().getDay(), new Date().getUTCHours(), new Date().getMinutes(), new Date().getSeconds()];
-log4js.configure({
-    appenders: { cheeses: { type: "file", filename: "log.log" } },
-    categories: { default: { appenders: ["cheeses"], level: "info" } }
+const prettyStream = pinoms.prettyStream()
+const streams = [{stream: fs.createWriteStream('log.log')},{stream: prettyStream}];
+const logger = pinoms(pinoms.multistream(streams))
+process.on('uncaughtException', (err)=> {
+    logger.error(`CRITICAL ERROR: ${err}`)
 });
-const logger = log4js.getLogger("cheeses");
-
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -32,40 +34,46 @@ app.get("/", (req, res)=> {
 // синхронизация с параметрами только через сервер
 app.post("/auth", jsonParser, (req, res)=> {
     if(req.body.login && req.body.password){
+        if(!req.body.row) req.body.password += "=" 
         res.send(autorise(req.body.login, req.body.password, req.body.row, req.body.ip));
+        req.cookie("login", req.body.login)
+        req.cookie("passsword", req.body.password)
         logger.info("[🔌]авторизация: ", req.body.login, req.body.ip)
     }
     else res.send({error: "Не все поля заполнены"});
 });
 app.post("/regUser", jsonParser, (req, res)=> {
     if(req.body.login && req.body.password){
-        res.send(registration(req.body.login, req.body.password, req.body.ip));
+        let user = registration(req.body.login, req.body.password, req.body.ip)
+        req.cookie("login", req.body.login)
+        req.cookie("passsword", user.password)
         logger.info("[🆕] регистрация: ", req.body.login, req.body.ip)
+        res.send(user);
     }
     else res.send({error: "Не все поля заполнены"});
 });
 app.post("/addNode", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
 
     if(!user.error) user.addNewNode(req.body.state);
     else res.send(user)
 });
 app.post("/readNameRoom", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
     if(!user.error) user.reWriteRoom(req.body.name, req.body.id, (data)=> {
         res.send(data)
     });
     else res.send(user)
 });
 app.post("/delRoom", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
     if(!user.error) user.delRoom(req.body.id, (data)=> {
         res.send(user)
     });
     else res.send(user)
 });
 app.post("/addRoom", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
     if(!user.error){
         user.rooms.push({visibility:"block", name:req.body.room})
         db.set("user."+req.body.login, user)
@@ -74,7 +82,7 @@ app.post("/addRoom", jsonParser, (req, res)=> {
     else res.send(user)
 });
 app.post("/reNameDevice", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
     
     if(!user.error) user.reNameDevice(req.body.name, req.body.id, (data)=> {
         res.send(data)
@@ -83,7 +91,7 @@ app.post("/reNameDevice", jsonParser, (req, res)=> {
 });
 app.post("/set", jsonParser, (req, res)=> {
     // {mac:string, meta:{}, data:{}}
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
     
     if(!user.error){
         user.setTable(req.body.mac, req.body.meta, req.body.data)
@@ -92,7 +100,7 @@ app.post("/set", jsonParser, (req, res)=> {
     else res.send(user)
 });
 app.post("/newNode", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
     
     if(!user.error && req.body.state){
         user.addNewNode(req.body.state)
@@ -101,7 +109,7 @@ app.post("/newNode", jsonParser, (req, res)=> {
     else res.send(user)
 });
 app.post("/delete", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
+    let user = autorise(req.body.login, req.body.password+"=");
 
     if(!user.error && req.body.mac){
         user.deleteNode(req.body.mac)
@@ -138,13 +146,13 @@ const useAuthorise =(login, password, id)=> {
     let user = autorise(login, password+"=")
     if(user && !user.error) online[id] = user
     
+    logger.info("user authorize: "+login)
     return user
 }
 function useStorage(id) {
     let user = online[id]
     
     db.set("user."+user.login, user)
-    console.log("saved")
 }
 
 
@@ -162,7 +170,7 @@ io.on('connection', (socket)=> {
     });
     socket.on("set", (data)=> {
         let user = online[socket.id]
-        
+
         if(user && data[0] && data[1]){
             user[data[0]] = data[1]
             useStorage(socket.id)

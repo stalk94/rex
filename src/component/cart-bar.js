@@ -1,22 +1,21 @@
 import React, {useEffect, useState} from "react";
 import { MdOutlineTimer } from "react-icons/md";
 import { AiOutlineAreaChart } from "react-icons/ai";
+import { Title } from "./device.f";
 
 
 export const useUser =()=> store.get("user")
-
-
 function Footer(props) {
     return(
         <div style={{borderTop:"1px solid #00000080",paddingTop:"1px"}}>
             {props.elems.map((e, i)=> {
                 if(e.type.name==="TimerManager") return(
-                    <button style={{width:(100/elems.length)+"%"}} onClick={()=> props.useView(1)} key={i}>
+                    <button style={{width:(100/props.elems.length)+"%"}} onClick={()=> props.useView(1)} key={i}>
                         <MdOutlineTimer/>
                     </button>
                 )
             })}
-            <button style={{width:(100/elems.length)+"%"}} onClick={()=> props.useView(2)}>
+            <button style={{width:(100/props.elems.length)+"%"}} onClick={()=> props.useView(2)}>
                 <AiOutlineAreaChart/>
             </button>
         </div>

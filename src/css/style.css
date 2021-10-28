@@ -151,8 +151,8 @@ input[type="checkbox"]:before {
     position:absolute;
     top:0;
     left:0;
-    width:60px;
-    height:30px;
+    height:100%;
+    width:60%;
     background: linear-gradient(0deg, #000, #6b6b6b);
     border-radius: 20px;
     box-shadow: 0 0 0 1px #232323;
@@ -160,13 +160,13 @@ input[type="checkbox"]:before {
     transition:.5s;
 }
 input:checked[type="checkbox"]:before {
-    left:40px;
+    left:40%;
 }
 input[type="checkbox"]:after{
     content:'';
     position:absolute;
     top:calc(50% - 2px);
-    left:50px;
+    left:40%;
     width:4px;
     height:4px;
     background: linear-gradient(0deg, #6b6b6b, #000);
@@ -174,7 +174,7 @@ input[type="checkbox"]:after{
     transition:.5s;
 }
 input:checked[type="checkbox"]:after {
-    left:90px;
+    left:80%;
 }
 input[type=email], input[type=text], input[type=number], input[type=password] {
     display: block;

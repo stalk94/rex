@@ -1,6 +1,7 @@
 //const ReactDOMServer = require('react-dom/server');
 
 
+
 export const useCokie =(login, password)=> {
   if(login && password){
       document.cookie = `login=${login}`
@@ -42,7 +43,6 @@ class EventEmmitter {
 }
 
 
-window.Cache = {}
 const gurl = "http://localhost:3000/";
 window.EVENT = new EventEmmitter()
 

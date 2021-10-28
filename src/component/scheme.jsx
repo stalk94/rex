@@ -7,7 +7,7 @@ import Grid from "./grid";
 /////////////////////////////////////////////////
 const user = store.get("user")
 const style = {paddingLeft:"55px",paddingRight:"5%"}
-const SHEME = ['PMR','SMR',"FSC"]
+const SHEME = ['PMR','SMR',"FSC","BUT8","DIM8","CUR4"]
 ///////////////////////////////////////////////////
 const FormRegistrationNewNode =(props)=> {
     const [mac, setMac] = useState("")

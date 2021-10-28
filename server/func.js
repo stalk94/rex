@@ -35,23 +35,7 @@ const CARTS = [
     "/T0/TIME5set",
     "/T0/TIME5onoff",
     "/D0/onoff",          
-    "/D0/brightness",      
-    "/D0/TIME1hour",        
-    "/D0/TIME1min",         
-    "/D0/TIME1set",         
-    "/D0/TIME1onoff",       
-    "/D0/TIME2hour",        
-    "/D0/TIME2min",         
-    "/D0/TIME2set",         
-    "/D0/TIME2onoff",       
-    "/D0/TIME3hour",        
-    "/D0/TIME3min",        
-    "/D0/TIME3set",        
-    "/D0/TIME3onoff",       
-    "/D0/TIME4hour",       
-    "/D0/TIME4min",         
-    "/D0/TIME4set",         
-    "/D0/TIME4onoff"     
+    "/D0/brightness"    
 ];
 const master = 'rexMyHome';
 
