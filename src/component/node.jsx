@@ -46,20 +46,23 @@ const Node =(props)=> {
                         <Carts room={props.room} key={i} id={`#new-smr-${i}`} topic={props.mac+topic}>
                             <Lable type="SMR" >
                                 <TimerManager mac={props.mac} module={"R"+i} timers={[1,2,3,4]} />
-                                <OnOff icon={"lamp"} topic={props.mac+topic} />
+                                <OnOff style={{marginLeft:"60%",width:"100%"}} icon={"lamp"} topic={props.mac+topic} />
                             </Lable>
                         </Carts>
                     );
                 })
-                else if(props.type==="CUR4") return props.cart[key].map((topic, i)=> (
+                else if(props.type==="CUR4" && key==="reley") return props.cart[key].map((topic, i)=> {
+                    if(topic.split("/")[2]==="onoff") return( 
                     <Carts room={props.room} key={i} id={`#new-curtain-${i}`} topic={props.mac+topic}>
                         <Lable type="CUR4">
                             <TimerManager mac={props.mac} module={"R"+i} timers={[1,2,3,4]} />
-                            <ButtonBar mac={props.mac} index={i} module={"R"}/>
-                            <OnOff icon={"wtor"} topic={props.mac+topic} />
+                            <div style={{display:"flex",flexDirection:"row",textAlign:"center"}}>
+                                <ButtonBar mac={props.mac} index={i} module={"R"}/>
+                                <OnOff offView="false" style={{width:"100%"}} icon={"wtor"} topic={props.mac+topic} />
+                            </div>
                         </Lable>
                     </Carts>
-                ))
+                )})
                 else if(props.type==="FSC") return props.cart[key].map((topic, i)=> (
                     <Carts room={props.room} key={i} id={`#new-fsc-${i}`} topic={props.mac+topic}>
                         <Lable

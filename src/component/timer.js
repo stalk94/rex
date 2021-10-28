@@ -1,5 +1,5 @@
 import { useDidMount } from "rooks";
-import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
+import {Menu, MenuItem, MenuGroup} from '@szhsin/react-menu';
 import React, {useState, useEffect} from "react";
 import { usePub, useSub } from "./device.f";
 import { MdTimer } from "react-icons/md";
@@ -42,6 +42,7 @@ export function Timer(props) {
         marginRight:"15px",
         background:"#73c5de85",
         cursor:"pointer",
+        overwlowY:"auto"
     }
     const styleSelect = {
         margin:"1px",
@@ -66,13 +67,15 @@ export function Timer(props) {
     return(
         <div style={{textAlign:"center",fontSize:"28px",display:"flex",flexDirection:"row",marginBottom:"2%"}}>
             <Menu menuButton={<div style={style}>{ hour }</div>} transition>
-                {hours.map((h, i)=> <MenuItem key={i} onClick={()=> usePub(props.topicHour, h)}>
-                    { h.length===1 ? "0"+h : h }
-                </MenuItem>
-                )}
+                <MenuGroup style={{overflowY:"scroll"}}>
+                    {hours.map((h, i)=> <MenuItem key={i} onClick={()=> usePub(props.topicHour, h)}>
+                        { h.length===1 ? "0"+h : h }
+                    </MenuItem>
+                    )}
+                </MenuGroup>
             </Menu>
             : 
-            <Menu menuButton={<div style={style}>{ min }</div>} transition>
+            <Menu overflow="auto" menuButton={<div style={style}>{ min }</div>} transition>
                 {mins.map((m, i)=> <MenuItem key={i} onClick={()=> usePub(props.topicMin, m)}>
                     { m.length===1 ? "0"+m : m }
                 </MenuItem>

@@ -62,11 +62,11 @@ export default function SchemeConstructor(props) {
 
     const onCreate =(meta)=> {
         if(meta.type){
-            send("newNode", {login:useCokie().login, password:useCokie().password+"=", state:meta}, "POST").then((res)=> {
+            send("newNode", {login:useCokie().login, password:useCokie().password, state:meta}, "POST").then((res)=> {
                 res.json().then((userData)=> {
                     if(!userData.error){
                         store.set("user", userData)
-                        //window.location.reload()
+                        window.location.reload()
                     }
                     else props.error(userData.error)
                 })
