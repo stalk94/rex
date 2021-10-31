@@ -1,33 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { FullPage, Slide } from 'react-full-page';
-import Authorize from "./component/authorize";
 import { send, useCokie } from "./engine";
+import Authorize from "./component/authorize";
 import "./css/main.css";
-import figure from "./img/figure.svg";
-import gm from "./img/gm.svg";
+import Figure from "./component/figure";
 import p1 from "./img/promo-1.jpg";
 import p2 from "./img/promo-2.jpg";
 
 
 /////////////////////////////////////////////////////
-const fullPageOptions = {
-    scrollSensitivity: 3,
-    touchSensitivity: 3,
-    scrollSpeed: 450,
-    hideScrollBars: true,
-    enableArrowKeys: true
-};
-const text1 = `
-    Домашняя автоматизация — система домашних устройств, способных выполнять действия и решать определённые повседневные задачи без участия человека.
-    Домашняя автоматизация в современных условиях — чрезвычайно гибкая система, которую пользователь конструирует и настраивает самостоятельно в зависимости 
-    от собственных потребностей. 
-    Это предполагает, что каждый владелец умного дома самостоятельно определяет, какие устройства куда установить и какие задачи они будут исполнять.
-`;
-const text2 = `
-    О проекте: 
-`;
-
-const GM =(props)=> <img className="gm" onClick={props.open} src={gm}/>;
+const GM =(props)=> (
+    <svg className="gm"
+        height="32px"
+        style={{enableBackground:"new 0 0 32 32"}}
+        version="1.1" 
+        viewBox="0 0 32 32" 
+        width="32px"
+        xmlns="http://www.w3.org/2000/svg"
+        onClick={props.open}
+    >
+        <path fill="white" d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z" />
+    </svg>
+);
 const Logo =(props)=> (
     <svg xmlns="http://www.w3.org/2000/svg" 
         width="250px" 
@@ -43,79 +37,68 @@ const Logo =(props)=> (
             <path fill="#E31E24" d="M106.17 106.35c-9.23,9.19 -21.07,15.17 -33.68,17.28 -12.27,2.06 -25.29,0.47 -37.34,-5.36 -15.47,-7.48 -26.44,-20.53 -31.68,-35.57 -5.23,-15.04 -4.73,-32.08 2.75,-47.55 7.49,-15.47 20.53,-26.44 35.57,-31.68 15.05,-5.23 32.08,-4.73 47.55,2.75 12.05,5.83 21.37,15.03 27.37,25.91 6.17,11.19 8.85,24.16 7.39,37.08l-2.81 -0.31c1.39,-12.34 -1.16,-24.72 -7.06,-35.41 -5.73,-10.38 -14.62,-19.16 -26.12,-24.72 -14.76,-7.15 -31.03,-7.63 -45.39,-2.63 -14.36,4.99 -26.81,15.47 -33.95,30.24 -7.15,14.77 -7.63,31.03 -2.63,45.39 4.99,14.36 15.47,26.81 30.24,33.95 11.51,5.57 23.93,7.09 35.65,5.12 12.04,-2.02 23.34,-7.72 32.15,-16.49l1.99 2z"/>
         </g>
     </svg>
-)
+);
 /////////////////////////////////////////////////////
 
 
 export default function Main(props) {
-    const [regForm, setRegForm] = useState(
-        <Authorize 
-            onOk={(userData)=> {
-                delete userData.password
-                store.set("user", userData)
-                props.useRender(userData)
-            }}
-            onErr={(textError)=> {
-                onHead(
-                    <React.Fragment>
-                        <GM open={verify}/>
-                        <h3 style={{color:"brown", marginLeft:"5%"}}>{textError}</h3>
-                    </React.Fragment>
-                );
-                setTimeout(()=> onHead(<GM open={verify}/>), 6000)
-            }}
-        />
-    );
+    const [regForm, setRegForm] = useState()
+    const [head, onHead] = useState(<GM open={verify}/>)
 
     const verify =()=> {
         let data = useCokie()
+        console.log(data)
     
-        if(data.login && data.password) send("auth", {login:data.login, password:data.password}, "POST").then((res)=> {
-            res.json().then((userData)=> {
-                if(!userData.error){
-                    delete userData.password
-                    store.set("user", userData)
-                    props.useRender(userData)
-                }
-                else alert("login or password error")
-            });
-        });
-        else {
-            onHead(
-                <React.Fragment>
-                    <GM open={verify}/>
-                    <h3 style={{color:"brown", marginLeft:"5%"}}>Воспользуйтесь формой регистрации/авторизации</h3>
-                </React.Fragment>
-            );
-            setRegForm(
-                <Authorize 
-                    onOk={(userData)=> {
+        if(data.login && data.password && data.login!=="" && data.password!==""){
+            send("auth", {login:data.login, password:data.password}, "POST").then((res)=> {
+                res.json().then((userData)=> {
+                    if(!userData.error){
                         delete userData.password
                         store.set("user", userData)
                         props.useRender(userData)
-                    }}
-                    onErr={(textError)=> {
-                        onHead(
-                            <React.Fragment>
-                                <GM open={verify}/>
-                                <h3 style={{color:"brown", marginLeft:"5%"}}>{textError}</h3>
-                            </React.Fragment>
-                        );
-                        setTimeout(()=> onHead(<GM open={verify}/>), 6000)
-                    }}
-                />
-            );
-            setTimeout(()=> onHead(<GM open={verify}/>), 6000)
+                    }
+                    else alert("login or password error")
+                });
+            })
         }
+        else setTimeout(()=> onHead(<GM open={verify}/>), 6000)
     }
-    const [head, onHead] = useState(<GM open={verify}/>)
-    useEffect(()=> setTimeout(()=> verify(), 400), [])
+    
+
+    useEffect(()=> {
+        onHead(
+            <React.Fragment>
+                <GM open={verify}/>
+                <h3 style={{color:"brown", marginLeft:"5%"}}>Воспользуйтесь формой регистрации/авторизации</h3>
+            </React.Fragment>
+        );
+        setRegForm(
+            <Authorize 
+                onOk={(userData)=> {
+                    delete userData.password
+                    store.set("user", userData)
+                    props.useRender(userData)
+                }}
+                onErr={(textError)=> {
+                    onHead(
+                        <React.Fragment>
+                            <GM open={verify}/>
+                            <h3 style={{color:"brown", marginLeft:"5%"}}>{textError}</h3>
+                        </React.Fragment>
+                    );
+                    setTimeout(()=> onHead(<GM open={verify}/>), 6000)
+                }}
+            />
+        );
+        setTimeout(()=> verify(), 300)
+    }, [])
+    
     
     return(
         <FullPage>
             <Slide className="section-1"> 
                 <header>{ head }</header>
-                <img className="figure" src={ figure }/>
+                <Figure/>
                 <Logo left={35} />
                 { regForm }
             </Slide>

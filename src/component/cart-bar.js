@@ -26,7 +26,7 @@ function Footer(props) {
 
 
 export default function Carts(props) {
-    const elems = React.Children.toArray(props.children.props.children)
+    let elems = React.Children.toArray(props.children.props.children)
     const [name, setName] = useState("")
     const [room, setRoom] = useState({name:1})
     const [view, setView] = useState(0)
@@ -40,8 +40,9 @@ export default function Carts(props) {
         setName(cartName)
     }
     useEffect(()=> {
+        elems = React.Children.toArray(props.children.props.children)
         update(props.room)
-    }, [props.room])
+    }, [props.room, props.children])
 
     
     return(

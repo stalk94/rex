@@ -1,8 +1,6 @@
-import { useDidMount } from "rooks";
-import {Menu, MenuItem, MenuGroup} from '@szhsin/react-menu';
 import React, {useState, useEffect} from "react";
+import {Menu, MenuItem, MenuGroup} from '@szhsin/react-menu';
 import { usePub, useSub } from "./device.f";
-import { MdTimer } from "react-icons/md";
 import { Select } from "./input";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
@@ -19,9 +17,8 @@ for(let i=15; i<=35; i++){
     cells.push(`${i}`)
 }
 ///////////////////////////////////////////////////////////
-const useChek =(topic)=> {
-    return store.get("user").payloads[topic]
-}
+const useChek =(topic)=>  store.get("user").payloads[topic]
+
 
 
 
@@ -57,7 +54,7 @@ export function Timer(props) {
     const [min, setMin] = useState(useChek(props.topicMin)??"00")
     const [enable, setEnable] = useState(useChek(props.topicEnable)??'0')
     
-    useDidMount(()=> {
+    useEffect(()=> {
         useSub(props.topicHour, hour, setHour)
         useSub(props.topicMin, min, setMin)
         useSub(props.topicEnable, enable, setEnable)

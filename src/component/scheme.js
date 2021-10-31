@@ -77,8 +77,9 @@ export default function SchemeConstructor(props) {
 
 
     return(
-        <div>
+        <>
             <FormRegistrationNewNode create={onCreate} />
+            
             <div className="tables">
                 {Object.values(state).length > 0
                     ? Object.values(state).map((node, index)=> (
@@ -95,6 +96,6 @@ export default function SchemeConstructor(props) {
                     : "узлов пока не добавлено"
                 }
             </div>  
-        </div>
+        </>
     )
 }

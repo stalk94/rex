@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback, useMemo } from 'react';
-import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import { send, useCokie } from "../engine";
 import { AiFillDatabase } from "react-icons/ai";
+import { IoMdAdd } from "react-icons/io";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
-
 
 
 
@@ -44,6 +44,11 @@ const Fav =(props)=> {
 const Room =(props)=> {
     const [name, setName] = useState(props.name)
 
+    useEffect(()=> {
+        setName(props.name)
+    }, [props])
+
+
     return (
         <div style={{display:"flex",flexDirection:"row"}}>
             <button 
@@ -57,7 +62,7 @@ const Room =(props)=> {
                 menuButton={<MenuButton id="szh-menu">:</MenuButton>}
                 transition
             >
-                {Object.keys(props.devices).map((device, id)=> {
+                {Object.keys(props.nodes).map((device, id)=> {
                     if(device.room===props.id) return (
                         <MenuItem key={id}>
                             <Fav 
@@ -90,9 +95,10 @@ const Room =(props)=> {
 
 
 export default function Navigations(props) {
+    const [user, setUser] = useState(props.user)
     const [curent, setCurent] = useState()
     const [nameRoom, setName] = useState("")
-    const [time, setTime] = useState()
+    const [runer, setReload] = useState("")
 
     const clb = useCallback(()=> {
         store.watch("user", ()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>))
@@ -106,17 +112,19 @@ export default function Navigations(props) {
         nameRoom.length > 3 
             ? props.setRoom(nameRoom) && setName("")
             : props.error("Не менее 4х символов")
-        
-        setTimeout(()=> setTime(<div style={{display:"none"}}>{Date.now()}</div>), 1000)
     }
 
-    useEffect(()=> store.watch("user", ()=> setName("")), [])
+    useEffect(()=> {
+        setUser(props.user)
+    }, [props.user])
 
     
     return(
         <>
+            <div style={{display:"none"}}>{runer}</div>
             <ul>
-                {props.user.rooms.map((room, index)=> {
+                {user.rooms.length > 0 
+                 ? user.rooms.map((room, index)=> {
                     if(room.visibility==="block" && index!==0) return(
                         <Room 
                             key={index}
@@ -124,15 +132,16 @@ export default function Navigations(props) {
                             name={room.name} 
                             room={room}
                             select={curent && curent===index?true:false}
-                            devices={props.user.nodes} 
+                            nodes={user.nodes} 
                             readRoom={props.readRoom}
                             delRoom={props.delRoom}
                             error={props.error}
                             onTarget={()=> useTarget(room, index)}
                         />
                     );
-                })}
-                { time }
+                })
+                 : "нет комнат"
+                }
             </ul>
 
             <hr style={{width:"85%", opacity:"0.1"}}/>
@@ -140,20 +149,20 @@ export default function Navigations(props) {
             <div style={{display:"flex",flexDirection:"row"}}>
                 <Menu 
                     direction="right"
-                    menuButton={<MenuButton id="add"><div id="addRoom"> ➕ </div></MenuButton>}
+                    menuButton={<MenuButton id="add"><div style={{color:"white"}} id="addRoom"><IoMdAdd/></div></MenuButton>}
                 >
-                    <input placeholder="имя комнаты" 
+                    <input 
+                        placeholder="имя комнаты" 
                         style={{width:"80%", marginLeft:"4%"}} 
                         type="text" 
-                        onInput={(ev)=> setName(ev.target.value)} 
+                        onChange={(ev)=> setName(ev.target.value)} 
                         value={nameRoom}
                     />
                     <MenuItem onClick={chek}> создать </MenuItem>
                 </Menu>
 
-                <MenuButton 
-                    onClick={()=> {props.add();setCurent(0)}} 
-                    id="serve"
+                <MenuButton id="serve"
+                    onClick={()=> {props.add();setCurent(0)}}
                 >
                     <div style={{borderBottom:curent===0?"1px solid white":""}} >
                         <AiFillDatabase/>

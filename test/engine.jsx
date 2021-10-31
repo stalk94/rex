@@ -1,4 +1,3 @@
-const expect = require('expect');
 const React = require("react");
 const TestRenderer = require('react-test-renderer');
 
@@ -14,9 +13,11 @@ const App =(props)=> {
     );
 }
 
+
 const e = <App/>
 const testRenderer = TestRenderer.create(e)
 const res = []
+
 
 res.push(testRenderer.toJSON())
 setTimeout(()=> {

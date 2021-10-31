@@ -38,10 +38,10 @@ exports.registration = function(login, password, ip, optionsData) {
             adres: "",
             kontact1: "",
             kontact2: "",
+            payloads: {},
             avatar: "./img/no-avatar.png",
-            payloads: [],
             favorites: [],
-            nodes: [],
+            nodes: {},
             rooms: [{name:"Серверная", visibility:"block"}]
         }
         db.set("user."+login, newUser)
@@ -52,13 +52,17 @@ exports.registration = function(login, password, ip, optionsData) {
 exports.autorise = function(login, password, row, ip) {
     if(!db.has("user."+login)) return {error: "нет такого юзера"};
     else {
-        if(row && getPasswordHash(db.get("user."+login).password)!==password) return {error: "password error"}
-        else if(!row && db.get("user."+login).password!==password) return {error: "password error"}
-        else {
+        if(db.get("user."+login).password===password){
             let data = db.get("user."+login)
-            data.ip=ip
+            if(data.ip) data.ip=ip
             return new User(data)
         }
+        else if(getPasswordHash(db.get("user."+login).password)===password) {
+            let data = db.get("user."+login)
+            if(data.ip) data.ip=ip
+            return new User(data)
+        }
+        else return {error: "password error"}
     }
 }
 ////////////////////////////////////////////////////////////////////////
@@ -83,9 +87,8 @@ class User {
                 name: name??`новая комната ${this.rooms.length}`,
                 visibility: "block",
             });
-            
-            clb(this.rooms)
             this.#dump()
+            clb(this.rooms)
         }
         else clb({error: "Максимальное кол-во комнат 10"})
     }

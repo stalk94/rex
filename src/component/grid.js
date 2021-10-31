@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { apiInit } from "../api";
+import { useWillUnmount } from "rooks";
 import { Select, Input } from "./input";
 import { send, useCokie } from "../engine";
 import { FaArrowsAltV } from "react-icons/fa";
-import { usePub } from "./device.f";
-
+import { usePub, useSub } from "./device.f";
+import Cookies from 'js-cookie';
 
 
 const useUser =()=> store.get("user")
+const useChek =(topic)=> store.get("user").payloads[topic]
+export const useWatch =(fn)=> store.watch("user", (data)=> fn(data))
+const useSocket =(key, val)=> socket.emit("set", [key, val])
+
 const META =()=> ({
     reley: [
         {type:"lable", data:"Реле", color:"#90e160cc"},         //скрытый топик вызова (всех реле группы)  
@@ -27,31 +31,29 @@ const META =()=> ({
         {type:'input', data:"GAstatus"}
     ]
 });
+const useParse =(type, index)=> META()[type][index]
+
+
 
 const useSend =(mac, meta, data, clb)=> {
     send("set", {
-            login:useCokie().login,
-            password:useCokie().password,
-            mac:mac,
-            meta:meta,
-            data:data
+            login: Cookies.get("login"),
+            password: Cookies.get("password"),
+            mac: mac,
+            meta: meta,
+            data: data
         }, "POST").then((res)=> clb && res.json().then((v)=> clb(v))
     )
 }
-const useChek =(topic)=> {
-   return store.get("user").payloads[topic]
-}
-const useParse =(type, index)=> {
-    return META()[type][index]
-}
 const useArray =(data, def)=> {
-    let payload = store.get("user").payloads
+    let payload = useUser().payloads
+
     if(data instanceof Array){
         let rezult = {}
         data.map((val, i)=> rezult[val]=payload[def+val])
         return rezult
     }
-    else {
+    else if(data instanceof Object) {
         let rezult = {}
         Object.keys(data).map((key)=> {
             rezult[key] = payload[def+key]
@@ -59,9 +61,8 @@ const useArray =(data, def)=> {
         return rezult
     }
 }
-const useSocket =(key, val)=> {
-    socket.emit("set", [key, val])
-}
+
+
 
 
 
@@ -78,14 +79,29 @@ const Title =(props)=> {
     const styleTitle = {display:"flex",flexDirection:"row",textAlign:"center",background:"#6c6a6acc"}
 
     const onDel =()=> {
-        send("delete", {login:useCokie().login,password:useCokie().password,mac:props.mac.mac}, "POST").then((data)=> {
+        send("delete", {login:Cookies.get("login"),password:Cookies.get("password"),mac:props.mac.mac}, "POST").then((data)=> {
             data.json().then((v)=> {
+                let data = store.get("user").payloads
+
+                window.api.publish(props.mac.mac+"/RESET", 1)
+                Object.keys(data).map((topic)=> {
+                    if(topic.split("/")[0]===props.mac.mac) {
+                        window.api.unsubscribe(topic)
+                        delete data[mac]
+                    }
+                });
+                
+                v.payloads = data
                 store.set("user", v)
                 window.location.reload()
             })
         })
     }
-    const onLoad =(e)=> inputRef.current.click()
+    const onLoad =(e)=> {
+        readFile(e.target, (data)=> {
+            socket.emit("file.po", [props.mac.mac, data])
+        })
+    }
     
 
     return(
@@ -96,8 +112,13 @@ const Title =(props)=> {
             <Input style={styleInput} placeholder="MAC" onChange={(e)=> props.mac.set(e.target.value)} value={props.mac.mac}/>
             <button onClick={props.change} style={{...style,marginRight:"50px"}}>💾</button>
             <label className="custom-file-upload">
-                <input ref={inputRef} type="file" style={{display:"none"}}/>
-                <button onClick={onLoad} style={style}>📁</button>
+                <input 
+                    ref={inputRef} 
+                    onChange={onLoad} 
+                    type="file" 
+                    style={{display:"none"}}
+                />
+                <button onClick={()=>inputRef.current.click()} style={style}>📁</button>
             </label>
             <button onClick={()=> usePub(props.mac.mac+"/STATUS", 1)} style={style}>Считать</button>
             <button style={style}>Перепрошивка</button>
@@ -108,24 +129,31 @@ const Title =(props)=> {
 
 
 const Row =(props)=> {
+    const [id, setId] = useState()
     const [state, setState] = useState(useArray(props.module, props.mac+"/"+props.name+"/"))
     const [payload, setPayload] = useState(useUser().payloads) 
     
     const onSave =()=> {
         Object.keys(state).map((key)=> {
-            if(window.api){
-                window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st")
-                usePub(props.mac+"/"+props.name+"/"+key, state[key])
-            }
-            else {
-                apiInit()
-                window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st")
-                usePub(props.mac+"/"+props.name+"/"+key, state[key])
-            }
-        })
+            window.api.subscribe(props.mac+"/"+props.name+"/"+key+"st")
+            usePub(props.mac+"/"+props.name+"/"+key, state[key])
+        });
+
         useSocket("payloads", payload)
     }
-
+    useEffect(()=> {
+        if(!id) setId(useWatch((data)=> {
+            if(!data.payloads){
+                data.payloads = {}
+                store.set("user", data)
+            }
+            else setPayload(data.payloads)
+        }))
+    }, [])
+    useWillUnmount(()=> {
+        if(id) store.unwatch(id)
+        setId()
+    });
 
     return(
         <div className="Row">
@@ -206,15 +234,6 @@ export default function Grid(props) {
     const [knx, setKnx] = useState(props.knx)
     const [name, setName] = useState(props.name)
 
-    const onChange =(name, keyModule, data)=> {
-        if(name && keyModule && data){
-            let copy = modules
-            copy[keyModule][name] = data
-            setModules(copy)
-            let meta = {mac:mac, knx:knx, name:name}
-        }
-        else EVENT.emit("error", "переданы не все атрибуты")
-    }
     const onTitleChange =()=> {
         let meta = {mac:mac, knx:knx, name:name}
 
@@ -223,6 +242,12 @@ export default function Grid(props) {
             else EVENT.emit("error", res.error)
         });
     }
+    useEffect(()=> {
+        setMac(props.mac)
+        setKnx(props.knx)
+        setName(props.name)
+        setModules(props.rows)
+    }, [props.mac, props.knx, props.name, props.rows])
     
     
     return(
@@ -241,14 +266,15 @@ export default function Grid(props) {
                             mac={mac}
                             id={key}
                             name={kid}
-                            key={kid}
-                            change={onChange} 
+                            key={kid} 
                             module={modules[key][kid]} 
                         />
                     ))
                 ))}
             </div>
-            <div className="Shadower" onClick={()=> setVisible(visible?false:true)}><FaArrowsAltV/></div>
+            <div className="Shadower" onClick={()=> setVisible(visible?false:true)}>
+                <FaArrowsAltV/>
+            </div>
         </div>
     );
 }

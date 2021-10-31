@@ -1,3 +1,5 @@
 const db = require("quick.db");
+const sizeof = require('object-sizeof');
 
-db.get("user.test3")  //?
+
+sizeof(db.get("user"))  //?

@@ -1,11 +1,13 @@
+require("./api");
 import "./css/style.css";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from "react";
-import { useLocalstorageState } from "rooks";
+import { useDidMount, useLocalstorageState } from "rooks"
 import ReactDOM from "react-dom";
-import Main from "./index";
 import { send, useCokie } from "./engine";
+import Main from "./index";
 import User from "./component/user";
 import logo from "./img/logo.svg";
 import userIcon from "./img/user.svg";
@@ -15,7 +17,6 @@ import NodeArea from "./component/node"
 
 
 
-//////////////////////////////////////////////////////////////
 const Title =(props)=> {
     const style = {color:props.color}
 
@@ -26,38 +27,45 @@ const Title =(props)=> {
         </>
     );
 }
-socket.on("get.user", (newData)=> {
-    store.set("user", newData)
-});
 
 
-/** EVENTS: `error`,`errorColor`,`exit` */
+
+/** 
+ * EVENTS: `error`,`errorColor`,`exit` 
+ */
 function App(props) {
-    const [user, setUser] = useLocalstorageState("user", props.user)
-    const [curentRoom, setCurentRoom] = useLocalstorageState("curent.room", {name:"Избранное",id:0})
+    const [user, setUser] = useState(props.user)
+    const [curentRoom, setCurentRoom] = useLocalstorageState("curent.room", {name:"Избранное",id:-1})
     const [errorColor, setErrColor] = useState("red")
     const [error, setErr] = useState("")
+   
 
     ////////////////////////////////////////
     useEffect(()=> {
+        setUser(props.user)
+    }, [props.user])
+    useDidMount(()=> {
         EVENT.on("error", (text)=> {
             setErr(text)
             setTimeout(()=> setErr(""), 5000)
         });
         
         EVENT.on("errorColor", (color)=> setErrColor(color));
-        EVENT.on("exit", ()=> send("exit", {login:user.login, password:user.password, data:user, payload:store.get("payload")}))
-        !curentRoom ? setCurentRoom({name:"Избранное",id:-1}) : curentRoom.name
-    }, [])
+        EVENT.on("exit", ()=> send("exit", {login:Cookies.get("login"), password:Cookies.get("password"), data:store.get("user")}))
+    })
+
     const setError =(textError)=> {
         setErr(textError)
         setTimeout(()=> setErr(""), 5000)
     }
     const onAddRoom =(value)=> {
-        send("addRoom", {login:useCokie().login, password:useCokie().password, room:value}, "POST").then((res)=> {
+        send("addRoom", {login:Cookies.get("login"), password:Cookies.get("password"), room:value}, "POST").then((res)=> {
             res.json().then((val)=> {
                 delete val.password
-                if(!val.error) store.set("user", val)
+                if(!val.error){
+                    store.set("user", val)
+                    setUser(val)
+                }
                 else setError(val.error)
             })
         })
@@ -68,6 +76,7 @@ function App(props) {
                 if(!val.error){
                     user.rooms = val
                     store.set("user", user)
+                    setUser(user)
                 }
                 else console.log(val.error);
             })
@@ -79,12 +88,12 @@ function App(props) {
                 if(!val.error){
                     delete val.password
                     store.set("user", val)
+                    setUser(val)
                 }
                 else setError(val.error)
             })
         });
     }
-    const setcurRoom =(room)=> setCurentRoom(room)
     
 
     return(
@@ -93,7 +102,7 @@ function App(props) {
                 <aside>
                     <header className="logo">
                         <img width="100%"
-                            onClick={()=> setcurRoom({name:"Избранное",id:-1})} 
+                            onClick={()=> setCurentRoom({name:"Избранное",id:-1})} 
                             src={logo}
                         />
                     </header>
@@ -102,18 +111,18 @@ function App(props) {
                             error={setError}
                             user={user} 
                             target={curentRoom}
-                            onTarget={(room)=> setcurRoom(room)}
+                            onTarget={(room)=> setCurentRoom(room)}
                             setRoom={onAddRoom}
                             readRoom={readRoom} 
                             delRoom={delRoom}
-                            add={()=> setcurRoom({name:"Серверная", id:0})}
+                            add={()=> setCurentRoom({name:"Серверная", id:0})}
                         />
                     </nav>
                 </aside>
                 <div className="base">
                     <header>
                         <Title 
-                            user={()=> setcurRoom({name:"user", id:0})} 
+                            user={()=> setCurentRoom({name:"user", id:0})} 
                             error={error} 
                             color={errorColor} 
                         />
@@ -127,7 +136,7 @@ function App(props) {
                             />
                             :(curentRoom.name!=="user"
                                 ? <NodeArea nodes={user.nodes} room={ curentRoom }/>
-                                : <User>{ user }</User>
+                                : <User user={user}/>
                         )}
                     </div> 
                 </div>
@@ -142,8 +151,25 @@ const UI =()=> {
     const [render, setRender] = useState("")
 
     useEffect(()=> {
-        if(useCokie().login && useCokie().password) setRender(<App user={store.get("user")} />)
-        else setRender(<Main useRender={(data)=> {setRender(<App user={data} />)}} />)
+        setTimeout(()=> {
+            useCokie()
+            
+            if(Cookies.get("login") && Cookies.get("password") && store.get("user")){
+                send("auth", {login:Cookies.get("login"), password:Cookies.get("password")}, "POST").then((res)=> {
+                    res.json().then((userData)=> {
+                        if(!userData.error){
+                            delete userData.password
+                            store.set("user", userData)
+                            setRender(<App user={userData} />)
+                        }
+                        else alert("login or password error")
+                    });
+                });
+            }
+            else setRender(
+                <Main useRender={(data)=> setRender(<App user={data} />)}/>
+            );
+        }, 500)
     }, [])
 
 

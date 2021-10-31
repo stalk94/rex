@@ -1,7 +1,5 @@
-import { apiInit } from "../api";
 import React, { useEffect, useState } from 'react';
 import { useDebounce, useWillUnmount, useToggle } from "rooks";
-import {Menu, MenuItem, MenuButton} from '@szhsin/react-menu';
 import lamp from '../img/lamp.png';
 import onOff from '../img/onOff.png';
 import wtor from '../img/wtor.png';
@@ -9,7 +7,9 @@ import logic from '../img/logic.png';
 import termostat from '../img/termostat.png';
 import { BsCardText } from "react-icons/bs";
 
-let init = false
+
+
+
 const payloads = {}
 export const ICON = {
     lamp: lamp,
@@ -39,21 +39,13 @@ const Curtain =(props)=> (
 
 
 export const useSub =(topic, def, fn)=> {
-    if(!init){
-        apiInit()
-        init = true
-    }
-    let payload = store.get("user").payloads
-
-    if(!payloads[topic]){
-        payload[topic] = def
+    if(!payloads[topic] && topic){
+        let p = store.get("user").payloads
+        p[topic] = def
         payloads[topic] = def
-        socket.emit("set", ["payloads", payload])
-        if(window.api) window.api.subscribe(topic+"st")
-        else {
-            apiInit()
-            window.api.subscribe(topic+"st")
-        }
+        socket.emit("set", ["payloads", p])
+
+        if(api) api.subscribe(topic+"st")
         if(fn) window.api.on("message", (...arg)=> {
             let emitTopic = arg[0].slice(0, arg[0].length-2)
             if(topic===emitTopic) fn(String(arg[1]))
@@ -137,8 +129,8 @@ export const OnOffDeamer =(props)=> {
         setBrihtness(store.get("user").payloads[props.brihtness])
 
         store.watch("user", (data)=> {
-            setOnoff(data.payloads[props.topic])
-            setBrihtness(data.payloads[props.brihtness])
+            if(data.payloads[props.topic]) setOnoff(data.payloads[props.topic])
+            if(data.payloads[props.brihtness]) setBrihtness(data.payloads[props.brihtness])
         })
     }, [])
 
@@ -160,7 +152,7 @@ export const OnOff =(props)=> {
     let onData =()=> {
         useSub(props.topic, '0')
         store.watch("user", (data)=> {
-            setOnoff(data.payloads[props.topic])
+            if(data.payloads[props.topic]) setOnoff(data.payloads[props.topic])
         })
     }
 
@@ -256,7 +248,6 @@ export const Title =(props)=> {
         color:"#fcfcfc99",
         marginLeft:"5px"
     }
-    const iconStyle = {marginRight:"3px"}
 
     return(
         <div onClick={props.onClick} className="line" style={{borderBottom:"1px solid rgba(0,0,0,0.2)"}}>

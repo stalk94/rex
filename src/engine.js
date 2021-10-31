@@ -1,25 +1,8 @@
-//const ReactDOMServer = require('react-dom/server');
+import cookie from "cookie";
+const observe = require('store/plugins/observe');
 
 
 
-export const useCokie =(login, password)=> {
-  if(login && password){
-      document.cookie = `login=${login}`
-      document.cookie = `password=${password}`
-  }
-  else {
-    let cookies = document.cookie.split(";")
-    let res = {}
-
-    cookies.forEach((elem)=> {
-      let tokien = elem.split("=")
-      if(tokien[0]==="login" && tokien[1]!=="") res.login = tokien[1]
-      else if(tokien[0]===" password" && tokien[1]!=="") res.password = tokien[1]
-    });
-    
-    return res
-  } 
-}
 class EventEmmitter {
   constructor() {
     this.events = {};
@@ -42,69 +25,64 @@ class EventEmmitter {
   }
 }
 
-
+window.store = require('store');
+store.addPlugin(observe)
 const gurl = "http://localhost:3000/";
 window.EVENT = new EventEmmitter()
+window.run = true
 
 
-window.serverStore = {
-	cache: {},
-	on: EVENT.on,
-	emit: EVENT.emit,
-	init(login, password) {
-		socket.on("on.connect", (data)=> {
-			this.cache = data
-		});
-		this._listens()
-		socket.emit("init", [login, password])
-	},
-	set(key, value) { 
-		socket.emit("set", [key, value])
-	},
-	get(key) {
-		socket.emit("get", key)
-    console.log(this.cache[key])
-		if(this.cache[key]) return this.cache[key]
-		else return null
-	},
-	_listens() {
-		socket.on("on.get", (data)=> {
-			this.cache[data.key] = data.value
-			this.emit(data.key, data.value)
-		});
-    EVENT.on("unmount", (data)=> data[0], data[1])
-	},
-  domStore(app) {
-    //const testRenderer = TestRenderer.create(app)
-    //socket.emit("app", ReactDOMServer.renderToString(app))
-  }
+export const useCokie =(login, password)=> {
+  return cookie.parse(document.cookie)
 }
-
 
 
 window.onExit =()=> {
   EVENT.emit("exit")
+  socket.emit("exit", store.get("user"))
+  document.cookie = 'login=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  document.cookie = 'password=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
   setTimeout(()=> {
-    document.cookie = "login=";
-    document.cookie = "password=";
     store.remove("user");
-    store.remove("payload")
   }, 1000);
 }
 
+
+socket.on('delete_cookie', (cookie)=> {
+  document.cookie = cookie+'=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+});
+socket.on('disconnect', ()=> {
+  document.location.reload()
+});
+store.set("curent.room", {name:"Избранное", id:-1})
 socket.on("multiconnect", ()=> {
   EVENT.emit("error", "Обнаружено новое соединение, это было отключено от сервера!!!")
 });
-socket.on("connect", ()=> socket.emit("init", [useCokie().login, useCokie().password]))
-socket.on("on.connect", (data)=> console.log("init", data))
 socket.on("get.payload", (data)=> {
-  const user = store.get("user")
+  let user = store.get("user")
   user.payloads = data
   store.set("user", user)
 });
+socket.on("error", (txt)=> {
+  EVENT.emit("error", txt)
+});
 
-socket.on("error", (txt)=> EVENT.emit("error", txt))
+
+window.readFile =(input, clb)=> {
+    let file = input.files[0]
+    let reader = new FileReader()
+
+    reader.readAsText(file)
+
+    reader.onload =()=> {
+      console.log(reader.result)
+      if(clb) clb(reader.result)
+    }
+    reader.onerror =()=> {
+      EVENT.emit("error", reader.error)
+    }
+}
 
 
 export function send(url, data, metod) {

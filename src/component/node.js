@@ -1,4 +1,3 @@
-require("../engine")
 import React, {useEffect, useState} from "react";
 import { OnOff, Lable, Centr, Title, OnOffDeamer, ButtonBar } from "./device.f";
 import TimerManager from "./timer";
@@ -90,7 +89,7 @@ export default function NodeArea(props) {
     useEffect(()=> {
         setDevices(props.nodes)
     }, [props.nodes])
-
+    
 
     return(
         <div className="device-wraper">

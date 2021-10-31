@@ -1,47 +1,39 @@
-class EventEmmitter {
-    constructor() {
-      this.events = {};
-    }
-    on(eventName, fn) {
-      if(!this.events[eventName]) this.events[eventName] = [];
-      this.events[eventName].push(fn);
-      
-      return ()=> {
-        this.events[eventName] = this.events[eventName].filter((eventFn)=> fn !== eventFn);
-      }
-    }
-    emit(eventName, data) {
-      const event = this.events[eventName];
-      if(event){
-        event.forEach((fn, i)=> {
-          if(fn.call) fn.call(null, data);
-        });
-      }
-    }
-    remove(eventName, fn) {
-      if(this.events[eventName]){
-        delete this.events[eventName]
-        console.log("[x]event remove", eventName)
-      }
-    }
+const { it } = require("test.it");
+const React = require("react");
+const { render, unmountComponentAtNode } = require("react-dom");
+const { act } = require("react-dom/test-utils");
+
+
+const App =(props)=> {
+	return(<div>{props.name}</div>)
 }
 
-const testEmiter = new EventEmmitter() 
-
-
-window.test = {
-    cache: {},
-    on: testEmiter.on,
-    emit: testEmiter.emit,
-    set(key, val) {
-        this.cache[key] = val 
-        console.table(this.cache)
-    },
-    get(key) {
-        if(!this.cache[key]){
-            this.cache[key] = "test"
-        }
-
-        return this.cache[key]
-    }
+let container = null;
+window.beforeEach =()=> {
+	container = document.createElement("div");
+	document.body.appendChild(container);
 }
+
+window.afterEach =()=> {
+	unmountComponentAtNode(container);
+	container.remove();
+	container = null;
+}
+
+
+it("renders with or without a name", ()=> {
+	act(()=> {
+		render(<App />, container);
+	});
+	expect(container.textContent).toBe("Hey, stranger");
+
+	act(()=> {
+		render(<App name="Jenny" />, container);
+	});
+	expect(container.textContent).toBe("Hello, Jenny!");
+
+	act(()=> {
+		render(<App name="Margaret" />, container);
+	});
+	expect(container.textContent).toBe("Hello, Margaret!");
+});

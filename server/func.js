@@ -100,7 +100,7 @@ exports.getPasswordHash = function(hashPass) {
     return CryptoJS.AES.decrypt(hashPass, master).toString(CryptoJS.enc.Utf8)
 }
 exports.tokenGeneration = function(login, pass) {
-    return CryptoJS.AES.encrypt(login+'&'+time(), pass).toString()
+    return CryptoJS.AES.encrypt(login+'&'+new Date().getTime(), pass).toString()
 }
 exports.tokenDecriptor = function(token, pass) {
     let rez = CryptoJS.AES.decrypt(token, pass).toString(CryptoJS.enc.Utf8)

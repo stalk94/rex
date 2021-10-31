@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useInput } from "rooks";
 import { send } from "../engine";
 
 
+
 export default function Authorize(props) {
-    const [login, setLogin] = useState("")
-    const [password, setPass] = useState("")
+    const login = useInput()
+    const password = useInput()
 
     const auth =()=> {
-        $.getJSON("https://api.ipify.org?format=json", (data)=> {
-            send("auth", {login:login, password:password, ip:data, row:true}, "POST").then((res)=> {
-                res.json().then((data)=> {
-                    if(!data.error) props.onOk(data);
-                    else props.onErr(data.error);
-                })
-            });
-        })
+        send("auth", {login:login.value, password:password.value}, "POST").then((res)=> {
+            res.json().then((data)=> {
+                if(!data.error) props.onOk(data);
+                else props.onErr(data.error);
+            })
+        });
     }
     const reg =()=> {
-        $.getJSON("https://api.ipify.org?format=json", (data)=> {
-            send("regUser", {login:login, password:password, ip:data}, "POST").then((res)=> {
-                res.json().then((data)=> {
-                    if(!data.error) props.onOk(data);
-                    else props.onErr(data.error);
-                })
-            });
+        send("regUser", {login:login.value, password:password.value, ip:data}, "POST").then((res)=> {
+            res.json().then((data)=> {
+                if(!data.error) props.onOk(data);
+                else props.onErr(data.error);
+            })
         });
     }
 
@@ -31,15 +29,9 @@ export default function Authorize(props) {
     return(
         <div style={{marginTop:"0px"}} className="intrf">
             Логин:
-            <input type="text" 
-                value={ login } 
-                onInput={(ev)=> setLogin(ev.target.value)}
-            />
+            <input type="text" {...login}/>
             Пароль:
-            <input type="password" 
-                value={ password } 
-                onInput={(ev)=> setPass(ev.target.value)}
-            />
+            <input type="password" {...password} />
 
             <div className="line">
                 <button style={{marginTop:"20px", width:"35%"}} 
