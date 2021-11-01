@@ -20,6 +20,7 @@ const fs = require("fs");
 const pinoms = require('pino-multi-stream');
 const path = require("path");
 const {registration, autorise} = require("./server/user");
+const { tokenGeneration } = require("./server/func")
 
 
 
@@ -31,7 +32,7 @@ const TIME =()=> [new Date().getDay(), new Date().getUTCHours(), new Date().getM
 const prettyStream = pinoms.prettyStream()
 const streams = [{stream: fs.createWriteStream('log.log')},{stream: prettyStream}];
 const logger = pinoms(pinoms.multistream(streams))
-const online = {}
+const whiteList = {}
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -44,29 +45,28 @@ app.get("/", (req, res)=> {
 // синхронизация с параметрами только через сервер
 app.post("/auth", jsonParser, (req, res)=> {
     let user;
-    let cocs = cookieParser.JSONCookies(req.cookies)
     
     if(req.body.login && req.body.password) {
         user = autorise(req.body.login, req.body.password)
         
         if(!user.error){
-            res.cookie("login", user.login)
-            res.cookie("password", user.password)
+            user.token = tokenGeneration(req.body.login, req.body.password)
+            res.cookie("login", req.body.login)
+            res.cookie("password", req.body.password)
+            db.set("user."+user.login, user)
             logger.info("[🔌]авторизация: ", req.body.login)
             res.send(user);
         }
-    }
-    else if(cocs.login && cocs.password){
-        user = autorise(cocs.login, cocs.password)
-        res.send(user);
     }
     else res.send({error:"login or password error"})
 });
 app.post("/regUser", jsonParser, (req, res)=> {
     if(req.body.login && req.body.password){
         let user = registration(req.body.login, req.body.password)
-        req.cookies["login"] = req.body.login
-        req.cookies["passsword"] = user.password
+        user.token = tokenGeneration(req.body.login, req.body.password)
+        res.cookie("login", req.body.login)
+        res.cookie("password", req.body.password)
+        db.set("user."+user.login, user)
         logger.info("[🆕] регистрация: ", req.body.login)
         res.send(user);
     }
@@ -142,9 +142,6 @@ app.post("/exit", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
     
     if(!user.error && req.body.state){
-        res.clearCookie("login")
-        res.clearCookie("password")
-        res.clearCookie("token")
         res.redirect("http://31.172.65.58/")
     }
     else res.send(user)
@@ -168,35 +165,21 @@ app.post("/getUser", jsonParser, (req, res)=> {
 
 
 io.on('connection', (socket)=> {
-    let cookies =()=> cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie))
     console.log('[🔌]соединение установлено:', socket.id)
-    
-    const useOnline =()=> {
-        if(cookies().login && !online[cookies().login]){
-            let user = autorise(cookies().login, cookies().passsword)
-            if(!user.error) online[user.login] = user
-            else {
-                socket.emit('delete_cookie', 'login');
-                socket.emit('delete_cookie', 'password');
-                socket.disconnect()
-            }
-        }
-    }
-    
+   
+    socket.on("init", (data)=> {
+        let user = autorise(data.login, data.password)
+        if(user) whiteList[socket.id] = user
+    });
+    socket.on("set", async(data)=> {
+        let user = whiteList[socket.id]
 
-    socket.on("set", (data)=> {
-        let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
-        if(!user){
-            useOnline()
-            user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
-        }
-        
         if(user){
-            if(data[0] && data[1]){
-                user[data[0]] = data[1]
+            if(data.req[0] && data.req[1]){
+                user[data.req[0]] = data.req[1]
                 db.set("user."+user.login, user)
 
-                if(data[0]==="payloads") socket.emit("get.payload", user.payloads)
+                if(data.req[0]==="payloads") socket.emit("get.payload", user.payloads)
                 else socket.emit("get.user", user)
             }
             else socket.emit("error", "error key or value set")
@@ -204,56 +187,54 @@ io.on('connection', (socket)=> {
         else socket.emit("error", "error object user set")
     });
     socket.on("get", (data)=> {
-        useOnline()
-        let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
-        if(user && data){
-            socket.emit("get."+data, user[data])
+        let user = whiteList[socket.id]
+
+        if(user && data.req){
+            console.log("get: ", data.req)
+            socket.emit("get."+data, user[data.req])
         }
         else socket.emit("error", "user multi session")
     })
     socket.on("del", (data)=> {
-        useOnline()
-        let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
+        let user = whiteList[socket.id]
 
-        if(user){
-            user.delete(data)
+        if(user && data.req){
+            console.log("delete: ", data.req)
+            user.delete(data.req)
         }
-        else socket.emit("error", "user multi session")
+        else socket.emit("error", "error delete data "+data.req)
     });
     socket.on("dump", (data)=> {
-        useOnline()
-        let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
+        let user = whiteList[socket.id]
 
         if(user && user.payloads){
             user.payloads = data.payloads
             db.set("user."+user.login, user)
             socket.emit("get.user", user)
         }
-        else socket.emit("error", "user multi session")
+        else socket.emit("error", "error user data dump")
     });
     socket.on("app", (data)=> {
-        let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
-        if(user){
-            user.set("app", dompurify.sanitize(data))
-        }
-        else socket.emit("error", "user multi session")
+        let user = whiteList[socket.id]
+
+        if(user)user.set("app", dompurify.sanitize(data.req))
+        else socket.emit("error", "error dump dom")
     });
     socket.on("file.po", (data)=> {
-        let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
+        let user = whiteList[socket.id]
 
         if(user){
-            if(user.nodes[data[0]]) user.nodes[data[0]].file = data[1]
+            if(user.nodes[data.req[0]]) user.nodes[data.req[0]].file = data.req[1]
             db.set("user."+user.login, user)
         }
         else socket.emit("error", "error file.po")
     });
-    socket.on("exit", ()=> {
-        if(online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]){
-            console.log('[🆑]соединение разорвано:', socket.id)
-            let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
+    socket.on("exit", (data)=> {
+        let user = whiteList[socket.id]
+        
+        if(user){
+            console.log('[⭕]соединение разорвано:', socket.id)
             db.set("user."+user.login, user)
-
-            delete online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
             socket.disconnect()
         }
         else {
@@ -262,16 +243,8 @@ io.on('connection', (socket)=> {
         }
     });
     socket.on("disconnect", ()=> {
-        if(online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]){
-            console.log('[🆑]соединение разорвано:', socket.id)
-            let user = online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
-
-            if(user){
-                db.set("user."+user.login, user)
-                delete online[cookieParser.JSONCookies(cookie.parse(socket.request.headers.cookie)).login]
-            }
-        }
-        else logger.error("[❗]: error socket disconection")
+        console.log('[🆑]соединение разорвано:', socket.id)
+        delete whiteList[socket.id]
     });
 });
 

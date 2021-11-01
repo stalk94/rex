@@ -43,7 +43,7 @@ export const useSub =(topic, def, fn)=> {
         let p = store.get("user").payloads
         p[topic] = def
         payloads[topic] = def
-        socket.emit("set", ["payloads", p])
+        socket.emit("set", {token:store.get("user").token, req:["payloads", p]})
 
         if(api) api.subscribe(topic+"st")
         if(fn) window.api.on("message", (...arg)=> {

@@ -27,7 +27,7 @@ const FormRegistrationNewNode =(props)=> {
     }
 
     return(
-        <>
+        <div style={{paddingBottom:"15px",borderBottom:"1px dotted gray"}}>
             <div style={{display:"flex",flexDirection:"row"}}>
                 {SHEME.map((type, i)=> (
                     <button onClick={useType} key={i}>{ type }</button>
@@ -51,7 +51,7 @@ const FormRegistrationNewNode =(props)=> {
             <button style={{marginTop:"2%",width:"52%"}} onClick={()=> props.create({mac:mac,name:name,type:type})}>
                 Создать узел
             </button>
-        </>
+        </div>
     );
 }
 
@@ -77,9 +77,8 @@ export default function SchemeConstructor(props) {
 
 
     return(
-        <>
+        <div>
             <FormRegistrationNewNode create={onCreate} />
-            
             <div className="tables">
                 {Object.values(state).length > 0
                     ? Object.values(state).map((node, index)=> (
@@ -96,6 +95,6 @@ export default function SchemeConstructor(props) {
                     : "узлов пока не добавлено"
                 }
             </div>  
-        </>
-    )
+        </div>
+    );
 }

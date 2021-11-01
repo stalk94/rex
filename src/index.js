@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FullPage, Slide } from 'react-full-page';
-import { send, useCokie } from "./engine";
 import Authorize from "./component/authorize";
 import "./css/main.css";
 import Figure from "./component/figure";
 import p1 from "./img/promo-1.jpg";
 import p2 from "./img/promo-2.jpg";
+import { useDidMount } from "rooks";
 
 
 /////////////////////////////////////////////////////
@@ -46,26 +46,14 @@ export default function Main(props) {
     const [head, onHead] = useState(<GM open={verify}/>)
 
     const verify =()=> {
-        let data = useCokie()
-        console.log(data)
-    
-        if(data.login && data.password && data.login!=="" && data.password!==""){
-            send("auth", {login:data.login, password:data.password}, "POST").then((res)=> {
-                res.json().then((userData)=> {
-                    if(!userData.error){
-                        delete userData.password
-                        store.set("user", userData)
-                        props.useRender(userData)
-                    }
-                    else alert("login or password error")
-                });
-            })
+        let data = store.get("user")
+        
+        if(data.login && data.password){
+            socket.emit("init", {login:data.login, password:data.password})
         }
         else setTimeout(()=> onHead(<GM open={verify}/>), 6000)
     }
-    
-
-    useEffect(()=> {
+    const onLoad =()=> {
         onHead(
             <React.Fragment>
                 <GM open={verify}/>
@@ -75,7 +63,6 @@ export default function Main(props) {
         setRegForm(
             <Authorize 
                 onOk={(userData)=> {
-                    delete userData.password
                     store.set("user", userData)
                     props.useRender(userData)
                 }}
@@ -91,8 +78,10 @@ export default function Main(props) {
             />
         );
         setTimeout(()=> verify(), 300)
-    }, [])
-    
+    }
+    useDidMount(()=> {
+        onLoad()
+    })
     
     return(
         <FullPage>

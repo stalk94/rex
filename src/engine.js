@@ -1,6 +1,6 @@
 import cookie from "cookie";
 const observe = require('store/plugins/observe');
-
+const { io } = require("socket.io-client");
 
 
 class EventEmmitter {
@@ -25,11 +25,11 @@ class EventEmmitter {
   }
 }
 
+window.socket = io()
 window.store = require('store');
 store.addPlugin(observe)
 const gurl = "http://localhost:3000/";
 window.EVENT = new EventEmmitter()
-window.run = true
 
 
 export const useCokie =(login, password)=> {

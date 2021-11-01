@@ -1,11 +1,20 @@
-{"level":30,"time":1635722495763,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"server start"}
-{"level":30,"time":1635722497765,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
-{"level":50,"time":1635722497864,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[❗]: error socket disconection"}
-{"level":30,"time":1635722501273,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
-{"level":50,"time":1635722689060,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[❗]: error socket disconection"}
-{"level":50,"time":1635722692249,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[❗]: error socket disconection"}
-{"level":50,"time":1635722696200,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[❗]: error socket disconection"}
-{"level":30,"time":1635722697755,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
-{"level":50,"time":1635722697860,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[❗]: error socket disconection"}
-{"level":30,"time":1635722700365,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
-{"level":50,"time":1635722779371,"pid":10592,"hostname":"DESKTOP-1PIEASA","msg":"[❗]: error socket disconection"}
+{"level":30,"time":1635797984368,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"server start"}
+{"level":30,"time":1635798035621,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798241162,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798289316,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798487280,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798657536,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798687640,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798745310,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798777295,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798864442,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635798894216,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799099785,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799140023,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799215871,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799231597,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799291829,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799352803,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799586084,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799620059,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}
+{"level":30,"time":1635799644354,"pid":12584,"hostname":"DESKTOP-1PIEASA","msg":"[🔌]авторизация: "}

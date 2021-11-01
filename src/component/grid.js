@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useWillUnmount } from "rooks";
 import { Select, Input } from "./input";
 import { send, useCokie } from "../engine";
-import { FaArrowsAltV } from "react-icons/fa";
+import arrow from "../img/top-ar.png";
 import { usePub, useSub } from "./device.f";
 import Cookies from 'js-cookie';
 
@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 const useUser =()=> store.get("user")
 const useChek =(topic)=> store.get("user").payloads[topic]
 export const useWatch =(fn)=> store.watch("user", (data)=> fn(data))
-const useSocket =(key, val)=> socket.emit("set", [key, val])
+const useSocket =(key, val)=> socket.emit("set", {token:useUser().token, req:[key, val]})
 
 const META =()=> ({
     reley: [
@@ -99,7 +99,8 @@ const Title =(props)=> {
     }
     const onLoad =(e)=> {
         readFile(e.target, (data)=> {
-            socket.emit("file.po", [props.mac.mac, data])
+            
+            socket.emit("file.po", {token:useUser().token, req:[props.mac.mac, data]})
         })
     }
     
@@ -155,6 +156,7 @@ const Row =(props)=> {
         setId()
     });
 
+    
     return(
         <div className="Row">
             {Object.keys(state).map((key, index)=> {
@@ -259,7 +261,7 @@ export default function Grid(props) {
                 knx={{knx:knx, set:setKnx}}
                 change={onTitleChange}
             />
-            <div style={{paddingLeft:"10px",marginTop:"10px",display:visible?"block":"none"}}>
+            <div style={{paddingLeft:"10px",marginTop:"10px",display:visible?"block":"none",transitionDelay:"1s"}}>
                 {Object.keys(modules).map((key)=> (
                     Object.keys(modules[key]).map((kid)=> (
                         <Row 
@@ -273,7 +275,7 @@ export default function Grid(props) {
                 ))}
             </div>
             <div className="Shadower" onClick={()=> setVisible(visible?false:true)}>
-                <FaArrowsAltV/>
+                <img width="50px" src={arrow} style={{transform:!visible?"rotate(180deg)":"rotate(0deg)",transitionDuration:"1s"}}/>
             </div>
         </div>
     );

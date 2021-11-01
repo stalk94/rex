@@ -1,4 +1,3 @@
-require("./api");
 import "./css/style.css";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
@@ -13,12 +12,14 @@ import logo from "./img/logo.svg";
 import userIcon from "./img/user.svg";
 import NavigationHome from "./component/navigation";
 import SchemeConstructor from "./component/scheme";
-import NodeArea from "./component/node"
+import NodeArea from "./component/node";
+import { NotificationLayer } from "./component/pop-up";
 
 
 
 const Title =(props)=> {
     const style = {color:props.color}
+    require("./api");
 
     return(
         <>
@@ -49,9 +50,9 @@ function App(props) {
             setErr(text)
             setTimeout(()=> setErr(""), 5000)
         });
-        
+
         EVENT.on("errorColor", (color)=> setErrColor(color));
-        EVENT.on("exit", ()=> send("exit", {login:Cookies.get("login"), password:Cookies.get("password"), data:store.get("user")}))
+        EVENT.on("exit", ()=> send("exit", {login:store.get("user").login, password:store.get("user").password, data:store.get("user")}))
     })
 
     const setError =(textError)=> {
@@ -139,6 +140,7 @@ function App(props) {
                                 : <User user={user}/>
                         )}
                     </div> 
+                    <NotificationLayer/>
                 </div>
             </main>
         </article>
@@ -147,35 +149,31 @@ function App(props) {
 
 
 ///////////////////////////////////////////////////////////////////////////////////
-const UI =()=> {
-    const [render, setRender] = useState("")
-
-    useEffect(()=> {
-        setTimeout(()=> {
-            useCokie()
-            
-            if(Cookies.get("login") && Cookies.get("password") && store.get("user")){
-                send("auth", {login:Cookies.get("login"), password:Cookies.get("password")}, "POST").then((res)=> {
+window.onload =()=> {
+    const UI =()=> {
+        const [render, setRender] = useState("")
+    
+        useEffect(()=> {
+            if(store.get("user").login && store.get("user").password){
+                send("auth", {login:store.get("user").login, password:store.get("user").password}, "POST").then((res)=> {
                     res.json().then((userData)=> {
                         if(!userData.error){
-                            delete userData.password
                             store.set("user", userData)
                             setRender(<App user={userData} />)
+                            socket.emit("init", {login:store.get("user").login, password:store.get("user").password})
                         }
                         else alert("login or password error")
                     });
                 });
             }
-            else setRender(
-                <Main useRender={(data)=> setRender(<App user={data} />)}/>
-            );
-        }, 500)
-    }, [])
+            else setRender(<Main useRender={(data)=> setRender(<App user={data} />)}/>);
+        }, [])
+    
+    
+        return(
+            <>{ render }</>
+        );
+    }
 
-
-    return(
-        <>{ render }</>
-    );
+    ReactDOM.render(<UI/>, document.querySelector(".root"))
 }
-
-window.onload =()=> ReactDOM.render(<UI/>, document.querySelector(".root"))
