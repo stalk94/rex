@@ -65,7 +65,6 @@ const useArray =(data, def)=> {
 
 
 
-
 /**
  * `knx`: knx   
  * `mac`: mac   
@@ -127,8 +126,6 @@ const Title =(props)=> {
         </div>
     );
 }
-
-
 const Row =(props)=> {
     const [id, setId] = useState()
     const [state, setState] = useState(useArray(props.module, props.mac+"/"+props.name+"/"))
@@ -225,7 +222,6 @@ const Row =(props)=> {
         </div>
     );
 }
-
 
 
 

@@ -52,7 +52,7 @@ export default function User(props) {
                 <h5 style={{textAlign:"left", margin:"0px", color:"grey"}}>Контактное лиццо2:</h5>
                 <input type="text" {...kontact2}/>
 
-                <div className="line" id="exit" onClick={()=> EVENT.emit("exit")}>
+                <div className="line" id="exit" onClick={()=> onExit()}>
                     <h3> Выход </h3>
                 </div>
             </ul>

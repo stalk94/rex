@@ -25,11 +25,13 @@ class EventEmmitter {
   }
 }
 
+
 window.socket = io()
 window.store = require('store');
 store.addPlugin(observe)
-const gurl = "http://localhost:3000/";
+const gurl = "http://31.172.65.58/";
 window.EVENT = new EventEmmitter()
+store.set("curent.room", {name:"Избранное", id:-1})
 
 
 export const useCokie =(login, password)=> {
@@ -37,14 +39,28 @@ export const useCokie =(login, password)=> {
 }
 
 
+window.readFile =(input, clb)=> {
+  let file = input.files[0]
+  let reader = new FileReader()
+
+  reader.readAsText(file)
+
+  reader.onload =()=> {
+    console.log(reader.result)
+    if(clb) clb(reader.result)
+  }
+  reader.onerror =()=> {
+    EVENT.emit("error", reader.error)
+  }
+}
 window.onExit =()=> {
-  EVENT.emit("exit")
-  socket.emit("exit", store.get("user"))
-  document.cookie = 'login=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-  document.cookie = 'password=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  socket.emit("exit", {})
+  localStorage.clear()
+  //document.cookie = 'login=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  //document.cookie = 'password=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
   setTimeout(()=> {
-    store.remove("user");
+    window.location.reload()
   }, 1000);
 }
 
@@ -55,7 +71,6 @@ socket.on('delete_cookie', (cookie)=> {
 socket.on('disconnect', ()=> {
   document.location.reload()
 });
-store.set("curent.room", {name:"Избранное", id:-1})
 socket.on("multiconnect", ()=> {
   EVENT.emit("error", "Обнаружено новое соединение, это было отключено от сервера!!!")
 });
@@ -66,26 +81,12 @@ socket.on("get.payload", (data)=> {
 });
 socket.on("error", (txt)=> {
   EVENT.emit("error", txt)
+  if(txt==="error object user set") setTimeout(()=> window.location.reload(), 1000)
 });
 
 
-window.readFile =(input, clb)=> {
-    let file = input.files[0]
-    let reader = new FileReader()
 
-    reader.readAsText(file)
-
-    reader.onload =()=> {
-      console.log(reader.result)
-      if(clb) clb(reader.result)
-    }
-    reader.onerror =()=> {
-      EVENT.emit("error", reader.error)
-    }
-}
-
-
-export function send(url, data, metod) {
+window.send =(url, data, metod)=> {
   let response;
 
 

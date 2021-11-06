@@ -138,14 +138,7 @@ app.post("/delete", jsonParser, (req, res)=> {
         res.send(user)
     }
 });
-app.post("/exit", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
-    
-    if(!user.error && req.body.state){
-        res.redirect("http://31.172.65.58/")
-    }
-    else res.send(user)
-});
+
 // admin api
 app.post("/getUserList", jsonParser, (req, res)=> {
     if(req.body.token===""){

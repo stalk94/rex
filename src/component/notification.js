@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { Add, FormClose, StatusGood, StatusWarning } from 'grommet-icons';
+import { FormClose, StatusGood, StatusWarning, StatusCritical } from 'grommet-icons';
 import { Box, Button, Grommet, Layer } from 'grommet';
+import Switch, { Case, Default } from 'react-switch-case';
 
 
-export const NotificationLayer =(props)=> {
+
+
+export default function NotificationLayer(props) {
     const [open, setOpen] = useState()
     const [text, setText] = useState("")
     const [status, setStatus] = useState("status-ok")
@@ -20,20 +23,23 @@ export const NotificationLayer =(props)=> {
             setStatus("status-ok")
             onOpen()
         })
-        EVENT.on("err", (txt)=> {
+        EVENT.on("error", (txt)=> {
             setText(txt)
             setStatus("status-error")
             onOpen()
         })
-        setTimeout(()=> EVENT.emit("payload", 'Чего пялимся?'), 2000)
-        setTimeout(()=> EVENT.emit("err", '!!!Щас ошибка выпадет'), 10000)
+        EVENT.on("warn", (txt)=> {
+            setText(txt)
+            setStatus("status-warning")
+            onOpen()
+        })
     }, [])
 
 
-    return (
+    return(
         <Grommet>
-            {open
-                ? <Layer
+            {open &&
+                <Layer
                     position="bottom"
                     modal={false}
                     margin={{vertical:'medium',horizontal:'small'}}
@@ -52,16 +58,23 @@ export const NotificationLayer =(props)=> {
                     background={status}
                 >
                     <Box align="center" direction="row" gap="xsmall">
-                        {status === "status-ok"
-                            ? <StatusGood/>
-                            : <StatusWarning/>
-                        }
+                        <Switch condition={status}>
+                            <Case value="status-ok">
+                                <StatusGood/>
+                            </Case>
+                            <Case value="status-warning">
+                                <StatusWarning/>
+                            </Case>
+                            <Default>
+                                <StatusCritical/>
+                            </Default>
+                        </Switch>
+
                         <var>{ text }</var>
                     </Box>
-                    <Button icon={<FormClose />} onClick={onClose} plain />
-                 </Box>
-                 </Layer>
-                : ""
+                    <Button icon={<FormClose/>} onClick={onClose} plain />
+                </Box>
+                </Layer>
             }
         </Grommet>
     );

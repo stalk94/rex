@@ -5,7 +5,7 @@ import onOff from '../img/onOff.png';
 import wtor from '../img/wtor.png';
 import logic from '../img/logic.png';
 import termostat from '../img/termostat.png';
-import { BsCardText } from "react-icons/bs";
+
 
 
 

@@ -27,22 +27,18 @@ export default function Authorize(props) {
 
 
     return(
-        <div style={{marginTop:"0px"}} className="intrf">
+        <div style={{marginTop:"0px",marginBottom:"5%"}} className="intrf">
             Логин:
             <input type="text" {...login}/>
             Пароль:
             <input type="password" {...password} />
 
-            <div className="line">
-                <button style={{marginTop:"20px", width:"35%"}} 
-                    onClick={ auth }
-                >
+            <div className="buttons-reg">
+                <button className="btn-reg" onClick={ auth }>
                     <i className="bx bx-user"/>
                     Авторизация
                 </button>
-                <button style={{marginTop:"20px", marginLeft:"50px", width:"35%"}} 
-                    onClick={ reg }
-                >
+                <button className="btn-reg" onClick={ reg }>
                     <i className="bx bxs-lock-open"/>
                     Регистрация
                 </button>

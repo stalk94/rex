@@ -5,7 +5,7 @@ import Carts from "./cart-bar"
 
 
 
-/** ! В данных полный пиздец, контролируй явно создание карточек
+/**
  *  `_frame`:0,     
  *  `mac`:string,   
  *  `guid`:${user.id:0},  
@@ -82,7 +82,7 @@ const Node =(props)=> {
 
 
 
-/** узлы: принимает карточки */
+
 export default function NodeArea(props) {
     const [nodes, setDevices] = useState(props.nodes)
     
