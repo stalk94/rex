@@ -1,11 +1,11 @@
 import "./css/style.css";
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import "./engine.js";
+import Api from "./api";
 import Cookies from 'js-cookie';
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
 import { useDidMount, useLocalstorageState } from "rooks";
-//import { send, useCokie } from "./engine";
 import User from "./component/user";
 import logo from "./img/logo.svg";
 import userIcon from "./img/user.svg";
@@ -18,7 +18,6 @@ import NotificationLayer from "./component/notification";
 
 const Title =(props)=> {
     const style = {color:props.color}
-    require("./api");
 
     return(
         <>
@@ -29,30 +28,16 @@ const Title =(props)=> {
 }
 
 
-
 /** 
  * EVENTS: `error`,`errorColor`,`exit` 
  */
 export default function App(props) {
     const [user, setUser] = useState(props.user)
-    const [curentRoom, setCurentRoom] = useLocalstorageState("curent.room", {name:"Избранное",id:-1})
     const [errorColor, setErrColor] = useState("red")
     const [error, setErr] = useState("")
+    Api(user)
+    const [curentRoom, setCurentRoom] = useLocalstorageState("curent.room", {name:"Избранное",id:-1})
    
-
-    ////////////////////////////////////////
-    useEffect(()=> {
-        setUser(props.user)
-    }, [props.user])
-    useDidMount(()=> {
-        EVENT.on("error", (text)=> {
-            setErr(text)
-            setTimeout(()=> setErr(""), 5000)
-        });
-
-        EVENT.on("errorColor", (color)=> setErrColor(color));
-    })
-
     const setError =(textError)=> {
         setErr(textError)
         setTimeout(()=> setErr(""), 5000)
@@ -76,7 +61,7 @@ export default function App(props) {
                     store.set("user", user)
                     setUser(user)
                 }
-                else console.log(val.error);
+                else setError(val.error);
             })
         })
     }
@@ -91,6 +76,16 @@ export default function App(props) {
             })
         });
     }
+    ////////////////////////////////////////
+    useDidMount(()=> {
+        EVENT.on("error", (text)=> {
+            setErr(text)
+            setTimeout(()=> setErr(""), 5000)
+        });
+
+        EVENT.on("errorColor", (color)=> setErrColor(color));
+    })
+    useEffect(()=> {setUser(props.user)}, [props.user])
     
 
     return(
@@ -135,13 +130,10 @@ export default function App(props) {
                                 ? <NodeArea nodes={user.nodes} room={ curentRoom }/>
                                 : <User user={user}/>
                         )}
-                    </div> 
+                    </div>
                     <NotificationLayer/>
                 </div>
             </main>
         </article>
     );
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////

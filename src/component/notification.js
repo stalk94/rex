@@ -33,6 +33,7 @@ export default function NotificationLayer(props) {
             setStatus("status-warning")
             onOpen()
         })
+        EVENT.emit("payload", `рады снова тебя видеть`)
     }, [])
 
 

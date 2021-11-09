@@ -1,6 +1,13 @@
+import React, { useState, useEffect } from "react";
+import { SmallNavigations } from "../src/component/diagrams"
+import {OnOffDeamer, Centr} from "../src/component/device.f";
+import Carts from "../src/component/cart-bar";
+import ReactDOM from "react-dom";
+import UI from "../src/app"
 const logs = []
 const skrins = []
 const snaps = []
+
 
 // контекст
 const db = {
@@ -124,4 +131,19 @@ EVENT.on("test.end", ()=> {
     localStorage.clear()
     store.set("SNAPSHOTS", snaps)
 })
-window.socket = EVENT.on
+window.socket = EVENT
+////////////////////////////////////////////////////////////
+
+
+
+const Test =(props)=> {
+
+    return(
+        <div>test</div>
+    )
+}
+
+
+
+EVENT.emit("test.start", "")
+ReactDOM.render(<Test/>, document.querySelector(".root"))

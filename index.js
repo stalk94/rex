@@ -1,13 +1,13 @@
+const fs = require("fs");
+const path = require("path");
+const pinoms = require('pino-multi-stream');
 const express = require("express");
-const cache = require('js-cache');
-const sizeof = require('object-sizeof');
 const jsonParser = require("body-parser").json();
 const dompurify = require("dompurify");
 const db = require("quick.db");
 const { Server } = require("socket.io");
 const http = require('http');
 const app = express();
-const cookie = require("cookie");
 const cookieParser = require('cookie-parser');
 const server = http.createServer(app)
 const io = new Server(server, {
@@ -16,9 +16,6 @@ const io = new Server(server, {
     cookieHttpOnly: false,
     cookiePath: "/"
 });
-const fs = require("fs");
-const pinoms = require('pino-multi-stream');
-const path = require("path");
 const {registration, autorise} = require("./server/user");
 const { tokenGeneration } = require("./server/func")
 
@@ -64,8 +61,6 @@ app.post("/regUser", jsonParser, (req, res)=> {
     if(req.body.login && req.body.password){
         let user = registration(req.body.login, req.body.password)
         user.token = tokenGeneration(req.body.login, req.body.password)
-        res.cookie("login", req.body.login)
-        res.cookie("password", req.body.password)
         db.set("user."+user.login, user)
         logger.info("[🆕] регистрация: ", req.body.login)
         res.send(user);
@@ -121,15 +116,6 @@ app.post("/set", jsonParser, (req, res)=> {
     }
     else res.send(user)
 });
-app.post("/newNode", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
-    
-    if(!user.error && req.body.state){
-        user.addNewNode(req.body.state)
-        res.send(user)
-    }
-    else res.send(user)
-});
 app.post("/delete", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
 
@@ -137,21 +123,6 @@ app.post("/delete", jsonParser, (req, res)=> {
         user.deleteNode(req.body.mac)
         res.send(user)
     }
-});
-
-// admin api
-app.post("/getUserList", jsonParser, (req, res)=> {
-    if(req.body.token===""){
-        res.send(db.get("user"))
-    }
-    else res.send({error:"error token"})
-});
-app.post("/getUser", jsonParser, (req, res)=> {
-    if(req.body.token===""){
-        if(db.has("user."+req.body.login)) res.send(db.get("user."+req.body.login));
-        else res.send({error:"такого логина в базе не найдено"})
-    }
-    else res.send({error:"error token"})
 });
 
 
@@ -221,6 +192,16 @@ io.on('connection', (socket)=> {
             db.set("user."+user.login, user)
         }
         else socket.emit("error", "error file.po")
+    });
+    socket.on("newNode", (data)=> {
+        let user = whiteList[socket.id]
+
+        if(user && data.state){
+            user.addNewNode(data.state)
+            console.log(user)
+            socket.emit("get.newNode", user)
+        }
+        else socket.emit("error", "error add node")
     });
     socket.on("exit", (data)=> {
         let user = whiteList[socket.id]

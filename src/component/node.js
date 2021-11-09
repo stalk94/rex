@@ -89,11 +89,11 @@ export default function NodeArea(props) {
     useEffect(()=> {
         setDevices(props.nodes)
     }, [props.nodes])
-    
+
 
     return(
         <div className="device-wraper">
-            {Object.keys(nodes).map((mac, index)=> (
+            {nodes && Object.keys(nodes).map((mac, index)=> (
                 <Node 
                     key={index}  
                     type={nodes[mac]._type}

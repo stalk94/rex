@@ -1,34 +1,61 @@
-import React from "react";
+import "./engine.js";
+const { io } = require("socket.io-client");
+import React, {useState, useEffect} from "react";
+import { useLocalstorageState, useDidMount } from "rooks";
 import App from "./application";
 import Main from "./index";
+import ReactDOM from "react-dom";
 
 
 
-window.onload =()=> {
-    const UI =()=> {
-        const [render, setRender] = useState("")
-    
-        useEffect(()=> {
-            if(store.get("user") && store.get("user").login && store.get("user").password){
-                send("auth", {login:store.get("user").login, password:store.get("user").password}, "POST").then((res)=> {
-                    res.json().then((userData)=> {
-                        if(!userData.error){
-                            store.set("user", userData)
-                            setRender(<App user={userData} />)
-                            socket.emit("init", {login:store.get("user").login, password:store.get("user").password})
-                        }
-                        else alert("login or password error")
-                    });
-                });
-            }
-            else setRender(<Main useRender={(data)=> setRender(<App user={data} />)}/>);
-        }, [])
-    
-    
-        return(
-            <>{ render }</>
-        );
+const initSocket =(user)=> {
+    if(!window.socket) {
+        window.socket = io()
+        socket.on('disconnect', ()=> {
+            document.location.reload()
+        });
+        socket.on("get.payload", (data)=> {
+            let user = store.get("user")
+            user.payloads = data
+            store.set("user", user)
+        });
+        socket.on("get.user", (data)=> {
+            if(!data.error) store.set("user", user)
+            else EVENT.emit("error", data.error)
+        });
+        socket.on("error", (txt)=> {
+            EVENT.emit("error", txt)
+            if(txt==="error object user set") setTimeout(()=> window.location.reload(), 1000)
+        });
+
+        socket.emit("init", {login:user.login, password:user.password})
     }
-
-    ReactDOM.render(<UI/>, document.querySelector(".root"))
 }
+
+
+export default function UI (props) {
+    const [user, setUser] = useLocalstorageState("user", false)
+    const [render, setRender] = useState("")
+    
+    useDidMount(()=> {
+        if(user && user.login && user.password){
+            useSend("auth", {login:user.login, password:user.password}, "POST", (userData)=> {
+                if(!userData.error){
+                    setUser(userData)
+                    setRender(<App user={ userData } />)
+                    initSocket(user)
+                }
+                else alert("login or password error")
+            });
+        }
+        else setRender(<Main useRender={(data)=> setRender(<App user={data} />)}/>);
+    })
+    
+    
+    return(
+        <>{ render }</>
+    );
+}
+
+
+ReactDOM.render(<UI/>, document.querySelector(".root"))

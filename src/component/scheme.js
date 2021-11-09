@@ -1,11 +1,9 @@
-import React, {useState} from "react";
-import { send, useCokie } from "../engine";
+import React, {useState, useEffect} from "react";
 import Grid from "./grid";
 
 
 
 /////////////////////////////////////////////////
-const user = store.get("user")
 const style = {paddingLeft:"55px",paddingRight:"5%"}
 const SHEME = ['PMR','SMR',"FSC","BUT8","DIM8","CUR4"]
 ///////////////////////////////////////////////////
@@ -61,26 +59,25 @@ export default function SchemeConstructor(props) {
     const [state, setState] = useState(store.get("user").nodes)
 
     const onCreate =(meta)=> {
-        if(meta.type){
-            send("newNode", {login:useCokie().login, password:useCokie().password, state:meta}, "POST").then((res)=> {
-                res.json().then((userData)=> {
-                    if(!userData.error){
-                        store.set("user", userData)
-                        window.location.reload()
-                    }
-                    else props.error(userData.error)
-                })
-            });
-        }
+        if(meta.type) socket.emit("newNode", {state:meta})
         else EVENT.emit("error", "не указан тип ноды")
     }
+    useEffect(()=> {
+        socket.on("get.newNode", (newData)=> {
+            if(!newData.error){
+                setState(newData.nodes)
+                store.set("user", newData)
+            }
+            else EVENT.emit("error", newData.error)
+        })
+    }, [])
 
 
     return(
         <div>
             <FormRegistrationNewNode create={onCreate} />
             <div className="tables">
-                {Object.values(state).length > 0
+                {state && Object.values(state).length > 0
                     ? Object.values(state).map((node, index)=> (
                         <div key={index} className="Table">
                             <Grid 

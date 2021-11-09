@@ -53,7 +53,7 @@ export default function User(props) {
                 <input type="text" {...kontact2}/>
 
                 <div className="line" id="exit" onClick={()=> onExit()}>
-                    <h3> Выход </h3>
+                    <img src={exit}/><h3> Выход </h3>
                 </div>
             </ul>
         </div>

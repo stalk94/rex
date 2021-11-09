@@ -1,6 +1,10 @@
 import cookie from "cookie";
 const observe = require('store/plugins/observe');
+const gurl = "http://localshost:3000/";
+
+
 window.store = require('store');
+store.addPlugin(observe)
 window.useCokie =(login, password)=> {
     return cookie.parse(document.cookie)
 }
@@ -29,7 +33,14 @@ class EventEmmitter {
 }
 
 window.send =(url, data, metod)=> {
+    console.log(url, data, metod)
     
+    return({then:(clb)=> { 
+        clb({
+            json:()=> {
+                return {then:(clb)=> { clb(store.get("user"))}}
+            }}) 
+    }})
 }
 
 

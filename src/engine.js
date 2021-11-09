@@ -1,6 +1,6 @@
 import cookie from "cookie";
 const observe = require('store/plugins/observe');
-const { io } = require("socket.io-client");
+window.store = require('store');
 
 
 class EventEmmitter {
@@ -25,20 +25,15 @@ class EventEmmitter {
   }
 }
 
-
-window.socket = io()
-window.store = require('store');
+if(!store.get("curent.room")) store.set("curent.room", {name:"Избранное",id:0})
+const gurl = "http://localhost:3000/";
 store.addPlugin(observe)
-const gurl = "http://31.172.65.58/";
 window.EVENT = new EventEmmitter()
-store.set("curent.room", {name:"Избранное", id:-1})
 
 
-export const useCokie =(login, password)=> {
+window.useCokie =(login, password)=> {
   return cookie.parse(document.cookie)
 }
-
-
 window.readFile =(input, clb)=> {
   let file = input.files[0]
   let reader = new FileReader()
@@ -65,30 +60,9 @@ window.onExit =()=> {
 }
 
 
-socket.on('delete_cookie', (cookie)=> {
-  document.cookie = cookie+'=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-});
-socket.on('disconnect', ()=> {
-  document.location.reload()
-});
-socket.on("multiconnect", ()=> {
-  EVENT.emit("error", "Обнаружено новое соединение, это было отключено от сервера!!!")
-});
-socket.on("get.payload", (data)=> {
-  let user = store.get("user")
-  user.payloads = data
-  store.set("user", user)
-});
-socket.on("error", (txt)=> {
-  EVENT.emit("error", txt)
-  if(txt==="error object user set") setTimeout(()=> window.location.reload(), 1000)
-});
 
-
-
-window.send =(url, data, metod)=> {
+window.send = function(url, data, metod) {
   let response;
-
 
   if(metod==="GET"){
       response = fetch(gurl + url, {
@@ -117,4 +91,16 @@ window.send =(url, data, metod)=> {
   });
 
   return response
+}
+window.useSend = function(url, data, metod, clb) {
+    send(url, data, metod).then((dat)=> {
+		console.log(dat)
+      	dat.json().then((val)=> {
+			clb(val)
+		})
+    })
+}
+window.onbeforeunload =()=> {
+  socket.emit("exit", {})
+  store.remove("loadApi")
 }

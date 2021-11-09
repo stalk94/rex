@@ -8,8 +8,6 @@ import termostat from '../img/termostat.png';
 
 
 
-
-
 const payloads = {}
 export const ICON = {
     lamp: lamp,
@@ -120,12 +118,13 @@ export function ProgressBar(props) {
  * brihtness:
  */
 export const OnOffDeamer =(props)=> {
-    const [onoff, setOnoff] = useState(store.get("user").payloads[props.topic]??'0')
+    const [onoff, setOnoff] = useState(0)
     const [brihtness, setBrihtness] = useState(50)
 
     useEffect(()=> {
-        useSub(props.topic, '0')
-        useSub(props.brihtness, '50')
+        useSub(props.topic, 0)
+        useSub(props.brihtness, 50)
+        setOnoff(store.get("user").payloads[props.topic])
         setBrihtness(store.get("user").payloads[props.brihtness])
 
         store.watch("user", (data)=> {
@@ -137,9 +136,9 @@ export const OnOffDeamer =(props)=> {
 
     return(
         <>
-            {onoff==='0'
+            {onoff===0
                 ? <h3 style={{color:onoff==='1'?"#42f059":"red",left:"40%"}}>
-                    { onoff==='1' ? brihtness+"%" : (onoff==='0'?"off":onoff) }
+                    { onoff===1 ? brihtness+"%" : (onoff===0?"off":onoff) }
                 </h3>
                 : "null"
             }
@@ -233,7 +232,11 @@ export const Centr =(props)=> {
         <input style={{marginTop:"5%"}} 
             disabled={onoff==="0"?false:true}
             type="range" 
-            onChange={(ev)=> {setDebounce(ev.target.value); setBr(ev.target.value);setBrihtness(ev.target.value)}} 
+            onChange={(ev)=> {
+                setDebounce(ev.target.value); 
+                setBr(ev.target.value);
+                setBrihtness(ev.target.value)
+            }} 
             value={+brihtness}
         />                       
     );
@@ -250,9 +253,9 @@ export const Title =(props)=> {
     }
 
     return(
-        <div onClick={props.onClick} className="line" style={{borderBottom:"1px solid rgba(0,0,0,0.2)"}}>
+        <div onClick={()=> props.onClick()} className="line" style={{borderBottom:"1px solid rgba(0,0,0,0.2)"}}>
             <div style={nameStyle}>
-                { props.name!==""?props.name:"not name" }
+                { props.name ? props.name : "not name" }
             </div>
         </div>
     );

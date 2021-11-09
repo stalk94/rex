@@ -10,7 +10,8 @@
     "FSC": {
         "reley": 8,
         "button": 4,
-        "termo": 4
+        "termo": 4,
+        "ir": 4
     },
     "BUT8": {
         "button": 8

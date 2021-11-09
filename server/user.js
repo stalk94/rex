@@ -1,5 +1,4 @@
 const db = require("quick.db");
-const { MongoClient } = require('mongodb');
 const { TaskTimer, Task } = require("tasktimer");
 const { parser, cartParse, cartsCreate, getPasswordHash, setPasswordHash } = require("./func");
 const MODULES = require("./modules.json");  
@@ -7,7 +6,6 @@ const NODES = require("./nodes.json");
 
 
 const timer = new TaskTimer(1000)
-const client = new MongoClient('mongodb://localhost:27017')
 const TIME =()=> `[${new Date().getDay()}:${new Date().getUTCHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}]:`;
 
 

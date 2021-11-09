@@ -1,6 +1,6 @@
 import React from 'react';
 import { useInput } from "rooks";
-import { send } from "../engine";
+//import { send } from "../engine";
 
 
 
@@ -17,7 +17,7 @@ export default function Authorize(props) {
         });
     }
     const reg =()=> {
-        send("regUser", {login:login.value, password:password.value, ip:data}, "POST").then((res)=> {
+        send("regUser", {login:login.value, password:password.value}, "POST").then((res)=> {
             res.json().then((data)=> {
                 if(!data.error) props.onOk(data);
                 else props.onErr(data.error);

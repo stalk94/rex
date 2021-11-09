@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useWillUnmount } from "rooks";
 import { Select, Input } from "./input";
-import { send, useCokie } from "../engine";
 import arrow from "../img/top-ar.png";
 import { usePub, useSub } from "./device.f";
 import Cookies from 'js-cookie';
@@ -29,8 +28,56 @@ const META =()=> ({
         {type:'select', name:"mod", data:['click','turnON','turnOFF','dimming','longClick','gerkonONOFF','gerkonOFFON','MS1min','MS5min','MS10min']},
         {type:'input', data:"GA2"}, 
         {type:'input', data:"GAstatus"}
+    ],
+    dimer: [
+        {type:"lable", data:"Димер", color: "#24bfe5"},
+        {type:'input', data:"name"}, 
+        {type:'select', name:"room", data:store.get("user").rooms.map((room)=> room.name)},
+        {type:'input', data:"GA1"}, 
+        {type:'input', data:"GA2"}, 
+        {type:'input', data:"GA1-relative"}, 
+        {type:'input', data:"GA2-relative"}, 
+        {type:'input', data:"GA1-absolute"},
+        {type:'input', data:"GA2-absolute"}, 
+        {type:'input', data:"GA-absolute-status"}, 
+        {type:'input', data:"GA-feedback"}
+    ],
+    termo: [
+        {type:"lable", data:"Термостат", color: "#d77575"},
+        {type:'input', data:"name"},
+        {type:'select', name:"room", data:store.get("user").rooms.map((room)=> room.name)},
+        {type:'input', data:"GA-data"}, 
+        {type:'input', data:"onoff"}, 
+        {type:'input', data:"onoff-status"}, 
+        {type:'input', data:"heat1"},
+        {type:'input', data:"heat1-status"}, 
+        {type:'input', data:"heat2"},
+        {type:'input', data:"heat2-status"}, 
+        {type:'input', data:"heat3"},
+        {type:'input', data:"heat3-status"},
+        {type:'input', data:"cool1"},
+        {type:'input', data:"cool1-status"}, 
+        {type:'input', data:"cool2"},
+        {type:'input', data:"cool2-status"}, 
+        {type:'input', data:"cool3"},
+        {type:'input', data:"cool3-status"}
+    ],
+    ir: [
+        {type:"lable", data:"ИК-пульт", color: "#af7ed7"},
+        {type:'input', data:"name"},
+        {type:'input', data:"GA1"}, 
+        {type:'input', data:"GA2"},
+        {type:'input', data:"GA3"}, 
+        {type:'input', data:"GA4"},
+        {type:'input', data:"GA5"}, 
+        {type:'input', data:"GA6"},
+        {type:'input', data:"GA7"}, 
+        {type:'input', data:"GA8"},
+        {type:'input', data:"GA9"}, 
+        {type:'input', data:"GA10"},
     ]
 });
+
 const useParse =(type, index)=> META()[type][index]
 
 
@@ -61,7 +108,6 @@ const useArray =(data, def)=> {
         return rezult
     }
 }
-
 
 
 

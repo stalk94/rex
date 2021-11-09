@@ -5,7 +5,6 @@ import "./css/main.css";
 import Figure from "./component/figure";
 import p1 from "./img/promo-0.png";
 import p2 from "./img/promo-1.png";
-import { useDidMount } from "rooks";
 
 
 /////////////////////////////////////////////////////
@@ -59,44 +58,34 @@ export default function Main(props) {
     const [regForm, setRegForm] = useState()
     const [head, onHead] = useState(<GM open={verify}/>)
 
-    const verify =()=> {
-        let data = store.get("user")
-        
-        if(data.login && data.password){
-            socket.emit("init", {login:data.login, password:data.password})
-        }
-        else setTimeout(()=> onHead(<GM open={verify}/>), 6000)
-    }
-    const onLoad =()=> {
-        onHead(
-            <React.Fragment>
-                <GM open={verify}/>
-                <var style={{color:"brown", marginLeft:"2%",fontSize:"18px"}}>Воспользуйтесь формой регистрации/авторизации</var>
-            </React.Fragment>
-        );
-        setRegForm(
-            <Authorize 
-                onOk={(userData)=> {
-                    store.set("user", userData)
-                    props.useRender(userData)
-                }}
-                onErr={(textError)=> {
-                    onHead(
-                        <React.Fragment>
-                            <GM open={verify}/>
-                            <h3 style={{color:"brown", marginLeft:"5%"}}>{textError}</h3>
-                        </React.Fragment>
-                    );
-                    setTimeout(()=> onHead(<GM open={verify}/>), 6000)
-                }}
-            />
-        );
-        setTimeout(()=> verify(), 300)
-    }
-    useDidMount(()=> {
-        onLoad()
-    })
+    const verify =()=> setTimeout(()=> onHead(<GM open={verify}/>), 4000)
     
+
+    useEffect(()=> {
+        onHead(<>
+            <GM open={ verify }/>
+            <var style={{color:"brown", marginLeft:"2%",fontSize:"18px"}}>
+                Воспользуйтесь формой регистрации/авторизации
+            </var>
+        </>)
+        setRegForm(<Authorize 
+            onOk={(userData)=> {
+                store.set("user", userData)
+                props.useRender(userData)
+            }}
+            onErr={(textError)=> {
+                onHead(<>
+                    <GM open={ verify }/>
+                    <h3 style={{color:"brown", marginLeft:"5%"}}>
+                        { textError }
+                    </h3>
+                </>);
+                verify()
+            }}
+        />)
+    }, [])
+    
+
     return(
         <FullPage>
             <Slide className="section-1"> 
@@ -108,13 +97,3 @@ export default function Main(props) {
         </FullPage>
     );
 }
-
-
-/**
- * <Slide className="section-2">
-                <img src={ p2 } style={{width:"110vw"}}/>
-            </Slide>
-            <Slide className="section-3"> 
-                <img src={ p1 } style={{opacity:"0.6"}}/>
-            </Slide>
- */

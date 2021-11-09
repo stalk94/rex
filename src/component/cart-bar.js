@@ -26,7 +26,7 @@ function Footer(props) {
 
 
 export default function Carts(props) {
-    let elems = React.Children.toArray(props.children.props.children)
+    const [elems, setElems] = useState([])
     const [name, setName] = useState("")
     const [room, setRoom] = useState({name:1})
     const [view, setView] = useState(0)
@@ -34,26 +34,24 @@ export default function Carts(props) {
     const update =(newRoom)=> {
         let roomTopic = props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/room"
         let roomCartId = useUser().payloads[roomTopic]
-        let cartName = useUser().payloads[props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/name"] 
+        let cartName = useUser().payloads[props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/name"]
 
         setRoom(useUser().rooms[roomCartId])
         setName(cartName)
     }
     useEffect(()=> {
-        elems = React.Children.toArray(props.children.props.children)
+        try{
+            setElems(React.Children.toArray(props.children.props.children))
+        }
+        catch{ console.log("ошибка") }
         update(props.room)
     }, [props.room, props.children])
 
     
     return(
-        <div className="container"
-            style={{
-                display: (room && store.get("curent.room").name===room.name) ? "block" : "none"
-            }}
-        >
+        <div className="container" style={{display: (room && store.get("curent.room").name===room.name) ? "block" : "none"}}>
             <Title name={name} onClick={()=> setView(0)}/>
-            {
-                elems.map((e, i)=> {
+            {elems.map((e, i)=> {
                     if(e.type.name==="TimerManager" && view===1) return e 
                     else if(e.type.name!=="TimerManager" && view===0) return e
                     else if(view===2) return "графики"
