@@ -48,6 +48,7 @@ export const useSub =(topic, def, fn)=> {
         if(fn) window.api.on("message", (...arg)=> {
             let emitTopic = arg[0].slice(0, arg[0].length-2)
             if(topic===emitTopic) fn(String(arg[1]))
+            console.log(arg[0], String(arg[1]))
         })
     }
 }
@@ -121,45 +122,38 @@ export function ProgressBar(props) {
  * brihtness:
  */
 export const OnOffDeamer =(props)=> {
-    const [changeValue, setChange] = useState(10)
     const [onoff, setOnoff] = useState(0)
-    const [brihtness, setBrihtness] = useState()
-    const setBound = useDebounce(()=> usePub(props.brihtness, changeValue), 500)
+    const [brightness, setBrightness] = useState(store.get("user").payloads[props.brightness??props.brihtness]??50)
+
 
     useEffect(()=> {
         let user = store.get("user")
-
+        
         useSub(props.topic, 0)
-        useSub(props.brihtness, 50)
+        useSub(props.brightness??props.brihtness, 50, setBrightness)
         setOnoff(user.payloads[props.topic])
-        if(user.payloads && user.payloads[props.brihtness]){
-            setBrihtness(user.payloads[props.brihtness])
+        if(user.payloads && user.payloads[props.brightness??props.brihtness]){
+            setBrightness(+user.payloads[props.brightness??props.brihtness])
         }
 
         store.watch("user", (data)=> {
             user = data
             if(data.payloads[props.topic]) setOnoff(data.payloads[props.topic])
-            if(data.payloads[props.brihtness]) setBrihtness(data.payloads[props.brihtness])
+            if(data.payloads[props.brightness]) setBrightness(data.payloads[props.brightness])
         });
     }, [])
 
-
+    
     return(
-        <>
-            {onoff === 0
-                ? <>
-                    <RangeInput onChange={(ev)=> {
-                            setChange(ev.target.value)
-                            setBound()
-                        }} 
-                        defaultValue={brihtness} 
-                        value={changeValue}
-                    />
-                    <OnOff icon={props.icon} topic={props.topic} />
-                </>
-                : "null"
-            }
-        </>
+        <div style={{display:"flex",flexDirection:"row"}}>
+            <RangeInput onChange={(ev)=> {
+                    setBrightness(ev.target.value);
+                    usePub(props.brightness??props.brihtness, ev.target.value)
+                }}
+                value={brightness}
+            />
+            <OnOff onoff={onoff} icon={props.icon??"lamp"} topic={props.topic} />
+        </div>
     );
 }
 /** topic, icon */

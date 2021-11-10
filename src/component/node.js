@@ -42,6 +42,20 @@ const Node =(props)=> {
                             </Lable>
                         </Carts>
                 )})
+                else if(props.type!=="DIM8" && key==="dimmer") return props.cart[key].map((topic, i)=> {
+                    return(
+                        <Carts room={props.room} key={i} id={`#new-dim8-${i}`} topic={props.mac+topic}>
+                            <Lable type="DIM8">
+                                <TimerManager mac={props.mac} module={"D"+i} timers={[1,2,3,4]} />
+                                <OnOffDeamer 
+                                    icon={"lamp"}
+                                    topic={props.mac+`/D${i}/onoff`}
+                                    brightness={props.mac+`/D${i}/brightness`}     
+                                />
+                            </Lable>
+                        </Carts>
+                    );
+                })
                 else if(props.type==="SMR" && key==="reley") return props.cart[key].map((topic, i)=> {
                     if(topic.split("/")[2]==="onoff") return(
                         <Carts room={props.room} key={i} id={`#new-smr-${i}`} topic={props.mac+topic}>
@@ -72,7 +86,7 @@ const Node =(props)=> {
                                 <OnOffDeamer 
                                     icon="termostat"
                                     topic={props.mac+props.cart.reley[i]}
-                                    brihtness={props.mac+topic}     // тут продумать надо
+                                    brightness={props.mac+topic}     // тут продумать надо
                                 />
                             </Lable>
                         </Carts>

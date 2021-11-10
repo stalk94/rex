@@ -25,6 +25,7 @@ class EventEmmitter {
   }
 }
 
+
 if(!store.get("curent.room")) store.set("curent.room", {name:"Избранное",id:0})
 const gurl = "http://localhost:3000/";
 store.addPlugin(observe)

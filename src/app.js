@@ -1,5 +1,5 @@
 import "./engine.js";
-const { io } = require("socket.io-client");
+import { io } from "socket.io-client";
 import React, {useState, useEffect} from "react";
 import { useLocalstorageState, useDidMount } from "rooks";
 import App from "./application";

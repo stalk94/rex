@@ -15,7 +15,6 @@ import NodeArea from "./component/node";
 import NotificationLayer from "./component/notification";
 
 
-
 const Title =(props)=> {
     const style = {color:props.color}
 
@@ -28,6 +27,7 @@ const Title =(props)=> {
 }
 
 
+
 /** 
  * EVENTS: `error`,`errorColor`,`exit` 
  */
@@ -38,6 +38,7 @@ export default function App(props) {
     Api(user)
     const [curentRoom, setCurentRoom] = useLocalstorageState("curent.room", {name:"Избранное",id:-1})
    
+
     const setError =(textError)=> {
         setErr(textError)
         setTimeout(()=> setErr(""), 5000)
@@ -85,7 +86,7 @@ export default function App(props) {
 
         EVENT.on("errorColor", (color)=> setErrColor(color));
     })
-    useEffect(()=> {setUser(props.user)}, [props.user])
+    useEffect(()=> setUser(props.user), [props.user])
     
 
     return(
