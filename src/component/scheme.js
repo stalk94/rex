@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import Grid from "./grid";
+import Grid from "./grid/grid";
 
 
 
@@ -59,7 +59,10 @@ export default function SchemeConstructor(props) {
     const [state, setState] = useState(store.get("user").nodes)
 
     const onCreate =(meta)=> {
-        if(meta.type) socket.emit("newNode", {state:meta})
+        if(meta.type){
+            socket.emit("newNode", {state:meta})
+            setTimeout(()=> document.location.reload(), 500)
+        }
         else EVENT.emit("error", "не указан тип ноды")
     }
     useEffect(()=> {

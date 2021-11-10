@@ -802,6 +802,7 @@ select {
     width: 100%;
 }
 
+/** Табличные стили */
 .tables {
     margin-top: 5%;
     overflow-y: auto;
@@ -812,12 +813,20 @@ select {
 }
 .Table {
     margin-top: 3%;
-    overflow-y: auto;
+}
+.Grid {
+    border: 1px solid gray;
+    overflow-y: visible;
+    background-color: #00000033;
 }
 .Row {
     text-align: center;
     display:flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 10px;
+    margin-top: 10px;
+    transition-delay: 1s;
 }
 .Shadower {
     position: relative;
@@ -829,7 +838,12 @@ select {
 .Shadower:hover {
     opacity: 0.5;
 }
-
+.save-row {
+    max-width: 50px;
+    height: 50px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
 
 
 @keyframes animateCircle {

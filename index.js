@@ -67,12 +67,6 @@ app.post("/regUser", jsonParser, (req, res)=> {
     }
     else res.send({error: "Не все поля заполнены"});
 });
-app.post("/addNode", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password+"=");
-
-    if(!user.error) user.addNewNode(req.body.state);
-    else res.send(user)
-});
 app.post("/readNameRoom", jsonParser, (req, res)=> {
     let user = autorise(req.body.login, req.body.password);
     if(!user.error) user.reWriteRoom(req.body.name, req.body.id, (data)=> {
@@ -115,14 +109,6 @@ app.post("/set", jsonParser, (req, res)=> {
         setTimeout(()=> res.send(user), 500)
     }
     else res.send(user)
-});
-app.post("/delete", jsonParser, (req, res)=> {
-    let user = autorise(req.body.login, req.body.password);
-
-    if(!user.error && req.body.mac){
-        user.deleteNode(req.body.mac)
-        res.send(user)
-    }
 });
 
 
@@ -198,11 +184,18 @@ io.on('connection', (socket)=> {
 
         if(user && data.state){
             user.addNewNode(data.state)
-            console.log(user)
             socket.emit("get.newNode", user)
         }
         else socket.emit("error", "error add node")
     });
+    socket.on("delete", (mac)=> {
+        let user = whiteList[socket.id] 
+
+        if(user && mac){
+            user.deleteNode(mac)
+            socket.emit("get.delete", user)
+        }
+    })
     socket.on("exit", (data)=> {
         let user = whiteList[socket.id]
         

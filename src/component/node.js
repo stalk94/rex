@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from "react";
-import { OnOff, Lable, Centr, Title, OnOffDeamer, ButtonBar } from "./device.f";
+import { OnOff, Lable, OnOffDeamer, ButtonBar } from "./device.f";
 import TimerManager from "./timer";
 import Carts from "./cart-bar"
+
 
 
 
@@ -16,7 +17,8 @@ import Carts from "./cart-bar"
  */
 const Node =(props)=> {
     return(
-        <>{props.type === "PMR"
+        <>
+        {props.type === "PMR"
             ? <Carts room={props.room} id={`#pmr-0`} topic={props.mac+props.cart.reley[0]}> 
                 <Lable type="PMR">
                     <OnOff topic={props.mac+props.cart.reley[0]}/>
@@ -25,25 +27,25 @@ const Node =(props)=> {
         
             : Object.keys(props.cart).map((key)=> {
                 if(props.type!=="PMR" && key==="dimmer") return props.cart[key].map((topic, i)=> {
-                        if(topic.split("/")[2]==="onoff") return(
-                            <Carts room={props.room} key={i} id={`#new-device-${i}`} topic={props.mac+topic}>
-                                <Lable 
-                                    type={props.type} 
-                                    topic={props.mac+topic} 
-                                >
-                                <TimerManager mac={props.mac} module={"D"+i} timers={[1,2,3,4]} />
-                                <OnOffDeamer 
-                                    key={i} 
-                                    brihtness={props.mac+`/D${i}/brightness`} 
-                                    topic={props.mac+topic}
-                                />
-                                </Lable>
-                            </Carts>
+                    if(topic.split("/")[2]==="onoff") return(
+                        <Carts room={props.room} key={i} id={`#new-device-${i}`} topic={props.mac+topic}>
+                            <Lable 
+                                type={props.type} 
+                                topic={props.mac+topic} 
+                            >
+                            <TimerManager mac={props.mac} module={"D"+i} timers={[1,2,3,4]} />
+                            <OnOffDeamer 
+                                key={i} 
+                                brihtness={props.mac+`/D${i}/brightness`} 
+                                topic={props.mac+topic}
+                            />
+                            </Lable>
+                        </Carts>
                 )})
                 else if(props.type==="SMR" && key==="reley") return props.cart[key].map((topic, i)=> {
                     if(topic.split("/")[2]==="onoff") return(
                         <Carts room={props.room} key={i} id={`#new-smr-${i}`} topic={props.mac+topic}>
-                            <Lable type="SMR" >
+                            <Lable type="SMR">
                                 <TimerManager mac={props.mac} module={"R"+i} timers={[1,2,3,4]} />
                                 <OnOff style={{marginLeft:"60%",width:"100%"}} icon={"lamp"} topic={props.mac+topic} />
                             </Lable>
@@ -56,30 +58,31 @@ const Node =(props)=> {
                         <Lable type="CUR4">
                             <TimerManager mac={props.mac} module={"R"+i} timers={[1,2,3,4]} />
                             <div style={{display:"flex",flexDirection:"row",textAlign:"center"}}>
-                                <ButtonBar mac={props.mac} index={i} module={"R"}/>
-                                <OnOff offView="false" style={{width:"100%"}} icon={"wtor"} topic={props.mac+topic} />
+                                <ButtonBar mac={props.mac} index={i} module="R" />
+                                <OnOff offView="false" style={{width:"100%"}} icon="wtor" topic={props.mac+topic} />
                             </div>
                         </Lable>
                     </Carts>
                 )})
-                else if(props.type==="FSC") return props.cart[key].map((topic, i)=> (
-                    <Carts room={props.room} key={i} id={`#new-fsc-${i}`} topic={props.mac+topic}>
-                        <Lable
-                            type="FSC" 
-                            topic={props.mac+topic}
-                        >
-                        <OnOffDeamer 
-                            topic={props.mac+props.cart.reley[i]}
-                            brihtness={props.mac+topic} 
-                        />
-                        </Lable>
-                    </Carts>
-                ))
-            })}
+                else if(props.type==="FSC" && key==="reley") return props.cart[key].map((topic, i)=> {
+                    return(
+                        <Carts room={props.room} key={i} id={`#new-fsc-${i}`} topic={props.mac+topic}>
+                            <Lable type="FSC" topic={props.mac+topic}>
+                                <TimerManager mac={props.mac} module={"R"+i} timers={[1,2,3,4]} />
+                                <OnOffDeamer 
+                                    icon="termostat"
+                                    topic={props.mac+props.cart.reley[i]}
+                                    brihtness={props.mac+topic}     // тут продумать надо
+                                />
+                            </Lable>
+                        </Carts>
+                    )
+                })
+            })
+        }
         </>
     );
 }
-
 
 
 

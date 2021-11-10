@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDebounce, useWillUnmount, useToggle } from "rooks";
+import { RangeInput } from "grommet";
 import lamp from '../img/lamp.png';
 import onOff from '../img/onOff.png';
 import wtor from '../img/wtor.png';
@@ -113,39 +114,55 @@ export function ProgressBar(props) {
 }
 
 
+
+
 /** 
- * topic:   
+ * topic: onoff
  * brihtness:
  */
 export const OnOffDeamer =(props)=> {
+    const [changeValue, setChange] = useState(10)
     const [onoff, setOnoff] = useState(0)
-    const [brihtness, setBrihtness] = useState(50)
+    const [brihtness, setBrihtness] = useState()
+    const setBound = useDebounce(()=> usePub(props.brihtness, changeValue), 500)
 
     useEffect(()=> {
+        let user = store.get("user")
+
         useSub(props.topic, 0)
         useSub(props.brihtness, 50)
-        setOnoff(store.get("user").payloads[props.topic])
-        setBrihtness(store.get("user").payloads[props.brihtness])
+        setOnoff(user.payloads[props.topic])
+        if(user.payloads && user.payloads[props.brihtness]){
+            setBrihtness(user.payloads[props.brihtness])
+        }
 
         store.watch("user", (data)=> {
+            user = data
             if(data.payloads[props.topic]) setOnoff(data.payloads[props.topic])
             if(data.payloads[props.brihtness]) setBrihtness(data.payloads[props.brihtness])
-        })
+        });
     }, [])
 
 
     return(
         <>
-            {onoff===0
-                ? <h3 style={{color:onoff==='1'?"#42f059":"red",left:"40%"}}>
-                    { onoff===1 ? brihtness+"%" : (onoff===0?"off":onoff) }
-                </h3>
+            {onoff === 0
+                ? <>
+                    <RangeInput onChange={(ev)=> {
+                            setChange(ev.target.value)
+                            setBound()
+                        }} 
+                        defaultValue={brihtness} 
+                        value={changeValue}
+                    />
+                    <OnOff icon={props.icon} topic={props.topic} />
+                </>
                 : "null"
             }
         </>
     );
 }
-/** topic */
+/** topic, icon */
 export const OnOff =(props)=> {
     const [onoff, setOnoff] = useState(store.get("user").payloads[props.topic]??'0')
     let onData =()=> {
@@ -156,16 +173,12 @@ export const OnOff =(props)=> {
     }
 
 
-    useEffect(()=> {
-        onData()
-    }, [])
+    useEffect(()=> onData(), [])
     useWillUnmount(()=> onData = undefined)
 
     
     return(
-        <div style={props.style}
-            onClick={()=> usePub(props.topic, onoff==='1'?0:1)}
-        >
+        <div style={props.style} onClick={()=> usePub(props.topic, onoff==='1'?0:1)}>
             {!props.offView
                 ? <div style={{color:onoff==='1'?"#42f059":"red",width:"40%",fontSize:"20px",position:"absolute"}}>
                     { onoff==='1'?"on":"off" }

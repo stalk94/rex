@@ -94,10 +94,9 @@ window.send = function(url, data, metod) {
 }
 window.useSend = function(url, data, metod, clb) {
     send(url, data, metod).then((dat)=> {
-		console.log(dat)
-      	dat.json().then((val)=> {
-			clb(val)
-		})
+        dat.json().then((val)=> {
+            clb(val)
+        })
     })
 }
 window.onbeforeunload =()=> {

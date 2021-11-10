@@ -31,7 +31,7 @@ export default function Carts(props) {
     const [room, setRoom] = useState({name:1})
     const [view, setView] = useState(0)
     
-    const update =(newRoom)=> {
+    const update =()=> {
         let roomTopic = props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/room"
         let roomCartId = useUser().payloads[roomTopic]
         let cartName = useUser().payloads[props.topic.split("/")[0]+"/"+props.topic.split("/")[1]+"/name"]
@@ -40,16 +40,16 @@ export default function Carts(props) {
         setName(cartName)
     }
     useEffect(()=> {
-        try{
-            setElems(React.Children.toArray(props.children.props.children))
-        }
+        try{ setElems(React.Children.toArray(props.children.props.children)) }
         catch{ console.log("ошибка") }
         update(props.room)
     }, [props.room, props.children])
 
     
     return(
-        <div className="container" style={{display: (room && store.get("curent.room").name===room.name) ? "block" : "none"}}>
+        <div className="container" 
+            style={{display: (room && store.get("curent.room").name===room.name) ? "block" : "none"}}
+        >
             <Title name={name} onClick={()=> setView(0)}/>
             {elems.map((e, i)=> {
                     if(e.type.name==="TimerManager" && view===1) return e 
