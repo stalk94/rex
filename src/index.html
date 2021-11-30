@@ -1,0 +1,21 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./css/main.css" rel="stylesheet" defer>
+    <link href="./css/style.css" rel="stylesheet" defer>
+    <link href="./css/media.css" rel="stylesheet" defer>
+
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+    <script type="module" src="../node_modules/store/dist/store.legacy.min.js"></script>
+    <script type="module" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Умный дом в каждый дом</title>
+</head>
+
+
+<body>
+    <div class="root"></div>
+    
+    <script>window.socket = io();</script>
+    <script type="module" src="./main.js"></script>
+</body>

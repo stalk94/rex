@@ -1,0 +1,70 @@
+{
+  "name": "rex",
+  "version": "1.0.0",
+  "private": "true",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "scripts": {
+    "start": "node index.js",
+    "build": "parcel build src/index.html",
+    "bable": "./node_modules/.bin/babel src --out-dir dist"
+  },
+  "dependencies": {
+    "@devexpress/dx-react-chart": "^2.7.6",
+    "@devexpress/dx-react-chart-material-ui": "^2.7.6",
+    "@devexpress/dx-react-core": "^2.7.6",
+    "@syncstate/react": "^0.7.0",
+    "@szhsin/react-menu": "^2.3.0",
+    "@types/jest": "^27.0.3",
+    "babel-preset-es2015": "^6.24.1",
+    "base-64": "^1.0.0",
+    "cookie": "^0.4.1",
+    "cookie-parser": "^1.4.5",
+    "crypto-js": "^4.1.1",
+    "dompurify": "^2.3.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "grommet": "^2.18.0",
+    "grommet-icons": "^4.6.2",
+    "js-cookie": "^3.0.1",
+    "mqtt": "^4.2.8",
+    "node-fetch": "^2.6.6",
+    "parcel": "^2.0.1",
+    "pino": "^7.0.3",
+    "pino-multi-stream": "^6.0.0",
+    "pino-pretty": "^7.1.0",
+    "pretty-format": "^27.3.1",
+    "quick.db": "^7.1.3",
+    "react": "^17.0.2",
+    "react-color": "^2.19.3",
+    "react-dom": "^17.0.2",
+    "react-drag-drop-container": "^6.1.1",
+    "react-full-page": "^0.1.12",
+    "react-icons": "^4.3.1",
+    "react-recipes": "^1.4.0",
+    "react-test-renderer": "^17.0.2",
+    "rooks": "^5.8.0",
+    "socket.io": "^4.3.2",
+    "socket.io-client": "^4.3.2",
+    "store": "^2.0.12",
+    "styled-components": "^5.3.3",
+    "tasktimer": "^3.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
+    "@parcel/config-default": "^2.0.1",
+    "@parcel/core": "^2.0.1",
+    "@types/node": "^16.11.4",
+    "@types/react": "^17.0.31",
+    "@types/store": "^2.0.2"
+  },
+  "quokka": {
+    "babel": true,
+    "plugins": [
+      "jsdom-quokka-plugin"
+    ]
+  }
+}

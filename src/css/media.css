@@ -1,0 +1,28 @@
+.btn-reg {
+    padding-right: 10%; 
+    padding-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+}
+.Promo {
+    text-align: center;
+    margin-bottom: 0.5%;
+}
+
+@media screen and (min-width: 1000px) {
+    .buttons-reg {
+        display: flex;
+        flex-direction: row;
+        margin-left: 10%;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .buttons-reg {
+        display: flex;
+        flex-direction: column;
+        margin-left: 10%;
+    }
+    .device-wraper {
+        flex-direction: column;
+    }
+}

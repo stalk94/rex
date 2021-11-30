@@ -1,0 +1,136 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(-45deg, #99c5ee, #6b46b1, #445eb3, #78c0b0);
+    animation: gradient 15s ease infinite;
+    color: white;
+}
+header {
+    background-color: #0d0e0f41;
+    color: rgba(220, 220, 220, 0.2);
+    text-align: center;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4);
+    height: 6%;
+    width: 100%;
+    display: flex;
+    flex-direction: raw;
+}
+h1 {
+    position: absolute;
+    background-color: hsl(0deg 0% 0% / 40%);
+    box-shadow: 0 0.2rem 0.4rem rgb(0 0 0 / 30%);
+    padding: 5%;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    top: 10%;
+    left: 5%;
+    width: 80%;
+    color: white;
+}
+.line {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+
+.intrf {
+    margin-left: 18%;
+    margin-top: 5%;
+    display: flex;
+    color: white;
+    flex-direction: column;
+    max-width: 55%;
+    word-wrap: break-word;
+    background-color: hsl(0deg 0% 0% / 20%);
+    background-clip: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: .25rem;
+    margin-bottom: 1.5rem;
+    padding: 5%;
+    box-shadow: 0 0.2rem 0.4rem rgb(0 0 0 / 30%);
+}
+.section-1 {
+    background-color: rgba(40, 40, 48, 0.5);
+}
+.section-2 {
+    background: linear-gradient(-45deg, #ac469e, #664a99, #304486, #438072);
+}
+.section-3 {
+    background: linear-gradient(-45deg, #ac469e, #664a99, #304486, #438072);
+}
+.logo-index {
+    position:relative;
+    z-index: 2;
+    margin-left: 20%;
+    max-width: 60%;
+    border-radius: 3px;
+}
+
+
+input[type=email], input[type=text], input[type=number], input[type=password] {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: hsl(0deg 0% 100%);
+    background-color: hsl(0deg 0% 0% / 15%);
+    background-clip: padding-box;
+    border: 1px solid hsl(0deg 0% 100% / 15%);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+button {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    background-color: hsl(0deg 0% 100% / 12%);
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    letter-spacing: .5px;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid hsl(0deg 0% 100% / 35%);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+button:hover {
+    background-color: hsl(0deg 0% 100% / 25%);
+    color: rgb(255, 255, 255);
+}
+
+.figure {
+    position:fixed;
+    top: 0px;
+    left: 65%;
+    z-index: 1;
+}
+.gm {
+    margin-left: 1%;
+    cursor: pointer;
+}
+.gm:hover {
+    opacity: 0.5;
+}
+
+.ErrPage {
+    background: linear-gradient(-45deg, #ac469e, #664a99, #304486, #438072);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}

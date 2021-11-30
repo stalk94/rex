@@ -1,0 +1,85 @@
+{
+    "reley": [
+        "/R$/all",
+        "/R$/name",
+        "/R$/room",
+        "/R$/ga1",      
+        "/R$/ga2", 
+        "/R$/gafb"
+    ],
+    "button": [
+        "/B$/all",
+        "/B$/name",
+        "/B$/ga1mode",  
+        "/B$/ga1",
+        "/B$/ga2mode",
+        "/B$/ga2",
+        "/B$/gafb"
+    ],
+    "termo": [
+        "/T$/all",
+        "/T$/name",
+        "/T$/room",  
+        "/T$/dataGA",      
+        "/T$/onoffGA",
+        "/T$/Set0GA",        
+        "/T$/Set0fbGA",
+        "/T$/datastGA",
+        "/T$/modeGA",
+        "/T$/modefbGA",
+        "/T$/heat1GA",
+        "/T$/heat2GA",
+        "/T$/heat3GA",
+        "/T$/cool1GA",
+        "/T$/cool2GA",
+        "/T$/cool3GA",
+        "/T$/modethermostat"
+    ],
+    "dimmer": [
+        "/D$/all",
+        "/D$/name",
+        "/D$/room",
+        "/D$/ga1",
+        "/D$/ga2",
+        "/D$/ga1relativ",
+        "/D$/ga2relativ",
+        "/D$/ga1absolut",
+        "/D$/ga2absolut",
+        "/D$/gaabsolutfb",
+        "/D$/gafb"
+    ],
+    "ir": [
+        "/I$/all",
+        "/I$/name",
+        "/I$/ga1",
+        "/I$/ga2",
+        "/I$/ga3",
+        "/I$/ga4",
+        "/I$/ga5",
+        "/I$/ga6",
+        "/I$/ga7",
+        "/I$/ga8",
+        "/I$/ga9",
+        "/I$/ga10",
+        "/I$/gafb"
+    ],
+    "sensor": [
+        "/S$/all",
+        "/S$/name",
+        "/S$/ga1"
+    ],
+    "lrgb": [
+        "/L$/all",
+        "/L$/name",
+        "/L$/room",
+        "/L$/ga1",
+        "/L$/ga2",
+        "/L$/ga1relativ",
+        "/L$/ga2relativ",
+        "/L$/ga1absolut",
+        "/L$/ga2absolut",
+        "/L$/gaabsolutfb",
+        "/L$/gafb",
+        "/L$/color"
+    ]
+}

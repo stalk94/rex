@@ -1,0 +1,40 @@
+{
+    "PMR": {
+        "reley": 1,
+        "button": 1
+    },
+    "SMR": {
+        "reley": 8,
+        "button": 16
+    },
+    "FSC": {
+        "reley": 8,
+        "button": 4,
+        "termo": 4,
+        "ir": 4,
+        "sensor": 4
+    },
+    "BUT8": {
+        "button": 8,
+        "sensor": 1
+    },
+    "DIM8": {
+        "dimmer": 8
+    },
+    "CUR4": {
+        "reley": 8,
+        "button": 4
+    },
+    "LRGB": {
+        "dimmer": 3,
+        "lrgb": 1
+    },
+    "MR": {
+        "reley": 8,
+        "button": 4
+    },
+    "R4C2": {
+        "reley": 8,
+        "button": 4
+    }
+}
