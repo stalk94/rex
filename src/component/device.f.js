@@ -98,9 +98,9 @@ export function Termostat(props) {
     const [color, setColor] = useState(user.payloads[props.mode]+"st"??1)
 
     useDidMount(()=> {
+        useSub(props.onoff+"st", onoff, setOnoff)
         useSub(props.mode+"st", color, (i)=> setColor(useColorTermo(i)));
-        useSub(props.onoff+"st", 0, setOnoff)
-        useSub(props.data+"st", 0, setData)
+        useSub(props.data+"st", data, setData)
     });
     useWillUnmount(()=> {
         useUnmountSub(props.mode+"st")
@@ -252,7 +252,7 @@ export const ButtonBarTermo =(props)=> {
 ////////////////////////////////////////////
 const RgbLampImage =(props)=> {
     return(
-        <div style={{width: "18vh",height: "18vh",cursor: "pointer",opacity: +props.onoff+"st"===1?"1":"0.4",}} onClick={()=> usePub(props.topic+"onoffst", +props.onoff+"st"===1?0:1)}>
+        <div style={{width: "18vh",height: "18vh",cursor: "pointer",opacity: +props.onoff===1?"1":"0.4",}} onClick={()=> usePub(props.topic+"onoffst", +props.onoff===1?0:1)}>
             <svg version="1.1" 
                 xmlns="http://www.w3.org/2000/svg" 
                 x="0px" 
@@ -379,30 +379,3 @@ export const Lable =(props)=> {
         </div>
     );
 }
-
-
-
-/**
- * <svg className="progress" xmlns="http://www.w3.org/2000/svg"
-                version="1.1"  
-                x={props.x ? props.x : "0px"} 
-                y={props.y ? props.y : "0px"} 
-                viewBox="0 0 100 100"
-            >
-                <path className="track" 
-                    transform="translate(-10 8) rotate(45 50 50)" 
-                    d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
-                </path>
-                <text className="temp" x="40%" y="50%"> 
-                    { +data===0 ? 'off' : data } 
-                </text>
-                <path style={{stroke:+onoff===0?useColorTermo(0):color}} 
-                    className="fill"
-                    transform="translate(-10 8) rotate(45 50 50)" 
-                    d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
-                </path>
-                <foreignObject height="100%" width="100%" x={0} y={50} >
-                    
-                </foreignObject>
-            </svg>
- */
