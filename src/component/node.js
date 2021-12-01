@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { OnOff, Lable, OnOffDeamer, ButtonBar, ProgressBar, ButtonBarTermo, RgbLamp } from "./device.f";
-import TimerManager from "./timer";
+import { OnOff, Lable, OnOffDeamer, ButtonBar, Termostat, RgbLamp } from "./device.f";
 import Carts from "./cart-bar";
 
 
@@ -8,26 +7,15 @@ import Carts from "./cart-bar";
 const Nodes = {
     FSC: (props)=> (
         <Carts room={props.room} id={`#new-fsc-${props.i}`} topic={[props.mac,`T${props.i}`]}>
-            <Lable type="FSC">
-                <div style={{display:"flex",flexDirection:"row",textAlign:"center"}}>
-                    <div style={{display:"flex",flexDirection:"column",textAlign:"center"}}>
-                        <OnOffDeamer 
-                            style={{width:"100%",marginLeft:"2%"}} 
-                            topic={props.mac+`/T${props.i}/onoff`} 
-                            brightness={props.mac+`/T${props.i}/Set0`}
-                        />
-                        <ButtonBarTermo 
-                            mode={props.mac+`/T${props.i}/headcoolmode`} 
-                            public={props.mac+`/T${props.i}/mode`}
-                        />
-                    </div>
-                    <ProgressBar style={{marginLeft:"10%"}}
-                        mode={props.mac+`/T${props.i}/headcoolmode`}
-                        onoff={props.mac+`/T${props.i}/onoff`} 
-                        data={props.mac+`/T${props.i}/datafb`} 
-                        brightness={props.mac+`/T${props.i}/Set0`}
-                    />
-                </div>
+            <Lable  type="FSC">
+                <Termostat
+                    i={props.i}
+                    mac={props.mac}
+                    mode={props.mac+`/T${props.i}/headcoolmode`}
+                    onoff={props.mac+`/T${props.i}/onoff`} 
+                    data={props.mac+`/T${props.i}/datafb`} 
+                    brightness={props.mac+`/T${props.i}/Set0`}
+                 />
             </Lable>
         </Carts>
     ),
@@ -44,7 +32,6 @@ const Nodes = {
     SMR: (props)=> (
         <Carts room={props.room} id={`#new-smr-${props.i}`} topic={[props.mac,`R${props.i}`]}>
             <Lable type="SMR">
-                <div style={{visibility:"hidden",textAlign:"center",fontSize:"28px",display:"flex",flexDirection:"row",marginBottom:"2%"}}/>
                 <OnOff style={{marginLeft:"60%"}} icon={"lamp"} topic={props.mac+`/R${props.i}/onoff`} />
             </Lable>
         </Carts>
@@ -102,16 +89,15 @@ const Nodes = {
  *  `view`:boolean,   
  *  `payload`:{onoff:topic, brihtness:topic}  
  */
-function Node(props) {
-    const [reload, setReload] = useState()
-    useEffect(()=> setReload(new Date().getMilliseconds()), [])
+const Node =(props)=> {
+    const [reload, setReload] = useState(new Date().getMilliseconds())
+    useEffect(()=> setReload(new Date().getMilliseconds()), [props.room])
 
     return(
         <>
-            {props.type === "PMR"
+            {props.type==="PMR"
                 ? <Carts room={props.room} id={`#pmr-0`} topic={props.mac, `R0`}> 
                     <Lable type="PMR">
-                        <TimerManager mac={props.mac} module="R0" timers={[1,2,3,4]} />
                         <OnOff topic={props.mac+`/R0/onoff`} icon={"logic"}/>
                     </Lable>
                 </Carts>
@@ -126,8 +112,8 @@ function Node(props) {
                     else if(props.type==="CUR4" && key==="reley") return props.cart[key].map((topic, i)=> {
                         if(i<20) return(<Nodes.CUR4 key={reload+"_"+key+"_"+i} i={i} mac={props.mac} room={props.room} />)
                     })
-                    else if(props.type==="FSC" && props.cart[key] && key==="termo") return props.cart[key].map((topic, i)=> {
-                        if(i<20) return(<Nodes.FSC key={`${reload}_${key}_${i}`} i={i} mac={props.mac} room={props.room} />);
+                    else if(props.type==="FSC" && props.mac && key==="termo") return props.cart[key].map((topic, i)=> {
+                        if(i<20) return(<Nodes.FSC key={`${props.mac}_${key}_${i}`} i={i} mac={props.mac} room={props.room} />);
                     })
                     else if(props.type==="LRGB" && key==="lrgb") return props.cart[key].map((topic, i)=> {
                         if(i<20) return(<Nodes.LED key={reload+"_"+key+"_"+i} i={i} mac={props.mac} room={props.room} />);
@@ -142,28 +128,32 @@ function Node(props) {
                         if(i<2) return(<Nodes.R4C2 type="R4C2" key={reload+"_"+key+"_"+i} i={i} mac={props.mac} room={props.room} />);
                         else if(i>=2) return(<Nodes.SMR key={reload+"_"+key+"_"+i} i={i} mac={props.mac} room={props.room} />);
                     })
-                })
-            }
+            })}
         </>
     );
 }
 
 
+
 export default function NodeArea(props) {
-    const [nodes, setDevices] = useState(props.nodes)
+    const [frame, setFrame] = useState(0)
+    const [nodes, setDevices] = useState()
     
     useEffect(()=> {
-        setDevices(props.nodes)
-    }, [props])
+        if(!window.useSub) window.useStart()
+        setTimeout(()=> setDevices(props.nodes), 500) 
+        setFrame(frame+1)
+        store.set("frame", frame)
+    }, [props.nodes, props.room])
 
     return(
         <div className="device-wraper">
             {nodes && Object.keys(nodes).map((mac, index)=> (
                 <Node 
-                    key={index}  
+                    key={mac+index}  
                     type={nodes[mac]._type}
                     name={nodes[mac]._name}
-                    mac={mac}
+                    mac={nodes[mac]._mac}
                     cart={nodes[mac].cart}
                     room={props.room}
                 />

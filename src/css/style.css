@@ -419,6 +419,9 @@ button:hover {
     border-radius: 3px;
     width: 80%;
 }
+.Termostat {
+    position: relative;
+}
 #read-b {
     padding: 5px;
     border: 1px solid gray;

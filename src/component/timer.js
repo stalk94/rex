@@ -42,10 +42,10 @@ export class Timer extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            hour: useChek(this.props.topicHour)??"-",
-            min: useChek(this.props.topicMin)??"-",
-            enable: useChek(this.props.topicEnable)??0,
-            value: useChek(this.props.topicCell)??"-"
+            hour: useChek(props.topicHour+"st")??"-",
+            min: useChek(props.topicMin+"st")??"-",
+            enable: useChek(props.topicEnable+"st")??0,
+            value: useChek(props.topicCell+"st")??"-"
         }
         this.setParam = this.setParam.bind(this)
         this.useTimerData = this.useTimerData.bind(this)
@@ -63,22 +63,16 @@ export class Timer extends React.Component {
         else if(this.props.module[0]==="T") return ["-", "on", "off", ...cells]
     }
     componentDidMount() {
-        if(!window.useSub)window.useStart()
-        
-        setTimeout(()=> {
-            useSub(this.props.topicHour+"st", this.state.hour, (val)=> this.setParam('hour', val))
-            useSub(this.props.topicMin+"st", this.state.min, (val)=> this.setParam('min', val))
-            useSub(this.props.topicEnable+"st", this.state.enable, (val)=> this.setParam('enable', val))
-            useSub(this.props.topicCell+"st", this.state.value, (val)=> this.setParam('value', val))
-        }, 500);
+        useSub(this.props.topicHour+"st", this.state.hour, (val)=> this.setParam('hour', val))
+        useSub(this.props.topicMin+"st", this.state.min, (val)=> this.setParam('min', val))
+        useSub(this.props.topicEnable+"st", this.state.enable, (val)=> this.setParam('enable', val))
+        useSub(this.props.topicCell+"st", this.state.value, (val)=> this.setParam('value', val))
     }
     componentWillUnmount() {
-        setTimeout(()=> {
-            useUnmountSub(this.props.topicHour+"st")
-            useUnmountSub(this.props.topicMin+"st")
-            useUnmountSub(this.props.topicEnable+"st")
-            useUnmountSub(this.props.topicCell+"st")
-        }, 500)
+        useUnmountSub(this.props.topicHour+"st")
+        useUnmountSub(this.props.topicMin+"st")
+        useUnmountSub(this.props.topicEnable+"st")
+        useUnmountSub(this.props.topicCell+"st")
     }
     render() {
         return(

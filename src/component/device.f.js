@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useDebounce, useWillUnmount, useToggle, useDidMount, useDebouncedValue } from "rooks";
+import { useDebounce, useWillUnmount, useDidMount } from "rooks";
+import Progressbar from "react-customizable-progressbar";
 import { RangeInput } from "grommet";
 import { BsSnow } from "react-icons/bs";
 import { WiDaySunny } from "react-icons/wi";
@@ -35,7 +36,7 @@ const colorLamp = {
 }
 const useColor =(index)=> {
     let result;
-    //! используй find дурень
+    
     if(index) Object.keys(colorLamp).forEach((key, i)=> {
         if(+index===i) result = key
     });
@@ -72,8 +73,7 @@ export const RangeTermostat =()=> {
     const [brightness, setBrightness] = useState(store.get("user").payloads[props.brightness+"st"]??0)
 
     useDidMount(()=> {
-        if(!window.useSub) window.useStart();
-        setTimeout(()=> useSub(props.brightness+"st", brightness, setBrightness), 500)
+        useSub(props.brightness+"st", brightness, setBrightness)
     })
     useWillUnmount(()=> useUnmountSub(props.brightness+"st"))
 
@@ -91,56 +91,63 @@ export const RangeTermostat =()=> {
  * data:    
  * brihtness:
  */
-export function ProgressBar(props) { 
-    const [onoff, setOnoff] = useState(store.get("user").payloads[props.onoff+"st"]??0)
-    const [data, setData] = useState(store.get("user").payloads[props.data+"st"]??0)
-    const [color, setColor] = useState(store.get("user").payloads[props.mode]+"st"??1)
+export function Termostat(props) { 
+    const user = store.get("user")
+    const [onoff, setOnoff] = useState(user.payloads[props.onoff+"st"]??0)
+    const [data, setData] = useState(user.payloads[props.data+"st"]??0)
+    const [color, setColor] = useState(user.payloads[props.mode]+"st"??1)
 
     useDidMount(()=> {
-        if(!window.useSub) window.useStart();
-
-        setTimeout(()=> {
-            useSub(props.mode+"st", color, (i)=> setColor(useColorTermo(i)));
-            useSub(props.onoff+"st", 0, setOnoff)
-            useSub(props.data+"st", 0, setData)
-        }, 500)
+        useSub(props.mode+"st", color, (i)=> setColor(useColorTermo(i)));
+        useSub(props.onoff+"st", 0, setOnoff)
+        useSub(props.data+"st", 0, setData)
     });
     useWillUnmount(()=> {
-        setTimeout(()=> {
-            useUnmountSub(props.mode+"st")
-            useUnmountSub(props.onoff+"st")
-            useUnmountSub(props.data+"st")
-        }, 300)
+        useUnmountSub(props.mode+"st")
+        useUnmountSub(props.onoff+"st")
+        useUnmountSub(props.data+"st")
     });
 
 
     return(
-        <div onClick={()=> usePub(props.onoff, +onoff===1?0:1)} className="top-device" style={props.style}>  
-            <svg className="progress" xmlns="http://www.w3.org/2000/svg"
-                version="1.1"  
-                x={props.x ? props.x : "0px"} 
-                y={props.y ? props.y : "0px"} 
-                viewBox="0 0 100 100"
-            >
-                <path className="track" 
-                    transform="translate(-10 8) rotate(45 50 50)" 
-                    d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
-                </path>
-                <text className="temp" x="40%" y="50%"> 
-                    { +data===0 ? 'off' : data } 
-                </text>
-                <path style={{stroke:+onoff===0?useColorTermo(0):color}} 
-                    className="fill"
-                    transform="translate(-10 8) rotate(45 50 50)" 
-                    d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
-                </path>
-                <foreignObject height="100%" width="100%" x={0} y={50} >
-                    <input style={{width:"30px",height:"10px",boxShadow: "inset 0 0 2px rgba(0,0,0,0.5)"}} 
-                        type="checkbox"
-                        value={+onoff}
-                    />
-                </foreignObject>
-            </svg>
+        <div style={{display:"flex",flexDirection:"row",textAlign:"center"}}>
+            <div style={{display:"flex",flexDirection:"column"}}>
+                <OnOffDeamer style={{width:"100%",marginLeft:"2%"}} 
+                    topic={props.mac+`/T${props.i}/onoff`} 
+                    brightness={props.mac+`/T${props.i}/Set0`}
+                />
+                <ButtonBarTermo 
+                    mode={props.mac+`/T${props.i}/headcoolmode`} 
+                    public={props.mac+`/T${props.i}/mode`}
+                />
+            </div>
+            <div onClick={()=> usePub(props.onoff, +onoff===1?0:1)} className="top-device" style={{marginLeft:"10%"}}>  
+                <Progressbar
+                    className="Termostat"
+                    radius={75}
+                    progress={+onoff===1 ? 100 : 0}
+                    cut={120}
+                    rotate={-210}
+                    strokeWidth={22}
+                    strokeColor={useColorTermo(color)}
+                    transition="1.5s ease 0.5s"
+                    strokeLinecap="butt"
+                    trackStrokeWidth={10}
+                    trackTransition="0s ease"
+                    trackStrokeLinecap="square"
+                >
+                    <div style={{position:"absolute",textAlign:"center",top:"120px",left:"50px"}}>
+                        <div style={{position:"absolute",fontSize:"45px",top:"-60px",left:"30px"}}>
+                            { data==='undefinedst' ? 0 : data }
+                        </div>
+                        <input 
+                            style={{width:"70px",height:"25px",boxShadow:"inset 0 0 2px rgba(0,0,0,0.5)"}} 
+                            type="checkbox"
+                            value={+onoff}
+                        />
+                    </div>
+                </Progressbar>
+            </div>
         </div>
     );
 }
@@ -155,9 +162,8 @@ export const OnOffDeamer =(props)=> {
     const [brightness, setBrightness] = useState(store.get("user").payloads[props.brightness+"st"]??0)
 
     useDidMount(()=> {
-        if(!window.useSub) window.useStart();
-        setTimeout(()=> useSub(props.brightness+"st", 0, setBrightness), 500)
-    })
+        useSub(props.brightness+"st", 0, setBrightness)
+    });
     useWillUnmount(()=> useUnmountSub(props.brightness+"st"))
 
     
@@ -167,7 +173,9 @@ export const OnOffDeamer =(props)=> {
                 onChange={(ev)=> {setBrightness(ev.target.value);usePub(props.brightness, ev.target.value)}}
                 value={brightness}
             />
-            <h3 style={{margin:"1px",padding:"1px"}}>{brightness}%</h3>
+            <h3 style={{margin:"1px",padding:"1px"}}>
+                { brightness }%
+            </h3>
         </div>
     );
 }
@@ -176,12 +184,10 @@ export const OnOff =(props)=> {
     const [onoff, setOnoff] = useState(store.get("user").payloads[props.topic+"st"]??0)
     
     useDidMount(()=> {
-        if(!window.useSub) window.useStart();
-        setTimeout(()=> useSub(props.topic+"st", onoff, setOnoff), 500)
+        useSub(props.topic+"st", onoff, setOnoff)
     });
     useWillUnmount(()=> {
-        if(!window.useSub) window.useStart();
-        setTimeout(()=> useUnmountSub(props.topic+"st"), 500)
+        useUnmountSub(props.topic+"st")
     });
 
     
@@ -221,11 +227,11 @@ export const ButtonBarTermo =(props)=> {
     const [state, setState] = useState(0)
 
     const useClick =(index)=> usePub(props.public+"st", index)
-    useEffect(()=> {
+    useDidMount(()=> {
         let def = store.get("user").payloads[props.public+"st"]??0
-        setTimeout(()=> useSub(props.public+"st", def, setState), 500)
+        useSub(props.public+"st", def, setState)
     }, [])
-    useWillUnmount(()=> setTimeout(()=> useUnmountSub(props.public+"st"), 500))
+    useWillUnmount(()=> useUnmountSub(props.public+"st"))
 
 
     return(
@@ -275,18 +281,12 @@ export const RgbLamp =(props)=> {
 
     const onUseColor =(color)=> setColor(useColor(color))
     useDidMount(()=> {
-        if(!window.useSub) window.useStart();
-
-        setTimeout(()=> {
-            useSub(topic+"onoffst", onoff, setOnoff)
-            useSub(topic+"colorst", color, onUseColor)
-        }, 500)
+        useSub(topic+"onoffst", onoff, setOnoff)
+        useSub(topic+"colorst", color, onUseColor)
     })
     useWillUnmount(()=> {
-        setTimeout(()=> {
-            useUnmountSub(topic+"onoffst")
-            useUnmountSub(topic+"colorst")
-        }, 500)
+        useUnmountSub(topic+"onoffst")
+        useUnmountSub(topic+"colorst")
     })
     
 
@@ -323,19 +323,14 @@ export const Centr =(props)=> {
         setBrihtness(data.payloads[props.brihtness+"st"])
     }
     useDidMount(()=> {
-        setTimeout(()=> {
-            useSub(props.topic+"st", 0)
-            useSub(props.brihtness+"st", 50)
-        }, 500)
-
+        useSub(props.topic+"st", 0)
+        useSub(props.brihtness+"st", 50)
+    
         store.watch("user", onUseCall)
     });
     useWillUnmount(()=> {
-        setTimeout(()=> {
-            useUnmountSub(props.topic+"st")
-            useUnmountSub(props.brihtness+"st")
-        }, 300)
-        
+        useUnmountSub(props.topic+"st")
+        useUnmountSub(props.brihtness+"st")
         store.unwatch(onUseCall)
     });
 
@@ -374,16 +369,40 @@ export const Title =(props)=> {
 }
 export const Lable =(props)=> {
     const style = {left:"50%",height:"15%"}
-    //enable={props.onOff} brihtness={props.brihtness} data={props.data}
+    const [frame, setFrame] = useState(0)
+    
+    useEffect(()=> setFrame(frame+1),[props.children])
 
     return(
-        <>
-            {props.type === "FSC"
-                ? <ProgressBar children={props.children}/>
-                : <div style={style}>
-                    { props.children }
-                </div>
-            }
-        </>
+        <div frame={frame} style={style}>
+            { props.children }
+        </div>
     );
 }
+
+
+
+/**
+ * <svg className="progress" xmlns="http://www.w3.org/2000/svg"
+                version="1.1"  
+                x={props.x ? props.x : "0px"} 
+                y={props.y ? props.y : "0px"} 
+                viewBox="0 0 100 100"
+            >
+                <path className="track" 
+                    transform="translate(-10 8) rotate(45 50 50)" 
+                    d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
+                </path>
+                <text className="temp" x="40%" y="50%"> 
+                    { +data===0 ? 'off' : data } 
+                </text>
+                <path style={{stroke:+onoff===0?useColorTermo(0):color}} 
+                    className="fill"
+                    transform="translate(-10 8) rotate(45 50 50)" 
+                    d="M40,72C22.4,72,8,57.6,8,40C8,22.4,22.4,8,40,8c17.6,0,32,14.4,32,32">
+                </path>
+                <foreignObject height="100%" width="100%" x={0} y={50} >
+                    
+                </foreignObject>
+            </svg>
+ */
